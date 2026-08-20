@@ -7,12 +7,10 @@
   "trailingSlash": false,
   "headers": [
     {
-      "comment": "Kerangka aplikasi WAJIB boleh berubah kapan saja. Kalau ikut disimpan lama, pengguna terjebak di versi lama dan tidak ada cara memperbaikinya dari jauh.",
       "source": "/(index.html|sw.js|manifest.webmanifest)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
     },
     {
-      "comment": "Kode dan materi: selalu tanya dulu ke server. Pekerja layanan sudah punya cadangan luringnya sendiri, jadi ini tidak mengurangi kemampuan offline.",
       "source": "/(js|data)/(.*)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
     },
@@ -21,12 +19,10 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
     },
     {
-      "comment": "Gambar, ikon, dan huruf jarang berubah dan namanya stabil.",
       "source": "/assets/(merek|icon)(.*)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
     },
     {
-      "comment": "Pengamanan dasar. Tidak ada kerangka tersemat, tidak ada penebakan tipe berkas, dan alamat halaman tidak bocor ke situs lain.",
       "source": "/(.*)",
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
