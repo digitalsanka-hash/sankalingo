@@ -6,7 +6,7 @@
 
 import { LANGS, langByCode } from '../data/lang/registry.js';
 import { state, mutate } from './state.js';
-import { loadCourse, loadPlus, loadPakai, loadVerba, loadKata, loadGoresan, pasangGoresan, mergeCourse, pasangPakai } from './course.js';
+import { loadCourse, loadPlus, loadPakai, loadVerba, loadKata, loadGoresan, pasangGoresan, loadContohAksara, mergeCourse, pasangPakai } from './course.js';
 import { daftarkanKamus } from './translit.js';
 
 const cache = new Map();
@@ -47,6 +47,8 @@ export async function loadLangData(code) {
     data.verba = await loadVerba(code);
     /* Goresan aksara yang sudah diperbaiki, kalau ada. */
     pasangGoresan(data, await loadGoresan(code));
+    /* Contoh kata untuk aksara yang tak tertutup kosakatanya. */
+    data.contohAksara = await loadContohAksara(code);
     /* Kamus alih aksara dibangun dari kosakata & frasa bahasa ini —
        bahan yang dipakai mesin suara saat materi tidak menyertakan
        romanisasi (terutama Mandarin dan kanji Jepang). */

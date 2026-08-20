@@ -425,6 +425,14 @@ export function scriptTrainerInto(host, code, L, scriptId, modeAwal = 'watch', k
   const hurufBanding = h => code === 'ko' ? h : String(h).toLowerCase();
 
   const contohUntuk = c => {
+    /* Contoh pilihan tangan didahulukan. Ia hanya ada untuk aksara yang
+       memang tidak tertutup kosakata bahasanya — 25 aksara Jepang,
+       hampir semuanya katakana, tidak pernah menemukan contoh apa pun
+       lewat pencarian di bawah karena kosakata inti aplikasi ini
+       ditulis hiragana dan kanji. */
+    const tangan = L.contohAksara?.[c.c];
+    if (tangan) return { teks: tangan[0], rom: tangan[1], arti: tangan[2] };
+
     /* Suku kata contoh IKUT diperingkat, tidak lagi dipakai begitu saja.
 
        Sebelumnya daftar ini dicari dengan .find() — kemunculan pertama

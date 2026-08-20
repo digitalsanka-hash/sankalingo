@@ -24,6 +24,7 @@ export const BERKAS_MATERI = [
      penyiapan luring melaporkan kegagalan yang sebenarnya bukan
      kegagalan. */
   ...['ar', 'de', 'ru', 'zh'].map(c => `./data/lang/${c}-goresan.js`),
+  ...['ja', 'zh'].map(c => `./data/lang/${c}-contoh-aksara.js`),
   './data/lang/registry.js',
   './data/lang/exam-blueprints.js',
   './data/lang/exam-bacaan.js',

@@ -47,6 +47,10 @@ export const loadKata = code => muatBerkas(`${code}-kata`);
    bahasanya sendiri. */
 export const loadGoresan = code => muatBerkas(`${code}-goresan`);
 
+/* Contoh kata pilihan tangan untuk aksara yang tidak tertutup
+   kosakata bahasanya sendiri — terutama katakana Jepang. */
+export const loadContohAksara = code => muatBerkas(`${code}-contoh-aksara`);
+
 /** Timpa goresan huruf dengan versi yang sudah diperbaiki.
  *
  *  Menimpa, bukan menyambung: yang lama memang salah, jadi tidak ada
