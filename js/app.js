@@ -156,6 +156,10 @@ async function route() {
   if (!isLangCode(seg[0])) {
     const code = currentLang();
     if (!path) return location.replace('#/' + code);
+    /* Tautan lama #/script/<kode>/<aksara> — kodenya ada di segmen kedua,
+       jadi tidak bisa lewat LEGACY yang hanya menukar segmen pertama. */
+    if (seg[0] === 'script' && isLangCode(seg[1]))
+      return location.replace(`#/${seg[1]}/aksara/${seg.slice(2).join('/')}`);
     const head = LEGACY[seg[0]];
     if (head !== undefined) {
       const rest = [head, ...seg.slice(1)].filter(Boolean).join('/');

@@ -141,20 +141,41 @@ function titikDari(d) {
 
 const jarak = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
 
-function ukur(d) {
-  const t = titikDari(d);
+function ukur(d, box = 100) {
+  /* Kotak asal tiap bahasa berbeda — KanjiVG memakai 109, goresan
+     tulisan tangan di berkas -goresan.js memakai 100. Semua ambang di
+     bawah ditulis dalam satuan kotak 100, jadi titiknya diskalakan dulu;
+     tanpa ini "jarak 3" berarti hal yang berbeda untuk tiap bahasa. */
+  const skala = 100 / (box || 100);
+  const t = titikDari(d).map(([x, y]) => [x * skala, y * skala]);
   if (t.length < 2) return { titik: t.length, panjang: 0, ulang: 0, balik: 0, luar: 0, kerdil: true };
 
+  /* Panjang kumulatif sepanjang jalur, dipakai untuk menilai apakah dua
+     titik yang berdekatan di layar juga berdekatan di sepanjang goresan. */
+  const s = [0];
   let panjang = 0;
-  for (let i = 1; i < t.length; i++) panjang += jarak(t[i - 1], t[i]);
+  for (let i = 1; i < t.length; i++) { panjang += jarak(t[i - 1], t[i]); s.push(panjang); }
 
-  /* Titik berulang: titik yang jaraknya < 3 dari titik SEBELUMNYA yang
-     bukan tetangga langsung. Ambang 3 dari kotak 100 — cukup longgar
-     untuk sudut yang wajar, cukup ketat untuk coretan. */
+  /* Menimpa jejak sendiri: dua titik yang JAUH di sepanjang jalur tetapi
+     BERDEKATAN di layar.
+
+     Sebelumnya "jauh di sepanjang jalur" diukur dengan selisih INDEKS
+     (j >= i+3). Itu keliru: kurva diratakan jadi enam titik per segmen,
+     jadi pada jalur dengan banyak segmen pendek — persis seperti data
+     KanjiVG — titik i dan i+3 hanya berjarak satu-dua satuan meski
+     goresannya lurus sempurna. Empat hanzi (百 山 好 是) tertuduh
+     "menimpa jejaknya sendiri" hanya karena datanya bersegmen rapat.
+
+     Yang benar adalah jarak SEPANJANG JALUR: pena harus sudah berjalan
+     jauh (>15 satuan, dua kali tebal penanya) lalu kembali ke tempat
+     yang sama (<3 satuan) sebelum itu disebut menimpa. Kait yang wajar
+     berbelok lalu menjauh, jadi tidak kena. */
   let ulang = 0;
   for (let i = 0; i < t.length; i++)
-    for (let j = i + 3; j < t.length; j++)
+    for (let j = i + 1; j < t.length; j++) {
+      if (s[j] - s[i] < 15) continue;
       if (jarak(t[i], t[j]) < 3) { ulang++; break; }
+    }
 
   /* Berbalik arah tajam. */
   let balik = 0;
@@ -216,7 +237,7 @@ for (const kode of KODE) {
       const g = c.strokes || [];
       if (!g.length) { masalah.push([kode, c.rom || c.c, 'tanpa goresan sama sekali']); cacat++; continue; }
 
-      const u = g.map(ukur);
+      const u = g.map(x => ukur(x, c.box || S.box || 100));
       goresan += g.length;
       const catat = p => { masalah.push([kode, c.rom || c.c, p]); };
       let burukDi = false;

@@ -103,7 +103,7 @@ export async function renderLang(code) {
       <h1 style="margin-top:.4rem">${esc(meta.name)} <span class="lang-native">${esc(L.native)}</span></h1>
       <p>${esc(L.intro.headline)}</p>
     </div>
-    <a class="btn btn--primary" href="#/script/${code}/${L.scripts[0].id}">
+    <a class="btn btn--primary" href="#/${code}/aksara/${L.scripts[0].id}">
       ${raw(ico('pen', { size: 16 }))} Mulai dari aksara</a>
   </div>
 
@@ -145,7 +145,7 @@ export async function renderLang(code) {
           <div class="row row--between">
             <div><div class="card__title">${esc(s.name)} <span class="muted">${esc(s.native || '')}</span></div>
               <div class="card__sub">${s.chars.length} huruf</div></div>
-            <a class="btn btn--primary btn--sm" href="#/script/${code}/${s.id}">
+            <a class="btn btn--primary btn--sm" href="#/${code}/aksara/${s.id}">
               ${ico('pen', { size: 15 })} Latih menulis</a>
           </div>
           <p class="small soft" style="margin:.7rem 0">${esc(s.note)}</p>
@@ -386,7 +386,7 @@ function showGlyphModal(L, ch, code) {
         <p class="xs muted" style="margin-top:.6rem">${c.strokes.length} goresan · nomor menunjukkan titik mulai</p>
       </div>
     </div>
-    <a class="btn btn--primary btn--block" style="margin-top:1rem" href="#/script/${code}/${s.id}" data-close>
+    <a class="btn btn--primary btn--block" style="margin-top:1rem" href="#/${code}/aksara/${s.id}" data-close>
       Latih menulis seluruh ${esc(s.name)}</a>
   </div>`;
   root.append(wrap);
