@@ -34,8 +34,8 @@
    menembus seluruh RLS dan hanya boleh hidup di sisi server.          */
 
 export const AWAN = {
-  url:  '',   // contoh: 'https://abcdefghijkl.supabase.co'
-  anon: ''    // Publishable key (sb_publishable_…) — BUKAN Secret key
+  url:  'https://zedamoledhrxsmgtpbvv.supabase.co',
+  anon: 'sb_publishable_tNuM7hm86ZoUvhonC7sU7Q_SSswgn5i'
 };
 
 /** Apakah penyelarasan awan sudah dikonfigurasi? */
