@@ -360,16 +360,100 @@ export function scriptTrainerInto(host, code, L, scriptId, modeAwal = 'watch', k
     }
   };
 
-  /* Huruf tunggal sering tidak terbaca mesin. Ucapkan nama & bunyinya,
-     lalu contoh kata bila ada — dan tampilkan apa yang diucapkan supaya
-     pengguna tidak mengira tombolnya rusak saat suaranya pelan. */
+  /* Huruf tunggal sering tidak terbaca mesin suara. Karena itu yang
+     diucapkan adalah nama hurufnya, lalu sebuah CONTOH KATA.
+
+     Pemilihan contohnya dulu asal ambil apa pun yang memuat huruf itu
+     di posisi mana pun — termasuk frasa panjang. Hasilnya janggal:
+     untuk huruf ج terpilih frasa "لَذِيذ جِدًّا" hanya karena جِدًّا
+     memuat ج, sehingga tombolnya membacakan "jim. ladzidz jiddan" —
+     "jim. enak sekali". Pemelajar tidak belajar apa pun dari itu.
+
+     Sekarang urutannya jelas, dari yang paling mengajarkan:
+
+       1. suku kata contoh yang memang disiapkan untuk huruf itu
+       2. KATA TUNGGAL yang DIAWALI huruf itu  ← paling berguna,
+          karena bunyinya terdengar di awal, tempat paling jelas
+       3. frasa yang diawali huruf itu
+       4. kata tunggal yang sekadar memuatnya
+       5. frasa yang sekadar memuatnya
+
+     Dalam tiap tingkat dipilih yang TERPENDEK, supaya hurufnya tidak
+     tenggelam di tengah kalimat panjang. */
+
+  /* Untuk menilai "diawali", tanda baca dan penanda bunyi dibuang
+     dulu — kata Arab hampir selalu berharakat, dan banyak yang
+     diawali kata sandang ال yang bukan bagian katanya. */
+  const pangkalKata = s => String(s || '')
+    .replace(/[ً-ْٰـ]/g, '')   /* harakat & tatwil Arab */
+    .replace(/^(ال|اَل)/, '')                          /* kata sandang Arab     */
+    .replace(/^[«"'¿¡\s]+/, '')
+    .trim();
+
+  /* ── Menyamakan huruf dengan isi kata ──────────────────────────
+     Dua bahasa perlu perlakuan khusus, dan tanpanya pelatih aksaranya
+     TIDAK PERNAH menemukan contoh sama sekali:
+
+     KOREA. Huruf di daftar aksara adalah jamo tunggal (ㄱ, U+3131),
+     sedangkan kata Korea ditulis sebagai SUKU TERSUSUN — 사람, bukan
+     ㅅ+ㅏ+ㄹ+ㅏ+ㅁ. Jadi "사람".includes("ㄱ") selamanya salah, dan
+     KESELURUHAN 24 huruf Korea tidak pernah punya contoh kata.
+     Suku Hangul karena itu diurai dulu jadi jamo penyusunnya.
+
+     RUSIA (dan abjad Latin). Huruf di daftar ditulis KAPITAL (Б),
+     kosakatanya huruf kecil (большой). startsWith("Б") tidak pernah
+     cocok, sehingga 13 huruf hanya menemukan frasa yang kebetulan
+     diawali kapital. Karena itu perbandingannya tidak peduli besar
+     kecilnya huruf.                                                  */
+
+  /* Suku Hangul dihitung: kode = 0xAC00 + (awal*21 + tengah)*28 + akhir */
+  const CHO = [...'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'];
+  const JUNG = [...'ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ'];
+  const JONG = ['', ...'ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ'];
+
+  const uraiHangul = teks => [...String(teks)].map(ch => {
+    const k = ch.codePointAt(0) - 0xAC00;
+    if (k < 0 || k > 11171) return ch;
+    return CHO[Math.floor(k / 588)] + JUNG[Math.floor((k % 588) / 28)] + JONG[k % 28];
+  }).join('');
+
+  /* Bentuk yang dipakai untuk membandingkan: Korea diurai jadi jamo,
+     sisanya cukup disamakan besar-kecil hurufnya. */
+  const banding = teks => code === 'ko'
+    ? uraiHangul(teks)
+    : String(teks).toLowerCase();
+  const hurufBanding = h => code === 'ko' ? h : String(h).toLowerCase();
+
   const contohUntuk = c => {
-    const dari = (L.syllable?.demo || []).find(d => d.block.includes(c.c));
-    if (dari) return { teks: dari.block, rom: dari.rom, arti: dari.layout };
-    const fr = L.phrases.flatMap(g => g.items).find(([t]) => t.includes(c.c));
-    if (fr) return { teks: fr[0], rom: fr[1], arti: fr[2] };
-    const vw = (L.vocab?.[0]?.words || []).find(w => w[0].includes(c.c));
-    return vw ? { teks: vw[0], rom: vw[1], arti: vw[2] } : null;
+    /* Suku kata contoh IKUT diperingkat, tidak lagi dipakai begitu saja.
+
+       Sebelumnya daftar ini dicari dengan .find() — kemunculan pertama
+       yang memuat hurufnya langsung menang. Untuk ب itu memberi كِتَاب
+       (indeks 0) padahal بَيْت ada di daftar yang sama di indeks 5 dan
+       justru DIAWALI ب. Empat huruf sekaligus (ا ب ت ك) sama-sama
+       mendapat "kitāb" karena itu. */
+    const demo = (L.syllable?.demo || [])
+      .map(d => ({ teks: d.block, rom: d.rom, arti: d.layout }));
+    const kata = (L.vocab || []).flatMap(p => p.words || [])
+      .map(w => ({ teks: w[0], rom: w[1], arti: w[2] }));
+    const frasa = (L.phrases || []).flatMap(g => g.items || [])
+      .map(f => ({ teks: f[0], rom: f[1], arti: f[2] }));
+
+    const h = hurufBanding(c.c);
+    const diawali = k => banding(pangkalKata(k.teks)).startsWith(h);
+    const memuat  = k => banding(k.teks).includes(h);
+    const terpendek = arr => arr.length
+      ? arr.reduce((a, b) => (String(a.teks).length <= String(b.teks).length ? a : b))
+      : null;
+
+    for (const kelompok of [
+      demo.filter(diawali),  kata.filter(diawali),  frasa.filter(diawali),
+      demo.filter(memuat),   kata.filter(memuat),   frasa.filter(memuat),
+    ]) {
+      const pilih = terpendek(kelompok);
+      if (pilih && pilih.teks && pilih.rom) return pilih;
+    }
+    return null;
   };
 
   const bunyiHuruf = async () => {
@@ -391,10 +475,20 @@ export function scriptTrainerInto(host, code, L, scriptId, modeAwal = 'watch', k
         <a href="${P(code, 'pengaturan')}">Buka Pengaturan</a>`;
       return;
     }
-    const dibaca = r.mode === 'native' ? teksAsli : teksRom;
+    /* Nama huruf dan contoh katanya dipisah.
+
+       Dulu keduanya dirangkai jadi satu kalimat — "jim. ladzidz
+       jiddan — Enak sekali" — yang terbaca seperti omong kosong.
+       Pemelajar tidak bisa tahu mana nama hurufnya, mana contohnya,
+       dan kenapa artinya "enak sekali". */
+    const asliHuruf = r.mode === 'native' ? c.c : bersihkanRom(nama);
+    const asliContoh = ct ? (r.mode === 'native' ? ct.teks : bersihkanRom(ct.rom)) : '';
     kotak.className = 'writer__say ' + (r.mode === 'native' ? 'is-ok' : 'is-warn');
     kotak.innerHTML = `${ico('volume', { size: 14 })}
-      <span>Dibacakan: <b>${esc(dibaca)}</b>${ct ? ` — ${esc(ct.arti)}` : ''}</span>
+      <span>Dibunyikan <b>${esc(asliHuruf)}</b>${ct
+        ? `, lalu contohnya <b>${esc(asliContoh)}</b>
+           <span class="soft">(${esc(ct.rom)}) &ldquo;${esc(ct.arti)}&rdquo;</span>`
+        : ''}</span>
       <em>${esc(r.voice ? r.voice.name : '')}${r.mode === 'native' ? '' : ' · romanisasi'}</em>`;
   };
 

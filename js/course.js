@@ -42,6 +42,24 @@ export const loadVerba = code => muatBerkas(`${code}-verba`);
    berkas supaya kata dan contohnya tidak bisa terpisah. */
 export const loadKata = code => muatBerkas(`${code}-kata`);
 
+/* Goresan aksara pengganti. Hanya ada untuk bahasa yang goresan
+   aslinya perlu ditulis ulang; sisanya memakai yang di berkas
+   bahasanya sendiri. */
+export const loadGoresan = code => muatBerkas(`${code}-goresan`);
+
+/** Timpa goresan huruf dengan versi yang sudah diperbaiki.
+ *
+ *  Menimpa, bukan menyambung: yang lama memang salah, jadi tidak ada
+ *  yang perlu dipertahankan. Huruf yang tidak ada di berkas pengganti
+ *  dibiarkan apa adanya. */
+export function pasangGoresan(L, goresan) {
+  if (!L?.scripts || !goresan) return L;
+  for (const S of L.scripts)
+    for (const c of S.chars || [])
+      if (goresan[c.c]) c.strokes = goresan[c.c];
+  return L;
+}
+
 /** Tempelkan contoh pemakaian ke tiap kata yang punya.
 
     Datanya disimpan TERPISAH di data/lang/<kode>-pakai.js, bukan

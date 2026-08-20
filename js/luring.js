@@ -19,6 +19,11 @@ export const BERKAS_MATERI = [
     .flatMap(c => [`./data/lang/${c}.js`, `./data/lang/${c}-course.js`,
                    `./data/lang/${c}-plus.js`, `./data/lang/${c}-pakai.js`,
                    `./data/lang/${c}-verba.js`, `./data/lang/${c}-kata.js`]),
+  /* Goresan pengganti hanya ada untuk empat bahasa yang goresan
+     aslinya perlu ditulis ulang. Menyebut yang tidak ada akan membuat
+     penyiapan luring melaporkan kegagalan yang sebenarnya bukan
+     kegagalan. */
+  ...['ar', 'de', 'ru', 'zh'].map(c => `./data/lang/${c}-goresan.js`),
   './data/lang/registry.js',
   './data/lang/exam-blueprints.js',
   './data/lang/exam-bacaan.js',
