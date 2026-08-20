@@ -332,6 +332,18 @@ where schemaname = 'public' and tablename = 'kemajuan';</code></pre>
     <i>Confirm email</i> supaya pengguna bisa langsung masuk dengan kode tanpa
     langkah konfirmasi terpisah.</p>
   </li>
+  <li><b>Ubah templat emailnya — paling mudah terlewat</b>
+    <p>Aplikasi ini memakai <b>kode enam angka</b>, bukan tautan ajaib. Token
+    tautan ajaib datang di bagian <b>hash</b> alamat (<code>#access_token=…</code>),
+    sedangkan aplikasi ini memakai hash untuk peruteannya (<code>#/en/grammar</code>).
+    Keduanya bertabrakan.</p>
+    <p>Templat bawaan Supabase mengirim TAUTAN. Kalau tidak diubah, pengguna tidak
+    pernah menerima kode dan tombol Masuk gagal tanpa penjelasan.</p>
+    <p>Buka <b>Authentication → Emails → Magic Link</b>, pastikan isinya memuat
+    <code>{{ .Token }}</code>:</p>
+    <pre><code>&lt;p style="font-size:28px;letter-spacing:6px"&gt;{{ .Token }}&lt;/p&gt;</code></pre>
+    <p class="kecil">Yang menentukan cuma satu: <code>{{ .Token }}</code> harus ada.</p>
+  </li>
 
   <li><b>Salin kunci ke aplikasi</b>
     <p><b>Settings → API</b>, ambil <b>Project URL</b> dan kunci

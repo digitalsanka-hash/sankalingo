@@ -139,7 +139,31 @@ pengguna bisa dibaca pengguna lain — jangan lanjut sebelum ini benar.
 pastikan aktif. Matikan *Confirm email* kalau ingin pengguna langsung bisa masuk
 dengan kode tanpa langkah konfirmasi terpisah.
 
-**5. Salin kunci.** **Settings → API**, ambil dua nilai:
+**5. Ubah templat emailnya — LANGKAH YANG PALING MUDAH TERLEWAT.**
+
+Aplikasi ini memakai **kode enam angka**, bukan tautan ajaib. Alasannya teknis
+dan penting: token tautan ajaib datang di bagian **hash** alamat
+(`#access_token=…`), dan aplikasi ini memakai hash itu untuk peruteannya
+(`#/en/grammar`). Keduanya bertabrakan — tautan ajaib akan merusak halaman yang
+sedang dibuka.
+
+Tetapi templat bawaan Supabase mengirim TAUTAN. Kalau tidak diubah, pengguna
+tidak akan pernah menerima kode, dan tombol "Masuk" akan gagal tanpa pesan yang
+menjelaskan apa pun.
+
+Buka **Authentication → Emails → Magic Link**, lalu ganti isinya sehingga memuat
+`{{ .Token }}`:
+
+```html
+<h2>Kode masuk SankaLingo GO</h2>
+<p>Masukkan kode ini di aplikasi:</p>
+<p style="font-size:28px;letter-spacing:6px;font-weight:700">{{ .Token }}</p>
+<p>Kode berlaku satu jam. Abaikan email ini kalau kamu tidak memintanya.</p>
+```
+
+Yang menentukan hanya satu hal: **`{{ .Token }}` harus ada**. Selebihnya bebas.
+
+**6. Salin kunci.** **Settings → API**, ambil dua nilai:
 
 - **Project URL** → contoh `https://abcdefghijkl.supabase.co`
 - **anon public** → kunci panjang berawalan `eyJ…`
@@ -153,7 +177,7 @@ export const AWAN = {
 };
 ```
 
-**6. Deploy ulang** (`git push` atau `vercel --prod`).
+**7. Deploy ulang** (`git push` atau `vercel --prod`).
 
 ### Soal keamanan kunci — jangan panik
 
