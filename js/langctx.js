@@ -115,6 +115,12 @@ const navOther = (L, meta) => {
   ];
   if (L?.levels?.length) nav.push({ to: 'kurikulum', ico: 'map', label: 'Kurikulum' });
   if (L?.scripts?.length) nav.push({ to: 'aksara', ico: 'pen', label: labelScript(meta) });
+  /* Kanji punya rute dan halamannya sendiri, tetapi dulu satu-satunya
+     jalan ke sana adalah kartu di beranda Jepang. Padahal 105 kanji N5
+     adalah bagian TERBESAR bahasa Jepang di aplikasi ini, dan setiap
+     bagian lain punya entri menunya sendiri — pemelajar yang sudah
+     berpindah halaman tidak punya cara kembali selain lewat beranda. */
+  if (L?.kanji?.length) nav.push({ to: 'kanji', ico: 'book', label: 'Kanji' });
   if (L?.verba) nav.push({ to: 'verba', ico: 'grammar', label: 'Sistem Kata Kerja' });
   nav.push(
     { to: 'grammar', ico: 'grammar', label: 'Tata Bahasa' },

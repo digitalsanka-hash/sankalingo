@@ -591,7 +591,7 @@ function finishAll(stage, bp, results) {
         <div class="card__title">Tulisanmu — ${esc(r.name)}</div>
         ${r.texts.map(x => `<div class="card card--flat" style="margin-top:.8rem">
           <div class="row row--between"><b>${esc(x.task.name)}</b>
-            <span class="badge">${x.text.trim().split(/\\s+/).filter(Boolean).length} kata / min ${x.task.words}</span></div>
+            <span class="badge">${x.text.trim().split(/\s+/).filter(Boolean).length} kata / min ${x.task.words}</span></div>
           <div class="passage small" style="margin-top:.6rem">${esc(x.text || '(kosong)')}</div>
           ${x.task.model ? `<details style="margin-top:.7rem"><summary class="b" style="cursor:pointer">Bandingkan dengan jawaban model</summary>
             <div class="passage small" style="margin-top:.5rem">${esc(x.task.model)}</div></details>` : ''}
