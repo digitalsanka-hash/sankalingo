@@ -1,10 +1,45 @@
 # Perkakas pengembangan
 
+Semuanya dijalankan `node tools/<nama>.mjs` dan keluar dengan status bukan-nol
+kalau menemukan masalah, jadi bisa dirangkai jadi satu pemeriksaan sebelum
+menerbitkan.
+
+### Pemeriksa materi
+
 | Berkas | Guna |
 |---|---|
+| `validasi-materi.mjs` | bentuk data delapan bahasa non-Inggris: kolom tertukar, romanisasi kosong, id ganda, rujukan menggantung |
+| `validasi-inggris.mjs` | integritas rujukan kurikulum **Inggris** — tidak dicakup `validasi-materi.mjs` sama sekali, padahal kurikulum terbesar (44 unit, 326 pelajaran, 162 topik) |
+| `validasi-grammar.mjs` | topik tata bahasa: rumus, contoh, jebakan, latihan |
+| `validasi-verba.mjs` | sistem kata kerja tiap bahasa |
+| `validasi-kata.mjs` | bank kosakata tambahan |
+| `validasi-pakai.mjs` | contoh pemakaian tiap kata |
 | `audit-isi.mjs` | menghitung isi materi tiap bahasa |
-| `validasi-materi.mjs` | memeriksa bentuk data yang cacat |
-| `isi-romanisasi.mjs` | mengisi kolom romanisasi yang kosong |
+
+### Pemeriksa kode dan tampilan
+
+| Berkas | Guna |
+|---|---|
+| `audit-goresan.mjs` | mutu **bentuk** goresan aksara — jalur yang cacat tetap sah sebagai SVG dan tetap tergambar, jadi hanya ini yang bisa menangkapnya |
+| `audit-kunci-ganda.mjs` | kunci ganda dalam satu objek literal; nilai terakhir menimpa yang pertama tanpa error |
+| `audit-kode-mati.mjs` | ekspor yang tidak terjangkau — kode mati di sini menyesatkan, bukan sekadar berantakan |
+| `audit-escape.mjs` | teks materi bermuatan `<` `>` yang akan ditelan sebagai markup, karena tag `html` sengaja tidak meng-escape |
+| `audit-kontras.mjs` | kontras warna teks terhadap latarnya, tema gelap dan terang |
+| `audit-luring.mjs` | kelengkapan kerangka luring dan keabsahan skrip sebaris |
+
+Tiga di antaranya pernah **salah ukur dan menghasilkan angka yang terlihat
+meyakinkan** — pembaca jalur SVG yang mengira perintah relatif itu mutlak,
+ukuran tumpang-tindih yang memakai jarak indeks alih-alih jarak sepanjang
+jalur, dan pemindai kunci ganda berbasis indentasi yang menuduh setiap larik
+objek. Sebabnya dicatat di kepala masing-masing berkas supaya tidak diulang.
+Aturannya: **alat ukur diuji dulu pada kasus yang jawabannya sudah diketahui**,
+sebelum angkanya dipercaya.
+
+### Lain-lain
+
+| Berkas | Guna |
+|---|---|
+| `isi-romanisasi.mjs`, `isi-rom-pakai.mjs` | mengisi kolom romanisasi yang kosong |
 | `goresan-ar.js` | membangkitkan jalur goresan huruf Arab dari huruf Amiri (OFL) — dijalankan di konsol peramban |
 | `dump-corpus.mjs`, `render_f5.py`, `models.json`, `ref/` | jalur perekaman F5-TTS — **tidak dipakai**, lihat di bawah |
 

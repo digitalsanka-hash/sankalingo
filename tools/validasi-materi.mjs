@@ -111,16 +111,30 @@ for (const c of KODE) {
     arr(u.script).forEach(x => { if (!idS.has(x)) catat(c, `unit:${u.id}`, `aksara "${x}" tidak ada`); });
   }));
 
-  /* kata kembar dalam satu bahasa */
-  const kata = new Map();
-  vocab.forEach(p => arr(p.words).forEach(w => {
-    const k = String(w[0]).trim();
-    if (k) kata.set(k, (kata.get(k) || 0) + 1);
-  }));
-  const kembar = [...kata].filter(([, v]) => v > 1);
-  if (kembar.length > 6)
-    catat(c, 'vocab', `${kembar.length} kata kembar, contoh: ${kembar.slice(0, 5).map(x => x[0]).join(', ')}`);
-  else kembar.forEach(([k, v]) => catat(c, 'vocab', `kata kembar "${k}" (${v}×)`));
+  /* Kata kembar — hanya DI DALAM satu paket yang salah.
+
+     Pemeriksaan ini dulu menghitung kembar di seluruh bahasa sekaligus,
+     dan melaporkan 168 "masalah" pada delapan bahasa. Semuanya derau:
+     tumpang-tindih antarpaket memang DISENGAJA — paket "kata inti" adalah
+     cicipan, paket tema adalah kurikulumnya, jadi 水 memang muncul di
+     keduanya (lihat komentar lexOf di js/langctx.js). Kartu hafalan sudah
+     membuang kembarnya sendiri, sementara daftar kosakata memang harus
+     menampilkan isi utuh tiap paket.
+
+     Alat yang selalu melaporkan delapan masalah palsu membuat masalah
+     yang sungguhan tidak terlihat. Yang benar-benar keliru adalah kata
+     yang muncul dua kali di dalam SATU paket — di situ pemelajar melihat
+     entri yang sama berturut-turut di halaman yang sama. */
+  vocab.forEach(p => {
+    const kata = new Map();
+    arr(p.words).forEach((w, i) => {
+      const k = String(w[0]).trim();
+      if (k) kata.set(k, [...(kata.get(k) || []), i]);
+    });
+    for (const [k, ix] of kata)
+      if (ix.length > 1)
+        catat(c, 'vocab', `paket ${p.id}: "${k}" muncul ${ix.length}× (indeks ${ix.join(', ')})`);
+  });
 }
 
 if (!masalah.length) {
@@ -135,3 +149,9 @@ if (!masalah.length) {
   }
   console.log(`\nTOTAL ${masalah.length} masalah`);
 }
+
+/* Status keluar HARUS mencerminkan hasilnya. Sebelumnya berkas ini selalu
+   keluar dengan 0, jadi ia melaporkan delapan masalah di layar sementara
+   rangkaian pemeriksaan menganggapnya lulus — persis keadaan yang membuat
+   sebuah alat pemeriksa tidak ada gunanya. */
+process.exit(masalah.length ? 1 : 0);

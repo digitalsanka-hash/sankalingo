@@ -12,11 +12,21 @@ V('ru-v-num','Angka, Waktu & Hari','A1',
    ['пять','pyat','lima'],['шесть','shest','enam'],['семь','syem','tujuh'],['восемь','vósyem','delapan'],
    ['девять','dyévyat','sembilan'],['десять','dyésyat','sepuluh'],['сто','sto','seratus'],
    ['тысяча','týsyacha','seribu'],['час','chas','jam'],['минута','minúta','menit'],
-   ['день','dyen','hari'],['неделя','nedélya','minggu'],['месяц','myésyats','bulan'],
+   /* Dulu di sini ada день 'hari', padahal день sudah ada lagi di deret
+      waktu-hari di bawah sebagai 'siang'. Satu kata muncul dua kali dalam
+      SATU paket: pemelajar melihat entri yang sama dua kali, dan kartu
+      hafalan — yang membuang kembar — hanya menyimpan yang pertama,
+      sehingga makna 'siang' tidak pernah sampai kepadanya.
+
+      Diganti сутки, yang justru pembedaan sungguhan dalam bahasa Rusia:
+      сутки adalah hari penuh 24 jam (karena itu ia sederet dengan jam,
+      menit, minggu, bulan, tahun), sedangkan день adalah siang — bagian
+      hari yang terang, lawan утро, вечер, dan ночь. */
+   ['сутки','sútki','hari (24 jam)'],['неделя','nedélya','minggu'],['месяц','myésyats','bulan'],
    ['год','got','tahun'],['понедельник','panedyélnik','Senin'],['вторник','ftórnik','Selasa'],
    ['среда','sredá','Rabu'],['четверг','chetvyérk','Kamis'],['пятница','pyátnitsa','Jumat'],
    ['суббота','subóta','Sabtu'],['воскресенье','vaskresyénye','Minggu'],['утро','útra','pagi'],
-   ['день','dyen','siang'],['вечер','vyécher','sore'],['ночь','noch','malam'],['сейчас','seychás','sekarang']]),
+   ['день','dyen','siang; hari'],['вечер','vyécher','sore'],['ночь','noch','malam'],['сейчас','seychás','sekarang']]),
 
 V('ru-v-fam','Keluarga & Orang','A1',
   'Nama Rusia selalu tiga bagian: nama depan, patronim, dan nama keluarga.',
