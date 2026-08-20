@@ -155,7 +155,7 @@ proses build, tidak ada basis data yang wajib. Artinya ia bisa ditaruh di hostin
 statis mana pun dan tetap jalan penuh — termasuk saat pengunjung sedang luring.</p>
 
 <table>
-  <tr><th style="width:42%">Yang diunggah</th><td>±2,2 MB dalam 115 berkas</td></tr>
+  <tr><th style="width:42%">Yang diunggah</th><td>±2,7 MB dalam 147 berkas</td></tr>
   <tr><th>Yang TIDAK diunggah</th><td><code>.venv-tts/</code> (4,6 GB), <code>tools/</code>, <code>PAKET LENGKAP/</code>, <code>server.js</code></td></tr>
   <tr><th>Proses build</th><td>tidak ada — berkas disajikan apa adanya</td></tr>
   <tr><th>Basis data</th><td>tidak wajib; hanya untuk selaras antar perangkat</td></tr>
@@ -199,13 +199,16 @@ GitHub, lebih cepat untuk sekali coba tetapi pembaruannya manual.</p>
 <h3>Jalur A — lewat GitHub (disarankan)</h3>
 
 <ol class="langkah">
-  <li><b>Siapkan repositori lokal</b>
+  <li><b>Repositori lokal — SUDAH SIAP</b>
+    <p>Folder <code>fasih/</code> sudah berupa repositori git dengan komit
+    pertama berisi 170 berkas. Tidak perlu <code>git init</code> lagi.</p>
     <pre><code>cd "D:/ASDP/02. PROJEK/files/fasih"
-git init
-git add .
-git commit -m "SankaLingo GO siap deploy"</code></pre>
-    <p class="kecil">Sebelum <code>commit</code>, jalankan <code>git status</code>
-    dan pastikan <code>.venv-tts</code> <b>tidak</b> disebut.</p>
+git log --oneline -1        # lihat komitnya
+git status                  # harus bersih</code></pre>
+    <p class="kecil">Sudah diperiksa: <code>.venv-tts/</code> (4,6&nbsp;GB),
+    <code>node_modules/</code>, dan <code>PAKET LENGKAP/</code> tidak ikut.
+    Repositori induk di <code>files/</code> juga tidak tersentuh — hanya
+    folder <code>fasih/</code> yang jadi repositori.</p>
   </li>
 
   <li><b>Buat repositori kosong di GitHub</b>
@@ -396,7 +399,7 @@ sama. Tidak ada kata sandi yang perlu dibuat atau diingat.</p>
 <h3>Saat memperbarui materi</h3>
 <p>Ubah berkas di <code>data/</code>, lalu <b>naikkan nomor versi</b> di
 <code>sw.js</code>:</p>
-<pre><code>const VERSI = 'fasih-v10';   // dari v9</code></pre>
+<pre><code>const VERSI = 'fasih-v17';   // dari v16</code></pre>
 
 <div class="awas">
   <p><strong>Tanpa langkah ini</strong>, pengguna lama akan terus melihat materi
