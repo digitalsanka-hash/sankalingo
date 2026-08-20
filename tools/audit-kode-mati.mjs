@@ -102,3 +102,9 @@ console.log(mati.length
   ? `\n=== TIDAK TERJANGKAU: ${mati.length} ===`
   : '\nSemua ekspor terjangkau.');
 mati.forEach(([f, n]) => console.log('  ' + n.padEnd(22) + f));
+
+/* Selalu keluar dengan 0, dan itu disengaja. Ekspor yang tidak
+   terjangkau belum tentu salah — sebagian memang utilitas yang sengaja
+   disediakan untuk dipakai nanti. Keputusannya milik manusia, jadi alat
+   ini melapor, bukan menghakimi. */
+process.exit(0);

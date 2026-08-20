@@ -46,12 +46,37 @@ for (const f of files) {
   });
 }
 
+/* Tidak semua yang terjaring sama beratnya, dan status keluarnya harus
+   mencerminkan itu:
+
+     '<' atau entitas '&…;'  → PASTI rusak. Peramban mulai membaca tag
+                               atau entitas di situ, dan sisa kalimatnya
+                               hilang dari layar tanpa error apa pun.
+     '>' sendirian            → aman. Peramban menggambar '>' apa adanya
+                               kalau tidak ada '<' yang membukanya, dan
+                               materi tata bahasa memakainya sebagai tanda
+                               urutan ("always > usually > often").
+
+   Karena itu hanya golongan pertama yang membuat alat ini gagal.
+   Golongan kedua tetap dicetak sebagai keterangan, bukan tuduhan. */
+const berat = hit.filter(([, , s]) => /</.test(s) || RE_ENTITAS.test(s));
+const ringan = hit.filter(x => !berat.includes(x));
+
 const perf = new Map();
 hit.forEach(([f]) => perf.set(f, (perf.get(f) || 0) + 1));
 
-console.log(`string materi berisi < > atau entitas &  :  ${hit.length} di ${perf.size} berkas\n`);
+console.log(`string materi terjaring: ${hit.length} di ${perf.size} berkas`);
+console.log(`  merusak ('<' atau entitas) : ${berat.length}`);
+console.log(`  aman ('>' sendirian)       : ${ringan.length}\n`);
 [...perf].sort((a, b) => b[1] - a[1]).forEach(([f, n]) => console.log(`  ${String(n).padStart(4)}  ${f}`));
-if (hit.length) {
-  console.log('\n=== semua kemunculan ===');
-  hit.forEach(([f, l, s]) => console.log(`  ${f}:${l}  |  ${s.length > 90 ? s.slice(0, 90) + '…' : s}`));
-}
+
+const cetak = (judul, daftar) => {
+  if (!daftar.length) return;
+  console.log(`\n=== ${judul} ===`);
+  daftar.forEach(([f, l, s]) => console.log(`  ${f}:${l}  |  ${s.length > 90 ? s.slice(0, 90) + '…' : s}`));
+};
+cetak('MERUSAK — harus di-escape atau ditulis ulang', berat);
+cetak('aman, hanya keterangan', ringan);
+
+console.log(`\n${berat.length} string merusak`);
+process.exit(berat.length ? 1 : 0);

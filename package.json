@@ -2,12 +2,13 @@
   "name": "fasih-english-lab",
   "version": "1.0.0",
   "private": true,
-  "description": "Platform belajar bahasa Inggris untuk penutur bahasa Indonesia: kurikulum CEFR A1-C2, IELTS, TOEFL, TOEIC, SRS, dan rencana belajar harian.",
+  "description": "SankaLingo GO — belajar sembilan bahasa untuk penutur bahasa Indonesia: kurikulum CEFR A1-C2 untuk Inggris beserta IELTS/TOEFL/TOEIC, ditambah Arab, Jerman, Spanyol, Prancis, Jepang, Korea, Mandarin, dan Rusia lengkap dengan pelatih aksara, SRS, dan rencana belajar harian.",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
     "deploy": "vercel --prod",
-    "periksa": "node tools/validasi-grammar.mjs && node tools/validasi-kata.mjs && node tools/validasi-verba.mjs && node tools/validasi-pakai.mjs && node tools/audit-kontras.mjs && node tools/audit-luring.mjs"
+    "periksa": "node tools/validasi-materi.mjs && node tools/validasi-inggris.mjs && node tools/validasi-grammar.mjs && node tools/validasi-kata.mjs && node tools/validasi-verba.mjs && node tools/validasi-pakai.mjs && node tools/audit-goresan.mjs && node tools/audit-kunci-ganda.mjs data && node tools/audit-kunci-ganda.mjs js && node tools/audit-escape.mjs data && node tools/audit-kontras.mjs && node tools/audit-luring.mjs",
+    "lapor": "node tools/audit-isi.mjs && node tools/audit-kode-mati.mjs"
   },
   "keywords": [
     "english",

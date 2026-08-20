@@ -78,3 +78,10 @@ console.log('TOT  ' + kol.map(k => String(KODE.reduce((a,c)=>a+(T[c][k]||0),0)).
 const butir = KODE.reduce((a,c) => a + T[c].kata + T[c].frasa + T[c].contoh + T[c].latihan + T[c].aksara + T[c].soalBacaan + T[c].kanji + T[c].kataKanji + T[c].contohPakai, 0);
 console.log(`\nTOTAL BUTIR MATERI (8 bahasa): ${butir}`);
 console.log(`Rata-rata per bahasa          : ${Math.round(butir / 8)}`);
+
+/* Alat ini MENGHITUNG, tidak menilai — tidak ada ambang yang bisa
+   disebut lulus atau gagal, jadi ia selalu keluar dengan 0. Ditulis
+   tegas di sini supaya tidak dikira kelupaan seperti yang pernah
+   terjadi pada validasi-materi.mjs, yang mencetak delapan masalah lalu
+   melaporkan sukses. */
+process.exit(0);
