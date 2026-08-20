@@ -125,15 +125,23 @@ ingin masuk lewat psql).
 `supabase/skema.sql`, tekan **Run**. Skrip ini membuat satu tabel `kemajuan`,
 menyalakan Row Level Security, dan memasang empat aturan akses.
 
-**3. Pastikan RLS benar-benar menyala.** Masih di SQL Editor:
+**3. Pastikan RLS benar-benar menyala.** Masih di **SQL Editor → New query**,
+tempel seluruh isi `supabase/periksa.sql`, tekan **Run**.
 
-```sql
-select tablename, rowsecurity from pg_tables
-where schemaname = 'public' and tablename = 'kemajuan';
-```
+Perintah itu tidak mengubah apa pun — ia hanya bertanya. Yang harus terlihat:
 
-Kolom `rowsecurity` **harus** bernilai `true`. Kalau `false`, data setiap
-pengguna bisa dibaca pengguna lain — jangan lanjut sebelum ini benar.
+| rls_menyala | jumlah_aturan | kesimpulan |
+|---|---|---|
+| `true` | `4` | AMAN — RLS menyala dan keempat aturan terpasang. |
+
+Kalau kesimpulannya bukan "AMAN", **jangan lanjut**. Kunci `anon` yang nanti
+dipasang di aplikasi bisa dilihat setiap pengunjung — memang begitu
+rancangannya. Yang mencegah orang memakai kunci itu untuk membaca kemajuan
+belajar seluruh pengguna hanyalah RLS. Kalau RLS mati, kunci publik itu berubah
+jadi pintu terbuka ke seluruh tabel.
+
+Hasil kosong berarti tabelnya belum ada — `skema.sql` belum jalan sampai
+selesai; ulangi langkah 2.
 
 **4. Nyalakan masuk dengan email.** **Authentication → Providers → Email**:
 pastikan aktif. Matikan *Confirm email* kalau ingin pengguna langsung bisa masuk
