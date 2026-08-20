@@ -13,6 +13,16 @@ supabase/
 server.js
 .cache/
 
+# package.json sengaja TIDAK diunggah.
+#
+# Isinya cuma skrip pengembangan lokal (`node server.js`). Kalau ikut
+# naik, Vercel bisa mengenalinya sebagai proyek Node lalu mencoba
+# menjalankan server — padahal ini situs statis murni. vercel.json
+# sudah memaksa mode statis, tetapi lebih aman tidak memberi apa pun
+# untuk ditebak daripada mengandalkan urutan menang-kalah pengaturan.
+package.json
+package-lock.json
+
 # Bundel jualan, bukan bagian situs.
 PAKET LENGKAP/
 *.zip
