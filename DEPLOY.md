@@ -101,6 +101,50 @@ ditampilkan di penyedia domainmu. Sertifikat HTTPS dipasang otomatis.
 
 ---
 
+## Kalau Vercel tidak bisa menyambung ke GitHub
+
+Gejalanya saat `vercel git connect` atau saat impor di dasbor:
+
+```
+You need admin or write access to the repository "NAMA" to link it. (400)
+```
+
+**Ini bukan kegagalan mendorong.** Kodenya sudah ada di GitHub; yang gagal
+adalah Vercel menyambungkan dirinya. Dua izin yang sama sekali terpisah
+terlibat di sini:
+
+| Perbuatan | Memakai izin | Disimpan di |
+|---|---|---|
+| `git push` | kredensial git kamu | Windows Credential Manager |
+| Vercel menyambung repo | izin OAuth akun Vercel | akun GitHub yang terikat ke Vercel |
+
+Kalau akun GitHub yang terikat ke Vercel berbeda dari pemilik repo, Vercel
+tidak punya izin **tulis** — dan izin tulis memang diperlukan, karena Vercel
+harus memasang webhook di repo itu supaya tahu kapan ada dorongan baru.
+Repo publik pun tetap ditolak: bisa dibaca, tidak bisa dipasangi webhook.
+
+Periksa siapa masing-masing:
+
+```bash
+npx vercel whoami        # akun Vercel
+git remote -v            # pemilik repo
+```
+
+**Perbaikannya, paling ringan:** undang akun Vercel itu sebagai kolaborator —
+GitHub → repo → Settings → Collaborators → Add people → beri peran **Write**.
+Terima undangannya, lalu `npx vercel git connect`.
+
+**Alternatif:** di Vercel, Settings → Git, sambungkan ulang dengan akun GitHub
+pemilik repo. Ini mengubah seluruh akun Vercel, jadi dampaknya lebih besar.
+
+**Sementara itu deploy tetap bisa**, hanya manual:
+
+```bash
+npm run deploy           # sama dengan: npx vercel --prod
+```
+
+---
+
 ## Bagian 2 — Supabase (opsional)
 
 ### Perlukah?

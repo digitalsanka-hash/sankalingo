@@ -5,8 +5,18 @@
   "description": "Platform belajar bahasa Inggris untuk penutur bahasa Indonesia: kurikulum CEFR A1-C2, IELTS, TOEFL, TOEIC, SRS, dan rencana belajar harian.",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "deploy": "vercel --prod",
+    "periksa": "node tools/validasi-grammar.mjs && node tools/validasi-kata.mjs && node tools/validasi-verba.mjs && node tools/validasi-pakai.mjs && node tools/audit-kontras.mjs && node tools/audit-luring.mjs"
   },
-  "keywords": ["english", "ielts", "toefl", "toeic", "cefr", "srs", "indonesia"],
+  "keywords": [
+    "english",
+    "ielts",
+    "toefl",
+    "toeic",
+    "cefr",
+    "srs",
+    "indonesia"
+  ],
   "license": "UNLICENSED"
 }
