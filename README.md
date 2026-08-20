@@ -1,8 +1,45 @@
-# SankaLingo GO — English Lab
+# SankaLingo GO
 
-Platform belajar bahasa Inggris untuk penutur bahasa Indonesia. Berjalan sepenuhnya di
-peramban: tanpa server aplikasi, tanpa akun, tanpa basis data. Seluruh kemajuan belajar
-disimpan di `localStorage`.
+Laboratorium bahasa untuk penutur Indonesia. Sembilan bahasa, tanpa
+proses build, jalan penuh tanpa internet.
+
+**Yang membedakan:** hampir semua bahan belajar bahasa menjelaskan
+aturan bahasa asingnya. Aplikasi ini menjelaskan **kenapa penutur
+Indonesia keliru** di titik itu — karena bahasa kita tidak punya kala,
+tidak punya jenis kelamin kata benda, tidak mengubah bentuk kata
+kerjanya, dan tidak membedakan tuntas dari tidak tuntas.
+
+---
+
+## Isi
+
+### Bahasa Inggris
+
+| | |
+|---|---|
+| Kurikulum CEFR | A1–C2 · 44 unit · 326 pelajaran |
+| Tata bahasa | 162 topik · 767 latihan · 302 jebakan khas penutur Indonesia |
+| Sistem kala | petak 12 tenses utuh (3 waktu × 4 rupa) + pasif + pengenal bentuk |
+| Kosakata | 1.364 kata, semuanya dengan IPA dan kalimat contoh |
+| Ujian | IELTS · TOEFL · TOEIC — strategi, bank soal, simulasi, konversi skor |
+
+### Delapan bahasa lain
+
+Arab · Jerman · Spanyol · Prancis · Jepang · Korea · Rusia · Mandarin
+
+| | |
+|---|---|
+| Kosakata | 3.754 kata, semuanya dengan pengucapan dan kalimat contoh |
+| Sistem kata kerja | tiap bahasa punya halamannya sendiri |
+| Aksara | pelatih Hangul, Kana, Hanzi, Hijaiyah, Kiril |
+| Kartu hafalan | SRS SM-2, lintas bahasa |
+
+Halaman **sistem kata kerja** memuat hal yang jarang dikatakan terus
+terang: Mandarin **tidak punya kala sama sekali**, Jepang **tidak punya
+kala masa depan**, dan Rusia lebih peduli apakah suatu peristiwa
+**tuntas** daripada kapan ia terjadi.
+
+---
 
 ## Menjalankan
 
@@ -10,83 +47,60 @@ disimpan di `localStorage`.
 node server.js
 ```
 
-Buka `http://localhost:4321`. Tidak ada dependensi yang perlu dipasang — `npm start`
-hanya memanggil server statis bawaan Node.
+Buka `http://localhost:4321`. Tidak ada `npm install`, tidak ada proses
+build — berkasnya disajikan apa adanya.
 
-Peramban yang disarankan: **Chrome atau Edge**. Modul berbicara memakai Web Speech API
-(pengenalan ucapan) yang belum tersedia di Firefox/Safari; sisa aplikasi tetap berjalan.
+## Menyebarkan
 
-## Isi
+Situs statis; bisa ditaruh di hosting statis mana pun. Panduan
+lengkapnya ada di [`DEPLOY.md`](DEPLOY.md) dan
+[`output/SankaLingo-GO-Panduan-Deploy.pdf`](output/SankaLingo-GO-Panduan-Deploy.pdf).
 
-| Bagian | Jumlah |
-|---|---|
-| Entri kosakata (kata, frasa kerja, idiom, kolokasi) | ±1.360 |
-| Topik tata bahasa A1–C2 | 120 |
-| Butir latihan tata bahasa | 341 |
-| Unit kurikulum | 44 |
-| Pelajaran | ±290 |
-| Bacaan bertingkat + bergaya ujian | 9 |
-| Butir dikte & simakan | ±55 |
-| Soal ujian (IELTS/TOEFL/TOEIC) | ±170 |
-| Trik & metode belajar | 62 |
-| Rencana harian | 6 (30/60/90 hari + sprint IELTS/TOEFL/TOEIC) |
+Supabase **opsional** — aplikasi jalan penuh tanpanya. Ia hanya dipakai
+untuk memindahkan kemajuan belajar antar perangkat.
 
-## Modul
+---
 
-- **Kurikulum CEFR A1→C2** — 6 level, 44 unit. Tiap unit: pelajaran tata bahasa,
-  paket kosakata, latihan keterampilan, dan ujian unit.
-- **Tata bahasa** — tiap topik menjelaskan *mengapa penutur Indonesia keliru di titik itu*,
-  lalu rumus, catatan, contoh, jebakan khas, dan latihan.
-- **Kosakata + SRS** — kartu hafalan dengan algoritma SM-2 termodifikasi; jatuh tempo
-  dihitung per hari agar sesi harian terasa jelas.
-- **Menyimak** — dikte bertingkat, simakan panjang, dan latihan khusus angka & ejaan
-  (13 vs 30) yang menjadi penyebab kehilangan nilai terbesar.
-- **Berbicara** — shadowing, kartu IELTS Part 2 dengan pewaktu 1+2 menit, dan penilaian
-  pengucapan otomatis lewat pengenalan ucapan.
-- **Membaca** — bacaan A1–C1 plus teks bergaya IELTS/TOEFL/TOEIC, dengan penghitung
-  kecepatan baca (kata/menit).
-- **Menulis** — tugas berpewaktu, jawaban model, dan pemeriksa heuristik yang menandai
-  kesalahan khas penutur Indonesia (comma splice, "despite of", "informations", dsb.).
-- **Pelafalan** — bagan IPA, delapan kelompok bunyi tersulit bagi penutur Indonesia,
-  pasangan minimal, aturan tekanan kata, dan bunyi bersambung.
-- **Ujian** — peta format, strategi per bagian, deskriptor band, tabel konversi skor,
-  bank soal, dan simulasi berpewaktu dengan analisis kesalahan.
-- **Rencana & penempatan** — tes penempatan 30 soal → level CEFR, lalu rencana harian
-  berisi daftar centang.
+## Perkakas pemeriksa
 
-## Struktur berkas
+Materinya dijaga mesin, bukan pembacaan ulang. Tiap alat ditulis
+**sebelum** bahan yang diperiksanya.
 
-```
-index.html            kerangka halaman
-assets/css/           tokens → base → components → views
-js/
-  app.js              router hash, navigasi, palet pencarian, tema
-  state.js            localStorage, XP, rentetan, kemajuan
-  srs.js              algoritma pengulangan berjarak
-  speech.js           TTS + pengenalan ucapan + penilaian
-  quiz.js             mesin latihan (mcq/fill/order/trans/dictate/speak)
-  ui.js               perkakas DOM, toast, modal, grafik SVG
-  data.js             agregator seluruh data + indeks pencarian
-  views/              satu berkas per kelompok layar
-data/                 seluruh materi (kosakata, grammar, kurikulum, ujian, dll.)
-server.js             server statis tanpa dependensi
+```bash
+node tools/validasi-grammar.mjs   # 162 topik: kunci jawaban, jebakan, kelompok tema
+node tools/validasi-kata.mjs      # kosakata: tiap kata punya contoh, contoh memuat katanya
+node tools/validasi-verba.mjs     # sistem kala & kata kerja 9 bahasa
+node tools/validasi-pakai.mjs     # 2.643 contoh pemakaian
+node tools/audit-kontras.mjs      # kontras warna WCAG AA, kedua tema
+node tools/audit-luring.mjs       # kelengkapan kerangka luring
 ```
 
-## Pintasan papan tik
+Pemeriksa kosakata harus memahami tata bahasa sungguhan, karena
+pencocokan lugu justru menolak kalimat yang paling benar:
 
-| Tombol | Fungsi |
-|---|---|
-| `/` atau `Ctrl+K` | palet pencarian |
-| `g` lalu `h c g v r e p s` | pindah halaman |
-| `Spasi` | balik kartu hafalan |
-| `1`–`4` | nilai kartu (Lupa/Sulit/Bagus/Mudah) |
-| `A`–`D` | jawab pilihan ganda |
+- kata kerja terpisah Jerman — `abfahren` muncul sebagai "**fährt** … **ab**"
+- jamak berumlaut — `Hand` → `Hände`
+- konjugasi Korea lewat aritmetika suku Hangul — `아프다` → `아파요`
+- harakat Arab yang berubah mengikuti kasus, dan kata sandang `ال`
+- **jamak taksir** Arab lewat pencocokan akar tiga konsonan — `قَدَم` → `أَقْدَام`
 
-## Catatan teknis
+Pengucapan untuk Korea, Arab, dan Rusia **dihitung mesin** dari
+aksaranya (`node tools/validasi-kata.mjs --isi`), sehingga ejaannya
+tidak pernah menyimpang dari yang dipakai mesin suara.
 
-- Tanpa proses build. Seluruh berkas adalah ES module yang dimuat langsung peramban.
-- Data materi disimpan sebagai tuple ringkas lalu dipetakan ke objek di `js/data.js`,
-  agar berkas tetap kecil dan mudah ditambah.
-- Skor simulasi ujian adalah **perkiraan**, bukan skor resmi. Deskriptor band dan tabel
-  konversi disertakan sebagai rujukan belajar.
-- Pemeriksa tulisan bersifat heuristik (pencocokan pola), bukan penilai IELTS.
+---
+
+## Bentuk
+
+Modul ES tanpa kerangka kerja, tanpa alat bangun. Perutean lewat hash
+(`#/<kode-bahasa>/<bagian>`). Kemajuan belajar di `localStorage`.
+Pekerja layanan menyimpan seluruh kerangka aplikasi, jadi aplikasinya
+tetap terbuka penuh tanpa jaringan.
+
+```
+data/          materi (per bahasa di data/lang/)
+js/            aplikasi; js/views/ satu berkas per halaman
+assets/css/    token → dasar → komponen → tampilan
+tools/         pemeriksa mutu materi
+supabase/      skema penyelarasan (opsional)
+```
