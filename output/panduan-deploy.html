@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<title>SankaLingo GO — Panduan Deploy</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 16mm; }
+
+  :root {
+    --tinta:   #16202e;
+    --lembut:  #5b667a;
+    --garis:   #d7dee8;
+    --merek:   #0d7a6b;
+    --merekbg: #eaf6f3;
+    --awas:    #a8500f;
+    --awasbg:  #fdf3e7;
+    --bahaya:  #a3213c;
+    --bahayabg:#fdeef1;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    font: 10.2pt/1.6 "Segoe UI", system-ui, sans-serif;
+    color: var(--tinta); margin: 0;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+
+  h1, h2, h3 { line-height: 1.25; margin: 0 0 .4em; }
+  h1 { font-size: 24pt; letter-spacing: -.4pt; }
+  h2 {
+    font-size: 14pt; margin-top: 1.5em; padding-bottom: .3em;
+    border-bottom: 2px solid var(--merek); color: var(--merek);
+    break-after: avoid;
+  }
+  h3 { font-size: 11.2pt; margin-top: 1.3em; break-after: avoid; }
+  p  { margin: 0 0 .7em; }
+  ul, ol { margin: 0 0 .8em; padding-left: 1.3em; }
+  li { margin-bottom: .3em; }
+  code {
+    font: 9pt/1.5 "Cascadia Mono", Consolas, monospace;
+    background: #f2f5f9; padding: .1em .35em; border-radius: 3px;
+  }
+  pre {
+    font: 8.8pt/1.55 "Cascadia Mono", Consolas, monospace;
+    background: #f7f9fc; border: 1px solid var(--garis);
+    border-left: 3px solid var(--merek);
+    padding: .7em .9em; border-radius: 4px; overflow-x: auto;
+    margin: 0 0 .8em; break-inside: avoid; white-space: pre-wrap;
+  }
+  pre code { background: none; padding: 0; }
+
+  table { width: 100%; border-collapse: collapse; margin: 0 0 .9em; font-size: 9.4pt; break-inside: avoid; }
+  th, td { border: 1px solid var(--garis); padding: .42em .6em; text-align: left; vertical-align: top; }
+  th { background: var(--merekbg); font-weight: 600; }
+
+  .sampul {
+    height: 247mm; display: flex; flex-direction: column;
+    justify-content: center; break-after: page;
+  }
+  .sampul__tanda {
+    width: 54px; height: 54px; border-radius: 14px; background: var(--merek);
+    color: #fff; display: grid; place-items: center;
+    font-size: 26pt; font-weight: 700; margin-bottom: 1.6em;
+  }
+  .sampul h1 { font-size: 34pt; margin-bottom: .15em; }
+  .sampul__sub { font-size: 13pt; color: var(--lembut); margin-bottom: 2.4em; }
+  .sampul__kotak {
+    border: 1px solid var(--garis); border-radius: 8px; padding: 1.1em 1.3em;
+    background: #fafcfe; max-width: 118mm;
+  }
+  .sampul__kotak p { margin: 0 0 .45em; font-size: 9.6pt; }
+  .sampul__kotak p:last-child { margin: 0; }
+  .sampul__kaki { margin-top: auto; font-size: 8.8pt; color: var(--lembut); }
+
+  .catatan, .awas, .bahaya {
+    border-radius: 5px; padding: .7em .95em; margin: 0 0 .9em;
+    break-inside: avoid; font-size: 9.5pt;
+  }
+  .catatan { background: var(--merekbg);  border-left: 3px solid var(--merek); }
+  .awas    { background: var(--awasbg);   border-left: 3px solid var(--awas); }
+  .bahaya  { background: var(--bahayabg); border-left: 3px solid var(--bahaya); }
+  .catatan p:last-child, .awas p:last-child, .bahaya p:last-child { margin: 0; }
+  .catatan strong { color: var(--merek); }
+  .awas strong    { color: var(--awas); }
+  .bahaya strong  { color: var(--bahaya); }
+
+  .langkah {
+    counter-reset: langkah; list-style: none; padding: 0; margin: 0 0 1em;
+  }
+  .langkah > li {
+    counter-increment: langkah; position: relative;
+    padding-left: 2.1em; margin-bottom: .9em; break-inside: avoid;
+  }
+  .langkah > li::before {
+    content: counter(langkah); position: absolute; left: 0; top: -.05em;
+    width: 1.5em; height: 1.5em; border-radius: 50%;
+    background: var(--merek); color: #fff;
+    font-size: 8.6pt; font-weight: 700; display: grid; place-items: center;
+  }
+  .langkah b { display: block; margin-bottom: .15em; }
+
+  .periksa { list-style: none; padding: 0; }
+  .periksa li { padding-left: 1.6em; position: relative; margin-bottom: .35em; }
+  .periksa li::before {
+    content: ''; position: absolute; left: 0; top: .28em;
+    width: .85em; height: .85em; border: 1.5px solid var(--lembut); border-radius: 3px;
+  }
+
+  .daftar-isi { list-style: none; padding: 0; }
+  .daftar-isi li {
+    display: flex; justify-content: space-between; gap: .6em;
+    padding: .4em 0; border-bottom: 1px dotted var(--garis); font-size: 10pt;
+  }
+  .daftar-isi span:last-child { color: var(--lembut); white-space: nowrap; }
+
+  .halaman-baru { break-before: page; }
+  .kecil { font-size: 9pt; color: var(--lembut); }
+</style>
+</head>
+<body>
+
+<!-- ── Sampul ────────────────────────────────────────────────── -->
+<section class="sampul">
+  <div class="sampul__tanda">S</div>
+  <h1>SankaLingo GO</h1>
+  <div class="sampul__sub">Panduan Deploy ke Vercel &amp; Supabase</div>
+
+  <div class="sampul__kotak">
+    <p><b>Untuk siapa</b> — pemilik aplikasi yang ingin menaruhnya di internet, tanpa harus paham server.</p>
+    <p><b>Perlu waktu</b> — sekitar 15 menit untuk Vercel saja, 30 menit dengan Supabase.</p>
+    <p><b>Biaya</b> — nol. Kedua layanan punya paket gratis yang cukup, tanpa kartu kredit.</p>
+    <p><b>Yang perlu disiapkan</b> — akun email, dan folder aplikasi ini di komputer.</p>
+  </div>
+
+  <div class="sampul__kaki">
+    Dokumen ini menyertai berkas <code>DEPLOY.md</code>, <code>vercel.json</code>,
+    <code>.vercelignore</code>, dan <code>supabase/skema.sql</code> di folder aplikasi.
+  </div>
+</section>
+
+<!-- ── Daftar isi ────────────────────────────────────────────── -->
+<h2>Isi panduan</h2>
+<ul class="daftar-isi">
+  <li><span>1 · Sebelum mulai — apa yang sebenarnya di-deploy</span><span>hlm. 2</span></li>
+  <li><span>2 · Deploy ke Vercel</span><span>hlm. 3</span></li>
+  <li><span>3 · Supabase — kapan perlu, kapan tidak</span><span>hlm. 5</span></li>
+  <li><span>4 · Setelah hidup — pemeriksaan &amp; perawatan</span><span>hlm. 7</span></li>
+  <li><span>5 · Kalau ada yang gagal</span><span>hlm. 8</span></li>
+</ul>
+
+<h2>1 · Sebelum mulai</h2>
+
+<p>SankaLingo GO adalah <b>situs statis</b>: tidak ada kode server, tidak ada
+proses build, tidak ada basis data yang wajib. Artinya ia bisa ditaruh di hosting
+statis mana pun dan tetap jalan penuh — termasuk saat pengunjung sedang luring.</p>
+
+<table>
+  <tr><th style="width:42%">Yang diunggah</th><td>±2,2 MB dalam 115 berkas</td></tr>
+  <tr><th>Yang TIDAK diunggah</th><td><code>.venv-tts/</code> (4,6 GB), <code>tools/</code>, <code>PAKET LENGKAP/</code>, <code>server.js</code></td></tr>
+  <tr><th>Proses build</th><td>tidak ada — berkas disajikan apa adanya</td></tr>
+  <tr><th>Basis data</th><td>tidak wajib; hanya untuk selaras antar perangkat</td></tr>
+</table>
+
+<div class="bahaya">
+  <p><strong>Jangan lewatkan ini.</strong> Folder aplikasi berisi
+  <code>.venv-tts/</code> sebesar <b>4,6 GB</b> — sisa lingkungan PyTorch dari
+  rencana lama yang sudah ditinggalkan. Kalau ikut terunggah, deploy akan gagal
+  atau memakan waktu sangat lama. Berkas <code>.vercelignore</code> dan
+  <code>.gitignore</code> sudah menyingkirkannya untukmu, tetapi <b>periksa
+  sekali</b> dengan <code>git status</code> sebelum commit pertama.</p>
+</div>
+
+<h3>Yang berubah dari rencana lama</h3>
+
+<p>Rencana awal merekam seluruh materi suara memakai F5-TTS. Rencana itu sudah
+ditinggalkan karena bobot modelnya berlisensi nonkomersial — dan itu dulu menjadi
+penghalang terbesar untuk menjual aplikasi ini.</p>
+
+<div class="catatan">
+  <p><strong>Akibatnya menguntungkan:</strong> aplikasi sekarang memakai Web Speech
+  API bawaan peramban. Tidak ada satu pun berkas audio, dan <b>tidak ada kewajiban
+  lisensi TTS sama sekali</b>. Aplikasi bebas dijual.</p>
+</div>
+
+<p>Yang masih perlu dicantumkan atribusinya: data goresan kana dan hanzi dari
+<b>KanjiVG</b> (CC BY-SA 3.0), serta penyangkalan merek dagang untuk nama ujian
+(TOEFL, IELTS, JLPT, dan seterusnya). Keduanya sudah terpasang di
+<code>NOTICE.md</code> dan halaman Panduan aplikasi. Goresan Arab dibangkitkan
+dari huruf Amiri berlisensi SIL OFL, jadi bebas dipakai.</p>
+
+<!-- ── Vercel ────────────────────────────────────────────────── -->
+<section class="halaman-baru">
+<h2>2 · Deploy ke Vercel</h2>
+
+<p>Ada dua jalur. <b>Jalur A</b> lewat GitHub — setiap kali kamu mengubah materi
+lalu <code>git push</code>, situs ikut diperbarui sendiri. <b>Jalur B</b> tanpa
+GitHub, lebih cepat untuk sekali coba tetapi pembaruannya manual.</p>
+
+<h3>Jalur A — lewat GitHub (disarankan)</h3>
+
+<ol class="langkah">
+  <li><b>Siapkan repositori lokal</b>
+    <pre><code>cd "D:/ASDP/02. PROJEK/files/fasih"
+git init
+git add .
+git commit -m "SankaLingo GO siap deploy"</code></pre>
+    <p class="kecil">Sebelum <code>commit</code>, jalankan <code>git status</code>
+    dan pastikan <code>.venv-tts</code> <b>tidak</b> disebut.</p>
+  </li>
+
+  <li><b>Buat repositori kosong di GitHub</b>
+    <p>Beri nama bebas, misalnya <code>sankalingo</code>. Jangan centang
+    "Add a README" — repositorinya harus benar-benar kosong.</p>
+  </li>
+
+  <li><b>Dorong kode ke GitHub</b>
+    <pre><code>git remote add origin https://github.com/NAMA-ANDA/sankalingo.git
+git branch -M main
+git push -u origin main</code></pre>
+  </li>
+
+  <li><b>Impor di Vercel</b>
+    <p>Buka <code>vercel.com</code> → <b>Add New → Project → Import</b>, pilih
+    repositori tadi. Isi seperti tabel di bawah, lalu tekan <b>Deploy</b>.</p>
+  </li>
+</ol>
+
+<table>
+  <tr><th style="width:38%">Isian</th><th>Nilai</th></tr>
+  <tr><td>Framework Preset</td><td><b>Other</b></td></tr>
+  <tr><td>Root Directory</td><td><code>.</code></td></tr>
+  <tr><td>Build Command</td><td><i>kosongkan</i></td></tr>
+  <tr><td>Output Directory</td><td><i>kosongkan</i></td></tr>
+  <tr><td>Install Command</td><td><i>kosongkan</i></td></tr>
+</table>
+
+<div class="awas">
+  <p><strong>Kalau Vercel memaksa mengisi Build Command,</strong> isi dengan
+  <code>echo statis</code>. Perintah itu tidak melakukan apa pun dan aman —
+  yang penting jangan biarkan Vercel menebak sendiri, karena ia bisa mengira
+  ini proyek Node dan mencoba menjalankan <code>server.js</code>.</p>
+</div>
+
+<p>Sekitar satu menit, situs hidup di <code>nama-proyek.vercel.app</code>.</p>
+
+<h3>Jalur B — tanpa GitHub</h3>
+
+<pre><code>npm i -g vercel
+cd "D:/ASDP/02. PROJEK/files/fasih"
+vercel</code></pre>
+
+<p>Ikuti pertanyaannya. Saat ditanya apakah ingin mengubah pengaturan build,
+jawab <b>no</b>. Untuk menerbitkan versi produksi:</p>
+
+<pre><code>vercel --prod</code></pre>
+
+<h3>Yang sudah disiapkan untukmu</h3>
+
+<table>
+  <tr><th style="width:32%">Berkas</th><th>Gunanya</th></tr>
+  <tr><td><code>vercel.json</code></td>
+      <td>Aturan cache dan pengamanan dasar. <code>index.html</code>,
+          <code>sw.js</code>, <code>js/</code>, dan <code>data/</code> sengaja
+          <b>tidak</b> disimpan lama.</td></tr>
+  <tr><td><code>.vercelignore</code></td>
+      <td>Menyingkirkan <code>.venv-tts/</code>, <code>tools/</code>,
+          <code>PAKET LENGKAP/</code>, <code>server.js</code>.</td></tr>
+  <tr><td><code>.gitignore</code></td>
+      <td>Sama, untuk sisi Git.</td></tr>
+</table>
+
+<div class="catatan">
+  <p><strong>Kenapa kode sengaja tidak di-cache lama?</strong> Kalau
+  <code>js/</code> dan <code>data/</code> disimpan berbulan-bulan oleh peramban
+  pengunjung, mereka terjebak di versi lama dan <b>tidak ada cara memperbaikinya
+  dari jauh</b>. Kemampuan luring tetap utuh, karena pekerja layanan
+  (<code>sw.js</code>) punya cadangannya sendiri.</p>
+</div>
+
+<h3>Memakai domain sendiri</h3>
+<p>Vercel → Project → <b>Settings → Domains → Add</b>. Tambahkan rekaman DNS yang
+ditampilkan di penyedia domainmu. Sertifikat HTTPS dipasang otomatis, gratis.</p>
+</section>
+
+<!-- ── Supabase ──────────────────────────────────────────────── -->
+<section class="halaman-baru">
+<h2>3 · Supabase</h2>
+
+<h3>Perlukah?</h3>
+
+<table>
+  <tr><th style="width:46%">Keadaan</th><th>Jawaban</th></tr>
+  <tr><td>Dipakai sendiri, satu perangkat</td>
+      <td><b>Tidak perlu.</b> Lewati seluruh bagian ini.</td></tr>
+  <tr><td>Dijual atau dipakai banyak orang</td>
+      <td><b>Perlu</b>, kalau kamu ingin kemajuan pengguna selamat saat mereka ganti HP.</td></tr>
+</table>
+
+<p>Tanpa Supabase, aplikasi tetap jalan penuh — kemajuan tersimpan di localStorage
+peramban. Yang hilang hanya kemampuan berpindah perangkat. Kartu penyelarasan di
+halaman Pengaturan <b>otomatis tersembunyi</b> selama Supabase belum
+dikonfigurasi, jadi pengguna tidak melihat pilihan yang tak berguna baginya.</p>
+
+<h3>Langkah</h3>
+
+<ol class="langkah">
+  <li><b>Buat proyek</b>
+    <p>Buka <code>supabase.com</code> → <b>New Project</b>. Pilih wilayah
+    <b>Southeast Asia (Singapore)</b> — paling dekat dari Indonesia. Simpan kata
+    sandi basis data yang kamu buat; aplikasi tidak memakainya, tetapi kamu akan
+    membutuhkannya kalau kelak ingin masuk lewat <code>psql</code>.</p>
+  </li>
+
+  <li><b>Jalankan skema</b>
+    <p>Buka <b>SQL Editor → New query</b>, tempel seluruh isi
+    <code>supabase/skema.sql</code>, tekan <b>Run</b>. Skrip ini membuat satu
+    tabel <code>kemajuan</code>, menyalakan Row Level Security, dan memasang
+    empat aturan akses. Aman dijalankan berulang kali.</p>
+  </li>
+
+  <li><b>Pastikan RLS benar-benar menyala</b>
+    <pre><code>select tablename, rowsecurity from pg_tables
+where schemaname = 'public' and tablename = 'kemajuan';</code></pre>
+    <p>Kolom <code>rowsecurity</code> <b>harus</b> bernilai <code>true</code>.</p>
+  </li>
+
+  <li><b>Nyalakan masuk dengan email</b>
+    <p><b>Authentication → Providers → Email</b>: pastikan aktif. Matikan
+    <i>Confirm email</i> supaya pengguna bisa langsung masuk dengan kode tanpa
+    langkah konfirmasi terpisah.</p>
+  </li>
+
+  <li><b>Salin kunci ke aplikasi</b>
+    <p><b>Settings → API</b>, ambil <b>Project URL</b> dan kunci
+    <b>anon public</b>. Tempel ke <code>js/awan-config.js</code>:</p>
+    <pre><code>export const AWAN = {
+  url:  'https://abcdefghijkl.supabase.co',
+  anon: 'eyJhbGciOi…'
+};</code></pre>
+  </li>
+
+  <li><b>Deploy ulang</b>
+    <p><code>git push</code> atau <code>vercel --prod</code>.</p>
+  </li>
+</ol>
+
+<div class="bahaya">
+  <p><strong>Kunci mana yang boleh dipasang.</strong> Kunci <b>anon</b> memang
+  dirancang untuk dipasang di sisi peramban dan boleh dilihat siapa pun — yang
+  menjaga data adalah Row Level Security, bukan kerahasiaan kunci. Yang
+  <b>tidak boleh</b> dipasang di sisi peramban adalah kunci
+  <b>service_role</b>: kunci itu menembus seluruh RLS dan bisa membaca data
+  semua pengguna.</p>
+</div>
+
+<h3>Bagaimana penggabungan bekerja</h3>
+
+<p>Ini bagian yang paling menentukan, karena salah rancang berarti kemajuan
+pengguna hilang. Penggabungan dilakukan <b>per bidang</b>, bukan timpa-menimpa:</p>
+
+<table>
+  <tr><th style="width:34%">Bidang</th><th>Aturan</th></tr>
+  <tr><td>XP</td><td>diambil yang <b>tertinggi</b> — bukan dijumlah, supaya tidak menggelembung tiap kali diselaraskan</td></tr>
+  <tr><td>Pelajaran</td><td>gabungan; kalau ada di dua sisi, ambil nilai tertinggi</td></tr>
+  <tr><td>Kartu hafalan</td><td>ambil yang <b>riwayat ulangannya lebih panjang</b></td></tr>
+  <tr><td>Riwayat harian</td><td>per tanggal ambil yang tertinggi, tidak dijumlah</td></tr>
+  <tr><td>Catatan &amp; penanda</td><td>gabungan, tanpa kembar</td></tr>
+</table>
+
+<div class="catatan">
+  <p><strong>Artinya:</strong> belajar di ponsel saat laptop sedang mati tidak
+  akan menghapus apa pun saat keduanya bertemu. Penggabungan juga
+  <i>idempoten</i> — menggabung dua kali hasilnya sama dengan sekali.</p>
+</div>
+
+<h3>Cara memakainya sebagai pengguna</h3>
+<p>Halaman <b>Pengaturan → Selaraskan antar perangkat</b>: masukkan email, terima
+kode enam angka lewat email, masuk. Di perangkat kedua, masuk dengan email yang
+sama. Tidak ada kata sandi yang perlu dibuat atau diingat.</p>
+</section>
+
+<!-- ── Setelah hidup ─────────────────────────────────────────── -->
+<section class="halaman-baru">
+<h2>4 · Setelah hidup</h2>
+
+<h3>Periksa satu per satu</h3>
+<ul class="periksa">
+  <li>Situs terbuka di alamat <code>.vercel.app</code></li>
+  <li>Berpindah bahasa berjalan — coba <code>#/de/kurikulum</code> dan <code>#/ja/kanji</code></li>
+  <li>Tombol suara berbunyi</li>
+  <li>Matikan internet, muat ulang — aplikasi <b>tetap terbuka</b></li>
+  <li>Di ponsel muncul tawaran "Tambahkan ke Layar Utama"</li>
+  <li>Kalau memakai Supabase: masuk di dua perangkat, pastikan kemajuan berpindah</li>
+</ul>
+
+<h3>Saat memperbarui materi</h3>
+<p>Ubah berkas di <code>data/</code>, lalu <b>naikkan nomor versi</b> di
+<code>sw.js</code>:</p>
+<pre><code>const VERSI = 'fasih-v10';   // dari v9</code></pre>
+
+<div class="awas">
+  <p><strong>Tanpa langkah ini</strong>, pengguna lama akan terus melihat materi
+  versi sebelumnya sampai cadangan luringnya kedaluwarsa sendiri. Ini kesalahan
+  yang paling sering terlewat.</p>
+</div>
+
+<h3>Biaya</h3>
+<table>
+  <tr><th style="width:26%">Layanan</th><th style="width:37%">Paket gratis</th><th>Cukup untuk</th></tr>
+  <tr><td>Vercel Hobby</td><td>100 GB lalu lintas/bulan</td><td>ribuan pengunjung</td></tr>
+  <tr><td>Supabase Free</td><td>500 MB basis data, 50.000 pengguna aktif/bulan</td>
+      <td>sangat lega — satu baris kemajuan hanya beberapa KB</td></tr>
+</table>
+
+<div class="awas">
+  <p><strong>Satu jebakan biaya-nol:</strong> proyek Supabase gratis
+  <b>dijeda otomatis setelah tujuh hari tanpa aktivitas</b>. Membangunkannya
+  cukup dengan membuka dasbornya, tetapi selama dijeda penyelarasan akan gagal.
+  Kalau aplikasi dipakai orang lain, pastikan ada permintaan sekali sepekan —
+  atau naikkan ke paket berbayar.</p>
+</div>
+</section>
+
+<!-- ── Masalah ───────────────────────────────────────────────── -->
+<section class="halaman-baru">
+<h2>5 · Kalau ada yang gagal</h2>
+
+<table>
+  <tr><th style="width:34%">Gejala</th><th>Sebab &amp; penanganan</th></tr>
+
+  <tr><td>Deploy sangat lama atau gagal kehabisan ruang</td>
+      <td><code>.venv-tts/</code> (4,6 GB) ikut terunggah. Pastikan
+          <code>.vercelignore</code> dan <code>.gitignore</code> ada di akar
+          folder, lalu ulangi.</td></tr>
+
+  <tr><td>Situs terbuka tetapi halamannya kosong</td>
+      <td>Vercel mengira ini proyek Node dan mencoba mem-build. Setel
+          <b>Framework Preset = Other</b> dan kosongkan Build Command.</td></tr>
+
+  <tr><td>Perubahan materi tidak muncul</td>
+      <td>Pekerja layanan menyajikan berkas lama. DevTools → Application →
+          Service Workers → <b>Unregister</b>, lalu Storage →
+          <b>Clear site data</b>. Untuk pengguna lain: naikkan
+          <code>VERSI</code> di <code>sw.js</code>.</td></tr>
+
+  <tr><td>"Server tidak terjangkau" saat menyelaraskan</td>
+      <td>Alamat proyek Supabase salah di <code>js/awan-config.js</code>, atau
+          proyeknya sedang dijeda. Buka dasbor Supabase untuk
+          membangunkannya.</td></tr>
+
+  <tr><td>Kode enam angka tidak sampai</td>
+      <td>Periksa folder spam. Kalau tetap tidak ada:
+          <b>Authentication → Providers → Email</b> pastikan aktif. Paket gratis
+          Supabase membatasi jumlah email per jam.</td></tr>
+
+  <tr><td>Masuk berhasil tetapi kemajuan tidak berpindah</td>
+      <td>Hampir selalu RLS belum menyala atau skema belum dijalankan. Ulangi
+          langkah 2 dan 3 di bagian Supabase.</td></tr>
+
+  <tr><td>Suara tidak keluar di ponsel</td>
+      <td>Bukan masalah deploy. Web Speech API butuh sentuhan pengguna lebih
+          dulu, dan suara bahasa asing bergantung pada apa yang terpasang di
+          perangkat itu. Halaman <code>#/&lt;kode&gt;/suara</code> menampilkan
+          keadaan sebenarnya.</td></tr>
+</table>
+
+<h3>Berkas rujukan</h3>
+<table>
+  <tr><th style="width:36%">Berkas</th><th>Isinya</th></tr>
+  <tr><td><code>DEPLOY.md</code></td><td>versi teks panduan ini, lebih rinci</td></tr>
+  <tr><td><code>NOTICE.md</code></td><td>seluruh atribusi lisensi</td></tr>
+  <tr><td><code>supabase/skema.sql</code></td><td>skema basis data, siap tempel</td></tr>
+  <tr><td><code>js/awan-config.js</code></td><td>tempat menempel kunci Supabase</td></tr>
+  <tr><td><code>js/awan.js</code></td><td>logika penyelarasan &amp; penggabungan</td></tr>
+  <tr><td><code>vercel.json</code></td><td>aturan cache &amp; pengamanan</td></tr>
+</table>
+
+<p class="kecil" style="margin-top:2em">
+SankaLingo GO — panduan deploy. Disusun bersama berkas konfigurasi yang sudah
+terpasang di folder aplikasi; seluruh langkah di dokumen ini sudah diuji pada
+salinan aplikasi yang sama.</p>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><title>SankaLingo GO</title><rect width="512" height="512" rx="0" fill="#141A2E"/><g transform="translate(96,96) scale(3.2000)">
+  <title>Tarsi</title>
+  <desc>Kepala tarsius. Mata tarsius sebesar otaknya sendiri — proporsi itu
+        dipertahankan di sini, dan itu pula yang membuatnya mustahil tertukar
+        dengan maskot mana pun.</desc>
+  <defs>
+    <linearGradient id="i512b" x1=".2" y1="0" x2=".8" y2="1">
+      <stop offset="0" stop-color="#F4C57F"/><stop offset="1" stop-color="#CE9147"/>
+    </linearGradient>
+    <radialGradient id="i512m" cx=".36" cy=".3" r=".8">
+      <stop offset="0" stop-color="#A6F5E4"/><stop offset=".45" stop-color="#35CFAE"/>
+      <stop offset="1" stop-color="#0E7A66"/>
+    </radialGradient>
+  </defs>
+
+  <!-- telinga: tipis, membulat, jelas keluar dari siluet kepala -->
+  <path d="M20 32C11 22 10 11 16 8c6-3 13 4 16 15z" fill="#C4843F"/>
+  <path d="M80 32c9-10 10-21 4-24-6-3-13 4-16 15z" fill="#C4843F"/>
+  <path d="M21 29c-5-7-5-13-2-14 3-1 7 3 9 10z" fill="#EFAFA4" opacity=".8"/>
+  <path d="M79 29c5-7 5-13 2-14-3-1-7 3-9 10z" fill="#EFAFA4" opacity=".8"/>
+
+  <!-- kepala -->
+  <path d="M50 15c21 0 35 14 35 33 0 25-15 40-35 40S15 73 15 48c0-19 14-33 35-33z"
+        fill="url(#i512b)"/>
+
+  <!-- mata raksasa, nyaris bersentuhan di tengah -->
+  <circle cx="31" cy="45" r="23" fill="#8A5B2C" opacity=".22"/>
+  <circle cx="69" cy="45" r="23" fill="#8A5B2C" opacity=".22"/>
+  <circle cx="31" cy="44" r="21" fill="url(#i512m)"/>
+  <circle cx="69" cy="44" r="21" fill="url(#i512m)"/>
+  <circle cx="31" cy="44" r="10.5" fill="#0F1E29"/>
+  <circle cx="69" cy="44" r="10.5" fill="#0F1E29"/>
+  <circle cx="25.4" cy="37.6" r="4.6" fill="#fff" opacity=".97"/>
+  <circle cx="63.4" cy="37.6" r="4.6" fill="#fff" opacity=".97"/>
+  <circle cx="36.5" cy="50.5" r="2.2" fill="#fff" opacity=".5"/>
+  <circle cx="74.5" cy="50.5" r="2.2" fill="#fff" opacity=".5"/>
+
+  <!-- garis bulu tipis di antara mata -->
+  <path d="M50 30v9" stroke="#E7B36F" stroke-width="2.6" stroke-linecap="round"/>
+
+  <!-- moncong kecil di bawah mata -->
+  <path d="M50 60c8 0 13 4 13 9s-6 9-13 9-13-4-13-9 5-9 13-9z"
+        fill="#F6D6A2" opacity=".7"/>
+  <path d="M50 63.5c2.2 0 3.6 1.2 3.6 2.6s-1.6 2.5-3.6 2.5-3.6-1.1-3.6-2.5 1.4-2.6 3.6-2.6z"
+        fill="#8C5A2E"/>
+  <path d="M50 68.6v2.6M50 71.2c-2.3 0-3.9-1.2-4.6-2.6M50 71.2c2.3 0 3.9-1.2 4.6-2.6"
+        stroke="#8C5A2E" stroke-width="2" stroke-linecap="round" fill="none"/>
+</g></svg>

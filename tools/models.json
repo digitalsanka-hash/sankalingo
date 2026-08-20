@@ -1,0 +1,155 @@
+{
+  "_catatan": [
+    "Peta bahasa → checkpoint F5-TTS. Semua repoId di bawah diverifikasi lewat API",
+    "HuggingFace dan daftar resmi SHARED.md repo SWivid/F5-TTS pada 16 Agustus 2026.",
+    "",
+    "LISENSI — baca sebelum memakai untuk apa pun yang dijual:",
+    "Bobot F5-TTS resmi berlisensi CC-BY-NC-4.0 (NONKOMERSIAL) karena data latihnya",
+    "(Emilia) adalah data 'in-the-wild'. Semua finetune turunannya mewarisi batasan itu.",
+    "Kodenya sendiri MIT, jadi yang terbatas hanya BOBOTNYA.",
+    "Field 'komersial' di tiap entri menandai mana yang boleh dipakai komersial.",
+    "Kalau SankaLingo GO akan dijual, pakai profil 'permisif' di bawah — bukan 'kualitas'.",
+    "",
+    "ckpt/vocab boleh dikosongkan: perender akan mencari sendiri berkas bobot terbesar",
+    "dan berkas vocab di repo itu. Isi manual hanya bila repo punya banyak varian."
+  ],
+
+  "zh": {
+    "repo": "SWivid/F5-TTS",
+    "ckpt": "F5TTS_v1_Base/model_1250000.safetensors",
+    "vocab": "",
+    "arsitektur": "F5TTS_v1_Base",
+    "lisensi": "cc-by-nc-4.0",
+    "komersial": false,
+    "resmi": true,
+    "ref_audio": "zh.wav",
+    "ref_text": "",
+    "kecepatan": 1.0,
+    "catatan": "Checkpoint resmi. Mandarin adalah salah satu dari dua bahasa latih aslinya."
+  },
+
+  "ja": {
+    "repo": "Jmica/F5TTS",
+    "ckpt": "JA_21999120/model_21999120.pt",
+    "vocab": "JA_21999120/vocab_japanese.txt",
+    "arsitektur": "F5TTS_Base",
+    "lisensi": "cc-by-nc-4.0",
+    "komersial": false,
+    "resmi": true,
+    "ref_audio": "ja.wav",
+    "ref_text": "",
+    "kecepatan": 1.0,
+    "catatan": "Terdaftar di SHARED.md. WAJIB memakai vocab_japanese.txt dari folder yang sama — vocab yang salah menghasilkan audio kacau atau senyap. Jangan pakai JA_8500000 (bermasalah pada kanji). Bobot 5,4 GB. Data latih memuat Galgame Dataset, jadi warna suaranya cenderung bergaya visual novel."
+  },
+
+  "ar": {
+    "repo": "silma-ai/silma-tts",
+    "ckpt": "",
+    "vocab": "",
+    "arsitektur": "F5TTS_v1_Base",
+    "lisensi": "apache-2.0",
+    "komersial": true,
+    "resmi": true,
+    "ref_audio": "ar.wav",
+    "ref_text": "",
+    "kecepatan": 1.0,
+    "catatan": "Pilihan terbaik di seluruh daftar ini: terdaftar resmi, Apache-2.0 (boleh komersial), mendukung harakat penuh, dilatih dari nol bukan finetune tipis. Materi Arab di SankaLingo GO memang sudah berharakat, jadi cocok."
+  },
+
+  "de": {
+    "repo": "hvoss-techfak/F5-TTS-German",
+    "ckpt": "",
+    "vocab": "",
+    "arsitektur": "F5TTS_v1_Base",
+    "lisensi": "cc-by-nc-4.0",
+    "komersial": false,
+    "resmi": true,
+    "ref_audio": "de.wav",
+    "ref_text": "",
+    "kecepatan": 1.0,
+    "catatan": "Entri Jerman di daftar resmi SHARED.md."
+  },
+
+  "fr": {
+    "repo": "RASPIAUDIO/F5-French-MixedSpeakers-reduced",
+    "ckpt": "",
+    "vocab": "",
+    "arsitektur": "F5TTS_Base",
+    "lisensi": "cc-by-nc-4.0",
+    "komersial": false,
+    "resmi": true,
+    "ref_audio": "fr.wav",
+    "ref_text": "",
+    "kecepatan": 1.0,
+    "catatan": "Entri Prancis di daftar resmi SHARED.md. Dilatih dari banyak penutur."
+  },
+
+  "es": {
+    "repo": "jpgallegoar/F5-Spanish",
+    "ckpt": "",
+    "vocab": "",
+    "arsitektur": "F5TTS_Base",
+    "lisensi": "cc-by-nc-4.0",
+    "komersial": false,
+    "resmi": true,
+    "ref_audio": "es.wav",
+    "ref_text": "",
+    "kecepatan": 1.0,
+    "catatan": "Entri Spanyol di daftar resmi SHARED.md."
+  },
+
+  "ru": {
+    "repo": "hotstone228/F5-TTS-Russian",
+    "ckpt": "",
+    "vocab": "",
+    "arsitektur": "F5TTS_v1_Base",
+    "lisensi": "cc-by-nc-sa-4.0",
+    "komersial": false,
+    "resmi": true,
+    "ref_audio": "ru.wav",
+    "ref_text": "",
+    "kecepatan": 1.0,
+    "catatan": "Entri Rusia di daftar resmi SHARED.md. Alternatif berlisensi permisif ada di profil 'permisif'."
+  },
+
+  "_permisif": {
+    "_catatan": "Profil pengganti untuk pemakaian komersial — hanya bobot berlisensi permisif. Salin entri yang diperlukan ke atas untuk memakainya.",
+    "en": {
+      "repo": "mrfakename/OpenF5-TTS-Base",
+      "ckpt": "", "vocab": "", "arsitektur": "F5TTS_v1_Base",
+      "lisensi": "apache-2.0", "komersial": true,
+      "ref_audio": "en.wav", "ref_text": "",
+      "catatan": "Dilatih ulang tanpa data Emilia, jadi bebas batasan nonkomersial."
+    },
+    "ru": {
+      "repo": "ESpeech/ESpeech-TTS-1_RL-V2",
+      "ckpt": "", "vocab": "", "arsitektur": "F5TTS_v1_Base",
+      "lisensi": "apache-2.0", "komersial": true,
+      "ref_audio": "ru.wav", "ref_text": "",
+      "catatan": "Satu-satunya checkpoint Rusia berlisensi permisif yang ditemukan."
+    },
+    "zh": {
+      "repo": "QingyuLiu1/Cross-Lingual_F5-TTS",
+      "ckpt": "", "vocab": "", "arsitektur": "F5TTS_v1_Base",
+      "lisensi": "apache-2.0", "komersial": true,
+      "ref_audio": "zh.wav", "ref_text": "",
+      "catatan": "Keyakinan sedang — uji dengar dulu sebelum dipakai."
+    }
+  },
+
+  "_tanpaDukungan": {
+    "ko": {
+      "alasan": "Tidak ada checkpoint F5-TTS bahasa Korea, per 16 Agustus 2026.",
+      "bukti": [
+        "Daftar resmi community finetunes (src/f5_tts/infer/SHARED.md) memuat Arab, Finlandia, Prancis, Jerman, Hindi, Italia, Jepang, Latvia, Rusia, Spanyol — tidak ada Korea.",
+        "Penelusuran API HuggingFace dengan filter tag f5-tts tidak menghasilkan satu pun model Korea.",
+        "Discussion #143 di repo SWivid menunjukkan percobaan melatih Korea dengan data satu penutur 12 jam pun masih gagal membaca Hangul dengan benar."
+      ],
+      "pilihan": [
+        "Biarkan Korea memakai lapisan suara peramban yang sudah ada (alih aksara Hangul→Latin sudah 100% bekerja).",
+        "Pakai mesin TTS Korea di luar F5, misalnya facebook/mms-tts-kor — perlu diverifikasi lisensi dan kualitasnya lebih dulu.",
+        "Hapus modul Korea dari aplikasi."
+      ]
+    }
+  }
+}

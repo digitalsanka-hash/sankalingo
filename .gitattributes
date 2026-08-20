@@ -1,0 +1,14 @@
+# Akhiran baris disamakan di dalam repo.
+#
+# Tanpa berkas ini, Git di Windows menyimpan LF tapi mengembalikan CRLF
+# saat checkout — sehingga berkas yang tidak disunting sekalipun bisa
+# muncul sebagai "berubah" di komit berikutnya. Kebisingan itu menutupi
+# perubahan yang sesungguhnya.
+* text=auto eol=lf
+
+# Berkas biner: jangan disentuh sama sekali.
+*.pdf  binary
+*.png  binary
+*.jpg  binary
+*.woff binary
+*.woff2 binary

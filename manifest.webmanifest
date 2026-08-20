@@ -1,0 +1,55 @@
+{
+  "name": "SankaLingo GO — Laboratorium Bahasa",
+  "short_name": "SankaLingo GO",
+  "description": "Belajar sembilan bahasa untuk penutur Indonesia: kurikulum berjenjang, animasi goresan aksara, kartu hafalan, dan persiapan ujian resmi. Jalan tanpa internet.",
+  "lang": "id",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
+  "orientation": "any",
+  "background_color": "#080a14",
+  "theme_color": "#080a14",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "./assets/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon-mask.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Lanjutkan belajar",
+      "short_name": "Lanjutkan",
+      "url": "./index.html#/",
+      "description": "Buka pelajaran terakhir"
+    },
+    {
+      "name": "Kartu jatuh tempo",
+      "short_name": "Kartu",
+      "url": "./index.html#/kartu",
+      "description": "Ulang kartu hafalan hari ini"
+    },
+    {
+      "name": "Pilih bahasa",
+      "short_name": "Bahasa",
+      "url": "./index.html#/lang",
+      "description": "Bandingkan sembilan bahasa"
+    }
+  ]
+}

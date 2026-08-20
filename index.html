@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="id" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>SankaLingo GO — Laboratorium Bahasa Inggris</title>
+<meta name="description" content="Platform belajar bahasa Inggris untuk orang Indonesia: kurikulum CEFR A1–C2, persiapan IELTS, TOEFL, TOEIC, SRS, dan rencana belajar harian." />
+<meta name="color-scheme" content="dark light" />
+<meta name="theme-color" content="#080a14" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="SankaLingo GO" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="apple-touch-icon" href="./assets/icon-192.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<link rel="icon" href="./assets/icon-192.svg" />
+<link rel="stylesheet" href="./assets/css/tokens.css" />
+<link rel="stylesheet" href="./assets/css/base.css" />
+<link rel="stylesheet" href="./assets/css/components.css" />
+<link rel="stylesheet" href="./assets/css/views.css" />
+<link rel="stylesheet" href="./assets/css/comfort.css" />
+<script>
+/* Terapkan preferensi tampilan SEBELUM halaman digambar supaya tidak berkedip. */
+(function () {
+  try {
+    var p = JSON.parse(localStorage.getItem('fasih.comfort') || '{}');
+    var r = document.documentElement;
+    var t = p.tema === 'sistem'
+      ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      : (p.tema || 'dark');
+    r.dataset.theme = t;
+    if (p.huruf)   r.dataset.huruf = p.huruf;
+    if (p.baris)   r.dataset.baris = p.baris;
+    if (p.kontras) r.dataset.kontras = p.kontras;
+    if (p.sentuh)  r.dataset.sentuh = p.sentuh;
+    if (p.fokus)   r.dataset.fokus = p.fokus;
+    if (p.latar)   r.dataset.latar = p.latar;
+    if (p.lebarBaca) r.dataset.lebar = p.lebarBaca;
+    if (p.gerak)   r.dataset.gerak = p.gerak;
+    if (p.tenang)  r.classList.add('mode-tenang');
+    if (p.skala)   r.style.setProperty('--fs-scale', (p.skala / 100).toFixed(3));
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Lompat ke konten</a>
+
+<div id="boot" class="boot">
+  <div class="boot__mark"><img src="./assets/merek/maskot-kepala.svg" alt="" width="44" height="44" /></div>
+  <div class="boot__bar"><i></i></div>
+  <p class="boot__txt">Menyiapkan laboratorium…</p>
+</div>
+
+<div class="shell" id="shell" hidden>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <div class="brand-mark"><img src="./assets/merek/maskot-kepala.svg" alt="" width="30" height="30" /></div>
+      <div class="brand-txt">
+        <strong>SankaLingo GO</strong>
+        <span>English Lab</span>
+      </div>
+      <button class="icon-btn sidebar__close" data-act="close-nav" aria-label="Tutup menu">✕</button>
+    </div>
+
+    <div class="sidebar__me" id="sideMe"></div>
+
+    <nav class="nav" id="nav" aria-label="Navigasi utama"></nav>
+
+    <div class="sidebar__foot">
+      <button class="btn btn--ghost btn--sm" data-act="toggle-theme" title="Ganti tema terang / gelap">
+        <span class="ico" aria-hidden="true">◐</span> Tema
+      </button>
+      <a class="btn btn--ghost btn--sm" href="#/panduan" data-nav-panduan
+         title="Cara memakai aplikasi"><span class="ico" aria-hidden="true">?</span> Panduan</a>
+      <a class="btn btn--ghost btn--sm" href="#/pengaturan" data-nav-atur
+         title="Pengaturan"><span class="ico" aria-hidden="true">⚙</span> Atur</a>
+    </div>
+  </aside>
+
+  <div class="sidebar__scrim" data-act="close-nav" hidden></div>
+
+  <div class="main-wrap">
+    <header class="topbar">
+      <button class="icon-btn topbar__burger" data-act="open-nav" aria-label="Buka menu">☰</button>
+      <div class="topbar__crumb" id="crumb"></div>
+      <div class="topbar__spacer"></div>
+
+      <div class="langsw" id="langsw">
+        <button class="langsw__btn" id="langswBtn" aria-haspopup="true" aria-expanded="false">
+          <span class="langsw__dot" id="langswDot"></span>
+          <span class="langsw__name" id="langswName">English</span>
+          <span class="langsw__caret">▾</span>
+        </button>
+        <div class="langsw__menu" id="langswMenu" hidden></div>
+      </div>
+
+      <button class="chip chip--streak" data-act="goto-plan" id="streakChip" title="Rentetan harian">🔥 <b>0</b></button>
+      <button class="chip chip--xp" data-act="goto-stats" id="xpChip" title="Total XP">✦ <b>0</b></button>
+      <button class="chip chip--due" data-act="goto-review" id="dueChip" title="Kartu jatuh tempo">⟳ <b>0</b></button>
+      <button class="icon-btn" data-act="open-search" aria-label="Cari" title="Cari (tekan /)">⌕</button>
+    </header>
+
+    <main id="main" class="view" tabindex="-1"></main>
+
+    <footer class="foot">
+      <span>SankaLingo GO · kurikulum CEFR A1–C2 · IELTS · TOEFL · TOEIC</span>
+      <span class="foot__dot">•</span>
+      <span id="footStat"></span>
+    </footer>
+  </div>
+</div>
+
+<div class="palette" id="palette" hidden>
+  <div class="palette__box" role="dialog" aria-label="Pencarian cepat">
+    <input id="paletteInput" type="search" placeholder="Cari materi, grammar, kosakata, latihan…" autocomplete="off" />
+    <div class="palette__results" id="paletteResults"></div>
+    <div class="palette__hint"><kbd>↑</kbd><kbd>↓</kbd> pilih · <kbd>Enter</kbd> buka · <kbd>Esc</kbd> tutup</div>
+  </div>
+</div>
+
+<p id="ann" class="sr-only" role="status" aria-live="polite"></p>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="modal-root" id="modalRoot"></div>
+
+<script type="module" src="./js/app.js"></script>
+
+<script>
+/* ── Penjaga boot ──────────────────────────────────────────────────
+   Aplikasi ini pernah tersangkut di layar "Menyiapkan laboratorium…"
+   TANPA PESAN APA PUN. Penyebabnya: js/data.js mengimpor puluhan
+   berkas data/*.js saat modul dimuat; kalau satu saja gagal diambil —
+   server mati, internet putus, atau berkasnya belum tersimpan — seluruh
+   grafik modul gagal, boot() di ujung app.js tidak pernah dipanggil,
+   dan layar boot menetap selamanya.
+
+   Yang paling buruk bukan gagalnya, melainkan DIAMNYA. Orang tidak
+   punya cara tahu apa yang salah atau apa yang harus dilakukan.
+
+   Skrip ini SENGAJA bukan modul, supaya ia tetap jalan justru saat
+   modulnya gagal — kalau ditulis sebagai modul, ia ikut mati bersama
+   yang hendak dilaporkannya.                                          */
+(function () {
+  var sudahLapor = false, sebab = '';
+
+  /* Impor modul yang gagal muncul sebagai error di window; simpan
+     berkas mana yang bermasalah supaya pesannya bisa menunjuk tepat. */
+  addEventListener('error', function (e) {
+    var url = (e && (e.filename || (e.target && (e.target.src || e.target.href)))) || '';
+    if (url && !sebab) sebab = url.replace(location.origin, '');
+  }, true);
+  addEventListener('unhandledrejection', function (e) {
+    var m = e && e.reason && (e.reason.message || String(e.reason));
+    if (m && !sebab) sebab = m.slice(0, 160);
+  });
+
+  /* Event error pada <script type="module"> hanya menyebut skrip
+     PANGKALNYA (js/app.js), bukan impor bersarang yang sebenarnya gagal
+     — menyesatkan justru saat orang paling butuh petunjuk. Catatan
+     waktu-sumber daya tahu berkas mana yang benar-benar gagal, jadi itu
+     yang dipakai lebih dulu. */
+  function berkasGagal() {
+    try {
+      return performance.getEntriesByType('resource')
+        .filter(function (r) { return r.responseStatus >= 400; })
+        .map(function (r) { return r.name.replace(location.origin, ''); })
+        .filter(function (u, i, a) { return a.indexOf(u) === i; });
+    } catch (e) { return []; }
+  }
+
+  function lapor() {
+    if (sudahLapor) return;
+    var shell = document.getElementById('shell');
+    if (shell && !shell.hidden) return;      /* aplikasi sudah terbuka */
+    var boot = document.getElementById('boot');
+    if (!boot) return;
+    sudahLapor = true;
+
+    var gagal = berkasGagal();
+    var BARIS = String.fromCharCode(10);
+    if (gagal.length) sebab = gagal.slice(0, 3).join(BARIS) +
+      (gagal.length > 3 ? BARIS + '… dan ' + (gagal.length - 3) + ' berkas lain' : '');
+
+    var daring = navigator.onLine;
+    var judul = daring ? 'Aplikasi tidak bisa dimuat.'
+                       : 'Tidak ada internet, dan mode luring belum disiapkan.';
+    var jelas = daring
+      ? 'Sebagian berkas materi gagal diambil. Biasanya karena server belum jalan.'
+      : 'Buka aplikasi sekali saat ada internet, lalu nyalakan "Siapkan mode luring".';
+
+    boot.innerHTML =
+      '<div style="max-width:44ch;text-align:center;display:grid;gap:14px;padding:24px">' +
+        '<div style="font-size:34px" aria-hidden="true">🔌</div>' +
+        '<h1 style="font-size:1.05rem;font-weight:700;line-height:1.35">' + judul + '</h1>' +
+        '<p style="font-size:.875rem;line-height:1.6;opacity:.85;margin:0">' + jelas + '</p>' +
+        (sebab ? '<p style="font-size:.75rem;font-family:ui-monospace,monospace;opacity:.6;' +
+                 'word-break:break-all;margin:0;white-space:pre-line;text-align:left">' +
+                 sebab.replace(/[<>&]/g, '') + '</p>' : '') +
+        '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">' +
+          '<button id="bootUlang" style="padding:.6rem 1.1rem;border-radius:10px;border:0;' +
+            'font:inherit;font-weight:700;cursor:pointer;background:#6c5ce7;color:#fff">Coba lagi</button>' +
+          '<button id="bootBersih" style="padding:.6rem 1.1rem;border-radius:10px;cursor:pointer;' +
+            'font:inherit;font-weight:600;background:transparent;color:inherit;' +
+            'border:1px solid currentColor;opacity:.75">Bersihkan simpanan &amp; muat ulang</button>' +
+        '</div>' +
+      '</div>';
+
+    document.getElementById('bootUlang').onclick = function () { location.reload(); };
+
+    /* Jalan keluar terakhir kalau simpanannya sendiri yang rusak.
+       Kemajuan belajar TIDAK ikut terhapus — itu di localStorage,
+       yang tidak disentuh di sini. */
+    document.getElementById('bootBersih').onclick = function () {
+      var beres = function () { location.reload(); };
+      var tugas = [];
+      if (window.caches) tugas.push(caches.keys().then(function (n) {
+        return Promise.all(n.map(function (x) { return caches.delete(x); }));
+      }));
+      if (navigator.serviceWorker) tugas.push(
+        navigator.serviceWorker.getRegistrations().then(function (rs) {
+          return Promise.all(rs.map(function (r) { return r.unregister(); }));
+        }));
+      Promise.all(tugas).then(beres, beres);
+    };
+  }
+
+  /* Delapan detik: cukup lama untuk sambungan lambat, cukup pendek
+     supaya orang tidak menatap layar diam tanpa tahu apa-apa. */
+  var pengatur = setTimeout(lapor, 8000);
+  addEventListener('sankalingo:siap', function () { clearTimeout(pengatur); sudahLapor = true; });
+})();
+</script>
+<noscript><p style="padding:2rem">Aktifkan JavaScript untuk menjalankan SankaLingo GO.</p></noscript>
+</body>
+</html>

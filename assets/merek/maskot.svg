@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 268" width="240" height="268">
+<defs>
+<radialGradient id="fur" cx="42%" cy="30%" r="80%"><stop offset="0" stop-color="#F4C57F"/><stop offset="100%" stop-color="#CE9147"/></radialGradient>
+<radialGradient id="iris" cx="42%" cy="38%" r="70%"><stop offset="0" stop-color="#6ff0d6"/><stop offset="60%" stop-color="#35CFAE"/><stop offset="100%" stop-color="#1f9e85"/></radialGradient>
+</defs>
+<ellipse cx="120" cy="250" rx="66" ry="12" fill="#141A2E" opacity=".18"/>
+<!-- telinga -->
+<path d="M64 74c-12-20-8-40 4-44 10-3 20 12 20 34z" fill="url(#fur)"/>
+<path d="M176 74c12-20 8-40-4-44-10-3-20 12-20 34z" fill="url(#fur)"/>
+<path d="M70 70c-6-14-4-28 2-30" fill="none" stroke="#b87a34" stroke-width="3" opacity=".5"/>
+<path d="M170 70c6-14 4-28-2-30" fill="none" stroke="#b87a34" stroke-width="3" opacity=".5"/>
+<!-- kepala + badan menyatu -->
+<path d="M120 40c48 0 76 34 76 84 0 62-36 108-76 108s-76-46-76-108c0-50 28-84 76-84z" fill="url(#fur)"/>
+<ellipse cx="120" cy="176" rx="46" ry="52" fill="#fbdca6" opacity=".55"/>
+<!-- mata raksasa (ciri tarsius) -->
+<circle cx="86" cy="104" r="30" fill="#fff"/><circle cx="154" cy="104" r="30" fill="#fff"/>
+<circle cx="86" cy="104" r="22" fill="url(#iris)"/><circle cx="154" cy="104" r="22" fill="url(#iris)"/>
+<circle cx="86" cy="104" r="11" fill="#0F1E29"/><circle cx="154" cy="104" r="11" fill="#0F1E29"/>
+<circle cx="80" cy="98" r="4.5" fill="#fff"/><circle cx="148" cy="98" r="4.5" fill="#fff"/>
+<circle cx="91" cy="110" r="2.4" fill="#fff" opacity=".7"/><circle cx="159" cy="110" r="2.4" fill="#fff" opacity=".7"/>
+<!-- hidung + mulut -->
+<path d="M116 134h8l-4 6z" fill="#8a5a24"/>
+<path d="M108 146c7 6 17 6 24 0" fill="none" stroke="#8a5a24" stroke-width="3.4" stroke-linecap="round"/>
+<!-- tangan jari panjang -->
+<path d="M78 210c-8 6-12 16-10 24M96 214c-3 8-3 18 2 24" fill="none" stroke="#CE9147" stroke-width="6" stroke-linecap="round"/>
+<path d="M162 210c8 6 12 16 10 24M144 214c3 8 3 18-2 24" fill="none" stroke="#CE9147" stroke-width="6" stroke-linecap="round"/>
+</svg>

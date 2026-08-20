@@ -1,0 +1,28 @@
+# Yang TIDAK ikut naik ke Vercel.
+# Aplikasi sesungguhnya cuma ±2,6 MB; tanpa berkas ini foldernya 4,6 GB
+# dan unggahan akan gagal atau memakan waktu sangat lama.
+
+# Lingkungan Python sisa jalur F5-TTS yang sudah ditinggalkan (4,6 GB).
+.venv-tts/
+.venv/
+__pycache__/
+
+# Perkakas pengembangan — tidak dipakai aplikasi saat berjalan.
+tools/
+supabase/
+server.js
+.cache/
+
+# Bundel jualan, bukan bagian situs.
+PAKET LENGKAP/
+*.zip
+*.rar
+
+# Panduan & keluaran PDF — dokumen kerja, bukan bagian situsnya.
+output/
+
+# Berkas kerja
+.git/
+.claude/
+*.log
+scratchpad*

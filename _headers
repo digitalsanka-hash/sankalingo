@@ -1,0 +1,31 @@
+# Aturan cache untuk Netlify & Cloudflare Pages.
+# Dua golongan berkas, dua perlakuan yang berlawanan.
+
+# 1. Audio rekaman — namanya SUDAH hash dari isinya, jadi isinya tidak
+#    mungkin berubah. Simpan selamanya. Ini yang membuat tombol suara
+#    terasa seketika pada kunjungan kedua.
+/audio/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 2. Kerangka aplikasi — harus boleh berubah kapan saja. Kalau ini ikut
+#    disimpan lama, pengguna terjebak di versi lama dan tidak ada cara
+#    memperbaikinya dari jauh.
+/index.html
+  Cache-Control: no-cache
+/sw.js
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Cache-Control: no-cache
+/js/*
+  Cache-Control: no-cache
+/assets/css/*
+  Cache-Control: no-cache
+/data/*
+  Cache-Control: no-cache
+
+# Pengerasan dasar. Aplikasi ini tidak punya server, tidak punya akun,
+# dan tidak mengirim data ke mana pun — header ini menjaganya tetap begitu.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), payment=(), usb=()

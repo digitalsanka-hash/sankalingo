@@ -1,0 +1,12 @@
+{
+  "name": "fasih-english-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Platform belajar bahasa Inggris untuk penutur bahasa Indonesia: kurikulum CEFR A1-C2, IELTS, TOEFL, TOEIC, SRS, dan rencana belajar harian.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["english", "ielts", "toefl", "toeic", "cefr", "srs", "indonesia"],
+  "license": "UNLICENSED"
+}

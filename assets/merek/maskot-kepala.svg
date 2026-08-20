@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<defs>
+<radialGradient id="fur" cx="42%" cy="30%" r="80%"><stop offset="0" stop-color="#F4C57F"/><stop offset="100%" stop-color="#CE9147"/></radialGradient>
+<radialGradient id="iris" cx="42%" cy="38%" r="70%"><stop offset="0" stop-color="#6ff0d6"/><stop offset="60%" stop-color="#35CFAE"/><stop offset="100%" stop-color="#1f9e85"/></radialGradient>
+</defs>
+<path d="M34 34c-7-11-5-22 2-24 6-2 11 7 11 19z" fill="url(#fur)"/>
+<path d="M86 34c7-11 5-22-2-24-6-2-11 7-11 19z" fill="url(#fur)"/>
+<path d="M60 16c26 0 42 20 42 44 0 30-19 46-42 46S18 90 18 60c0-24 16-44 42-44z" fill="url(#fur)"/>
+<circle cx="43" cy="54" r="17" fill="#fff"/><circle cx="77" cy="54" r="17" fill="#fff"/>
+<circle cx="43" cy="54" r="12.5" fill="url(#iris)"/><circle cx="77" cy="54" r="12.5" fill="url(#iris)"/>
+<circle cx="43" cy="54" r="6.2" fill="#0F1E29"/><circle cx="77" cy="54" r="6.2" fill="#0F1E29"/>
+<circle cx="39.5" cy="50.5" r="2.6" fill="#fff"/><circle cx="73.5" cy="50.5" r="2.6" fill="#fff"/>
+<path d="M57 74h6l-3 4.5z" fill="#8a5a24"/>
+<path d="M52 84c5 4 11 4 16 0" fill="none" stroke="#8a5a24" stroke-width="2.6" stroke-linecap="round"/>
+</svg>
