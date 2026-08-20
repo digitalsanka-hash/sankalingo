@@ -10,8 +10,18 @@
 
    Cara mengisi:
      1. Buat proyek di https://supabase.com (gratis)
-     2. Settings → API → salin "Project URL" dan kunci "anon public"
-     3. Tempel di bawah, lalu jalankan supabase/skema.sql di SQL Editor
+     2. Jalankan supabase/skema.sql di SQL Editor, lalu supabase/periksa.sql
+     3. Settings → API Keys → salin PUBLISHABLE KEY (sb_publishable_…)
+
+   Nama kuncinya berganti. Supabase dulu menyebutnya "anon public" berupa
+   JWT panjang berawalan eyJ…; sekarang namanya "Publishable key" dan
+   bentuknya sb_publishable_… Keduanya berperan sama dan sama-sama aman
+   dipasang di peramban. Yang lama masih ada di tab "Legacy anon,
+   service_role API keys".
+
+   Project URL tidak ada di halaman API Keys — ambil di Settings → General,
+   atau susun dari alamat dasbornya:
+   dashboard/project/ABCDEFG/... → https://ABCDEFG.supabase.co
 
    AMANKAH kunci ini ditulis di berkas yang bisa dilihat pengunjung?
    Ya — kunci "anon" memang dirancang untuk itu. Yang menjaga data
@@ -19,12 +29,13 @@
    Skema di supabase/skema.sql sudah menyalakan RLS sehingga tiap
    pengguna hanya bisa membaca dan menulis barisnya sendiri.
 
-   JANGAN pernah menempel kunci "service_role" di sini. Kunci itu
+   JANGAN pernah menempel kunci rahasia di sini — dulu bernama
+   "service_role", sekarang "Secret key" (sb_secret_…). Kunci itu
    menembus seluruh RLS dan hanya boleh hidup di sisi server.          */
 
 export const AWAN = {
   url:  '',   // contoh: 'https://abcdefghijkl.supabase.co'
-  anon: ''    // kunci anon public — bukan service_role
+  anon: ''    // Publishable key (sb_publishable_…) — BUKAN Secret key
 };
 
 /** Apakah penyelarasan awan sudah dikonfigurasi? */

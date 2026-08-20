@@ -43,7 +43,18 @@ async function panggil(jalur, { metode = 'GET', badan, pakaiToken = true, tambah
   };
   if (pakaiToken) {
     const s = await sesiSegar();
-    kepala.Authorization = `Bearer ${s?.access_token || AWAN.anon}`;
+    /* Hanya dipasang kalau ADA token pengguna sungguhan.
+       Dulu di sini ada cadangan `|| AWAN.anon`. Itu peninggalan dari
+       kunci anon lama yang berupa JWT sehingga bisa dipakai sebagai
+       Bearer. Kunci Publishable yang baru (sb_publishable_…) BUKAN JWT,
+       dan mengirimkannya sebagai Bearer menghasilkan 401 yang pesannya
+       tidak menjelaskan apa pun.
+
+       Cadangan itu memang tidak pernah terpakai — setiap pemanggil
+       jalur /rest/v1 sudah berhenti lebih dulu bila belum ada sesi.
+       Tapi kode mati yang salah lebih berbahaya daripada tidak ada:
+       ia menunggu sampai ada yang memanggilnya. */
+    if (s?.access_token) kepala.Authorization = `Bearer ${s.access_token}`;
   }
   let r;
   try {

@@ -171,10 +171,22 @@ Buka **Authentication → Emails → Magic Link**, lalu ganti isinya sehingga me
 
 Yang menentukan hanya satu hal: **`{{ .Token }}` harus ada**. Selebihnya bebas.
 
-**6. Salin kunci.** **Settings → API**, ambil dua nilai:
+**6. Salin kunci.** Ambil dua nilai:
 
-- **Project URL** → contoh `https://abcdefghijkl.supabase.co`
-- **anon public** → kunci panjang berawalan `eyJ…`
+- **Project URL** → **Settings → General**, atau susun dari alamat dasbornya:
+  `dashboard/project/ABCDEFG/…` → `https://ABCDEFG.supabase.co`
+- **Kunci publik** → **Settings → API Keys** → bagian **Publishable key**,
+  bentuknya `sb_publishable_…`
+
+Nama kuncinya sudah berganti. Supabase dulu menyebutnya **anon public** (JWT
+panjang berawalan `eyJ…`); sekarang namanya **Publishable key**
+(`sb_publishable_…`). Keduanya berperan sama dan sama-sama aman dipasang di
+peramban. Yang lama masih tersedia di tab *Legacy anon, service_role API keys*
+— pakai yang baru, yang lama sedang dihentikan.
+
+Di halaman yang sama ada **Secret key** (`sb_secret_…`, dulu `service_role`).
+**Jangan pernah** memasangnya di aplikasi: ia menembus seluruh RLS yang baru
+kamu nyalakan.
 
 Tempel ke `js/awan-config.js`:
 
