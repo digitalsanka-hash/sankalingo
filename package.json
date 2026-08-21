@@ -7,7 +7,7 @@
     "start": "node server.js",
     "dev": "node server.js",
     "deploy": "vercel --prod",
-    "periksa": "node tools/validasi-materi.mjs && node tools/validasi-inggris.mjs && node tools/validasi-grammar.mjs && node tools/validasi-kata.mjs && node tools/validasi-verba.mjs && node tools/validasi-pakai.mjs && node tools/audit-goresan.mjs && node tools/audit-kunci-ganda.mjs data && node tools/audit-kunci-ganda.mjs js && node tools/audit-escape.mjs data && node tools/audit-kontras.mjs && node tools/audit-penilaian.mjs && node tools/audit-luring.mjs",
+    "periksa": "node tools/validasi-materi.mjs && node tools/validasi-inggris.mjs && node tools/validasi-grammar.mjs && node tools/validasi-kata.mjs && node tools/validasi-verba.mjs && node tools/validasi-pakai.mjs && node tools/audit-goresan.mjs && node tools/audit-kunci-ganda.mjs data && node tools/audit-kunci-ganda.mjs js && node tools/audit-escape.mjs data && node tools/audit-kontras.mjs && node tools/audit-penilaian.mjs && node tools/audit-simulasi.mjs && node tools/audit-luring.mjs",
     "lapor": "node tools/audit-isi.mjs && node tools/audit-kode-mati.mjs"
   },
   "keywords": [

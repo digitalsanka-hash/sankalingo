@@ -1,6 +1,6 @@
 /* Empat keterampilan + pelafalan. */
 
-import { $, $$, el, html, raw, esc, toast, sample, shuffle, mmss } from '../ui.js';
+import { $, $$, el, html, raw, esc, toast, sample, shuffle, mmss, pasangSekali } from '../ui.js';
 import { state, addXP, addMinutes, recordQuiz } from '../state.js';
 import { say, sayList, stopSpeaking, listen, stopListening, scoreSpeech, sttReady, similarity } from '../speech.js';
 import { runQuiz } from '../quiz.js';
@@ -68,7 +68,7 @@ export function renderListening() {
         </div>
         <div id="talkQuiz" style="margin-top:var(--s-5)"></div>`;
 
-      body.addEventListener('click', async e => {
+      pasangSekali(body, 'click', 'menyimak', async e => {
         const p = e.target.closest('[data-play]'), sl = e.target.closest('[data-slow]');
         const q = e.target.closest('[data-quiz]'), sc = e.target.closest('[data-script]');
         if (p) { const l = talks[+p.dataset.play]; toast('Memutar simakan…'); await sayList(l.lines, 450); }
@@ -165,7 +165,7 @@ export function renderSpeaking() {
           </div>`).join('')}
         </div>
         <div id="shDrill" style="margin-top:var(--s-5)"></div>`;
-      body.addEventListener('click', e => {
+      pasangSekali(body, 'click', 'shadowing', e => {
         const d = e.target.closest('[data-drill]');
         if (d) {
           const s = SHADOWING[+d.dataset.drill];
@@ -241,7 +241,7 @@ export function renderSpeaking() {
           </div>`).join('')}
         </div>
         <div id="cueBox" style="margin-top:var(--s-5)"></div>`;
-      body.addEventListener('click', e => {
+      pasangSekali(body, 'click', 'berbicara', e => {
         const c = e.target.closest('[data-cue]');
         if (c) cueTimer($('#cueBox'), IELTS.speaking.part2[+c.dataset.cue]);
       });
@@ -398,7 +398,7 @@ export function renderWriting() {
           </div>`).join('')}
         </div>
         <div id="wEditor" style="margin-top:var(--s-5)"></div>`;
-      body.addEventListener('click', e => {
+      pasangSekali(body, 'click', 'menulis', e => {
         const m = e.target.closest('[data-model]'), w = e.target.closest('[data-write]');
         if (m) {
           const i = +m.dataset.model, box = $('#wm-' + i);
@@ -411,23 +411,26 @@ export function renderWriting() {
     }
     if (t === 'free') editor(body, null);
     if (t === 'check') {
+      /* Daftarnya dibangun dari ujian yang BENAR-BENAR punya checklist.
+         Sebelumnya baris ini menyebut TOEFL.writing.checklist secara
+         langsung, padahal TOEFL.writing tidak ada di data — tab "Daftar
+         Periksa" selalu melempar TypeError dan tidak pernah tergambar
+         sama sekali. Menyebut nama ujiannya satu per satu juga mencegah
+         kartu berjudul "TOEFL & TOEIC" yang isinya TOEIC saja. */
+      const daftar = [IELTS, TOEFL, TOEIC]
+        .filter(e => Array.isArray(e?.writing?.checklist) && e.writing.checklist.length);
       body.innerHTML = html`
         <div class="grid grid--2">
-          <div class="card">
-            <div class="card__title">Daftar periksa IELTS Writing</div>
+          ${raw(daftar.map(e => `<div class="card">
+            <div class="card__title">Daftar periksa ${esc(e.name)} Writing</div>
             <div class="stack stack--sm" style="margin-top:.8rem">
-              ${IELTS.writing.checklist.map(c => `<div class="check" style="cursor:default">
+              ${e.writing.checklist.map(c => `<div class="check" style="cursor:default">
                 <span class="check__box">✓</span><span class="check__txt">${esc(c)}</span></div>`).join('')}
             </div>
-          </div>
-          <div class="card">
-            <div class="card__title">Daftar periksa TOEFL & TOEIC</div>
-            <div class="stack stack--sm" style="margin-top:.8rem">
-              ${[...TOEFL.writing.checklist, ...TOEIC.writing.checklist].map(c => `<div class="check" style="cursor:default">
-                <span class="check__box">✓</span><span class="check__txt">${esc(c)}</span></div>`).join('')}
-            </div>
-          </div>
-        </div>`;
+          </div>`).join(''))}
+        </div>
+        ${raw(daftar.length < 3 ? `<p class="small muted" style="margin-top:var(--s-4)">
+          Daftar periksa tersedia untuk ${daftar.map(e => esc(e.name)).join(' dan ')}.</p>` : '')}`;
     }
   };
   paint('task');
@@ -596,7 +599,7 @@ export function renderPronunciation() {
         <button class="btn btn--primary btn--sm" style="margin-top:.9rem" data-prac="${s.id}">🎙 Uji pengucapanku</button>
       </div>`).join('') + '<div id="pracBox"></div>';
 
-      body.addEventListener('click', e => {
+      pasangSekali(body, 'click', 'pelafalan', e => {
         const p = e.target.closest('[data-prac]');
         if (p) {
           const s = HARD_SOUNDS.find(x => x.id === p.dataset.prac);
@@ -663,7 +666,7 @@ export function renderPronunciation() {
         sample(TONGUE_TWISTERS, 4).map(([t2]) => ({ t:'speak', text:t2, tag:'Pemanasan', tol:55 })),
         { skill:'speaking', quizKey:'twister' });
     }
-    body.addEventListener('click', e => {
+    pasangSekali(body, 'click', 'twister', e => {
       const sl = e.target.closest('[data-slow]');
       if (sl) say(sl.dataset.slow, { rate: 0.6 });
     });

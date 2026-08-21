@@ -92,6 +92,71 @@ export function modal(contentHtml, { onMount, wide } = {}) {
   return close;
 }
 
+/** Pasang penangan sekali saja pada elemen yang dipakai berulang.
+ *
+ *  Beberapa halaman menggambar ulang isi SATU wadah tetap setiap kali tab
+ *  berganti, dan memasang addEventListener di dalam fungsi penggambar itu.
+ *  Kembali ke tab yang sama berarti penangan kedua ikut menempel: klik
+ *  "Lihat model" lalu menjalankan toggle('hide') DUA kali, sehingga
+ *  kotaknya terbuka dan langsung tertutup lagi — tombolnya tampak mati,
+ *  lalu hidup lagi pada kunjungan ketiga.
+ *
+ *  `kunci` memisahkan penangan milik tab yang berbeda pada wadah yang
+ *  sama, sehingga tiap tab tetap mendapat penangannya sendiri — tepat
+ *  satu.  */
+/** Susun pilihan ganda yang dijamin unik, sudah teracak, dengan indeks
+ *  kunci yang benar.
+ *
+ *  Tiga pembangkit soal berbeda pernah salah dengan cara yang sama:
+ *
+ *    · js/views/langcourse.js menyaring pengecoh berdasarkan KATA
+ *      (`w[0] !== t`) lalu memetakannya ke ARTI (`w[2]`). Dua kata yang
+ *      berbeda bisa berarti sama, sehingga pengecohnya sama persis dengan
+ *      kunci — dan `opts.indexOf(arti)` lalu menunjuk salinan pertama,
+ *      yang belum tentu yang dimaksud.
+ *    · js/mockgen.js menyaring pengecoh terhadap kunci, tetapi tidak
+ *      terhadap SESAMA pengecoh, jadi dua pilihan bisa kembar.
+ *    · js/views/kanji.js menyaring "kanji yang berbeda", padahal dua kanji
+ *      bisa berbagi kata majemuk dengan bacaan yang sama.
+ *
+ *  Semuanya menghasilkan soal yang mustahil dijawab dengan pasti:
+ *  pemelajar menekan pilihan yang teksnya sama dengan kunci lalu dinilai
+ *  SALAH.
+ *
+ *  Karena itu penyaringannya dilakukan atas TEKS PILIHAN, dan indeks
+ *  kuncinya diambil dari posisinya sesudah diacak — bukan lewat indexOf,
+ *  yang justru rusak persis ketika ada yang kembar.
+ *
+ *  @returns {{opts:string[], a:number}|null} null kalau pengecohnya kurang.
+ */
+export function buatPilihan(kunci, calon, jumlah = 3) {
+  const teksKunci = String(kunci ?? '').trim();
+  if (!teksKunci) return null;
+  const dipakai = new Set([teksKunci]);
+  const pengecoh = [];
+  for (const c of calon) {
+    const teks = String(c ?? '').trim();
+    if (!teks || dipakai.has(teks)) continue;
+    dipakai.add(teks);
+    pengecoh.push(teks);
+    if (pengecoh.length === jumlah) break;
+  }
+  if (pengecoh.length < jumlah) return null;
+  const urut = shuffle([teksKunci, ...pengecoh].map((teks, i) => ({ teks, kunci: i === 0 })));
+  return { opts: urut.map(x => x.teks), a: urut.findIndex(x => x.kunci) };
+}
+
+const penangganTerpasang = new WeakMap();
+export function pasangSekali(elemen, tipe, kunci, fn) {
+  if (!elemen) return;
+  let punya = penangganTerpasang.get(elemen);
+  if (!punya) penangganTerpasang.set(elemen, punya = new Set());
+  const tanda = tipe + ':' + kunci;
+  if (punya.has(tanda)) return;
+  punya.add(tanda);
+  elemen.addEventListener(tipe, fn);
+}
+
 export function confirmDialog(title, body, okLabel = 'Ya, lanjut') {
   return new Promise(res => {
     const close = modal(html`

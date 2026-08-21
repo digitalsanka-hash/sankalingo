@@ -1,7 +1,7 @@
 /* Kurikulum berjenjang untuk bahasa selain Inggris:
    peta tingkat → unit → pelajaran, plus pemutar pelajarannya. */
 
-import { $, $$, el, html, raw, esc, toast, ring, sample, shuffle } from '../ui.js';
+import { $, $$, el, html, raw, esc, toast, ring, sample, shuffle, buatPilihan } from '../ui.js';
 import { ico } from '../icons.js';
 import { tipBantuan } from '../comfortui.js';
 import { addXP, addMinutes, markLesson } from '../state.js';
@@ -275,11 +275,16 @@ export function lesson(code, L, unitId, lessonId) {
       return (g?.drills || []).map(d => ({ ...d, tag: g.titleId, level: g.level }));
     });
     const kata = (u.vocab || []).flatMap(vid => (L.vocab.find(v => v.id === vid)?.words) || []);
+    /* Pengecoh disaring atas TEKS ARTINYA lewat buatPilihan, bukan atas
+       kata sumbernya. Sebelumnya penyaringnya `w[0] !== t` — kata yang
+       berbeda — lalu dipetakan ke `w[2]`, artinya; dua kata berbeda yang
+       berarti sama menghasilkan pilihan kembar, dan indexOf lalu menunjuk
+       salinan pertama. */
     const soalV = sample(kata, Math.min(8, kata.length)).map(([t, r, arti]) => {
-      const salah = sample(kata.filter(w => w[0] !== t), 3).map(w => w[2]);
-      const opts = shuffle([arti, ...salah]);
-      return { t: 'mcq', q: `Apa arti ${t} (${r})?`, opts, a: opts.indexOf(arti), tag: 'Kosakata' };
-    });
+      const pil = buatPilihan(arti, sample(kata.filter(w => w[0] !== t), 12).map(w => w[2]));
+      if (!pil) return null;
+      return { t: 'mcq', q: `Apa arti ${t} (${r})?`, opts: pil.opts, a: pil.a, tag: 'Kosakata' };
+    }).filter(Boolean);
     const items = shuffle([...soalG, ...soalV]);
     if (!items.length) return selesai();
     body.innerHTML = `<div class="note note--warn" style="margin-bottom:var(--s-4)">

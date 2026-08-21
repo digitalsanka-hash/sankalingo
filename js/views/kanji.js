@@ -12,7 +12,7 @@
    hilang cuma animasinya; cara menghafal yang lebih ampuh justru tetap
    ada.                                                                */
 
-import { $, $$, el, html, raw, esc, toast, shuffle, sample } from '../ui.js';
+import { $, $$, el, html, raw, esc, toast, shuffle, sample, buatPilihan } from '../ui.js';
 import { ico } from '../icons.js';
 import { addXP, addMinutes, state } from '../state.js';
 import { runQuiz } from '../quiz.js';
@@ -181,31 +181,6 @@ export function kanjiLatihan(code, L) {
  * Tiga bentuk, diselang-seling supaya tidak ada satu pola yang bisa
  * ditebak tanpa memahami kanjinya.
  */
-/* Pengecoh disaring dari TEKS PILIHANNYA, bukan dari kanji sumbernya.
-
-   Sebelumnya pengecoh hanya disaring `x.k !== k.k` — kanji yang berbeda.
-   Untuk soal bacaan itu tidak cukup: kanji berbeda bisa punya kata contoh
-   dengan bacaan yang SAMA PERSIS (じかん dipakai 時間 dan dua kata lain).
-   Hasilnya soal yang mustahil dijawab dengan pasti: dua pilihan bertuliskan
-   teks identik, dan hanya satu yang diakui benar. Pemelajar yang menekan
-   salinan kedua dinilai SALAH atas jawaban yang sama persis dengan kunci.
-
-   Alih-alih menyaring per soal di tiga tempat berbeda, pilihannya dibangun
-   lewat satu penolong yang membuang duplikat teks apa pun — termasuk
-   duplikat sesama pengecoh, yang sama membingungkannya. */
-const pilihanUnik = (kunci, calon, jumlah = 3) => {
-  const dipakai = new Set([String(kunci).trim()]);
-  const out = [];
-  for (const c of calon) {
-    const teks = String(c ?? '').trim();
-    if (!teks || dipakai.has(teks)) continue;
-    dipakai.add(teks);
-    out.push(teks);
-    if (out.length === jumlah) break;
-  }
-  return out.length === jumlah ? [kunci, ...out] : null;
-};
-
 function soalKanji(n = 20) {
   const kolam = shuffle(KANJI.slice());
   const soal = [];
@@ -217,18 +192,18 @@ function soalKanji(n = 20) {
     if (bentuk === 0) {
       /* kanji → arti */
       const salah = shuffle(KANJI.filter(x => x.k !== k.k && x.grup !== k.grup));
-      const opts = pilihanUnik(k.arti, salah.map(x => x.arti));
-      if (!opts) continue;
-      soal.push({ t: 'mcq', tag: 'arti', q: `Apa arti ${k.k}?`, opts, a: 0,
+      const pil = buatPilihan(k.arti, salah.map(x => x.arti));
+      if (!pil) continue;
+      soal.push({ t: 'mcq', tag: 'arti', q: `Apa arti ${k.k}?`, opts: pil.opts, a: pil.a,
                   why: k.komponen });
 
     } else if (bentuk === 1) {
       /* kata → bacaannya */
       const [tulis, baca, arti] = k.kata[0];
       const lain = shuffle(KANJI.filter(x => x.k !== k.k && x.kata[0]));
-      const opts = pilihanUnik(baca, lain.map(x => x.kata[0][1]));
-      if (!opts) continue;
-      soal.push({ t: 'mcq', tag: 'bacaan', q: `Bagaimana ${tulis} dibaca?`, opts, a: 0,
+      const pil = buatPilihan(baca, lain.map(x => x.kata[0][1]));
+      if (!pil) continue;
+      soal.push({ t: 'mcq', tag: 'bacaan', q: `Bagaimana ${tulis} dibaca?`, opts: pil.opts, a: pil.a,
                   why: `${tulis} = ${arti}. Dibaca ${baca} (${rom(baca)}).` });
 
     } else {
@@ -237,9 +212,10 @@ function soalKanji(n = 20) {
          kalau tidak cukup, baru diambil sembarang. */
       const sepadan = KANJI.filter(x => x.k !== k.k && x.coret === k.coret);
       const salah = shuffle(sepadan.length >= 3 ? sepadan : KANJI.filter(x => x.k !== k.k));
-      const opts = pilihanUnik(k.k, salah.map(x => x.k));
-      if (!opts) continue;
-      soal.push({ t: 'mcq', tag: 'tulisan', q: `Kanji mana yang berarti "${k.arti}"?`, opts, a: 0,
+      const pil = buatPilihan(k.k, salah.map(x => x.k));
+      if (!pil) continue;
+      const opts = pil.opts;
+      soal.push({ t: 'mcq', tag: 'tulisan', q: `Kanji mana yang berarti "${k.arti}"?`, opts, a: pil.a,
                   why: `${k.k} — ${k.komponen}` });
     }
   }

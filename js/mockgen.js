@@ -6,7 +6,7 @@
    penyelenggara; isi soalnya dari materi SankaLingo GO sendiri. Dengan begitu
    simulasinya menekan seperti ujian asli tanpa menyalin soal berhak cipta. */
 
-import { shuffle, sample } from './ui.js';
+import { shuffle, sample, buatPilihan } from './ui.js';
 import { bacaanUntuk } from '../data/lang/exam-bacaan.js';
 import { keLatin, perluAlih } from './translit.js';
 
@@ -74,18 +74,20 @@ function soalKata(code, b, n, rnd) {
   const out = [];
   const pilih = ambil(b.kata, Math.min(n, b.kata.length), rnd);
   pilih.forEach((k, i) => {
-    const lain = ambil(b.kata.filter(x => x.arti !== k.arti), 3, rnd);
+    const lain = ambil(b.kata.filter(x => x.arti !== k.arti), 10, rnd);
     if (lain.length < 3) return;
     if (i % 3 === 2) {
       /* arah balik: dari arti ke kata targetnya */
-      const opsi = shuffle([k.t, ...lain.map(x => x.t)]);
-      out.push({ t: 'mcq', q: `Kata mana yang berarti “${k.arti}”?`, opts: opsi,
-        a: opsi.indexOf(k.t), why: `${k.t}${k.r ? ' (' + k.r + ')' : ''} = ${k.arti}`,
+      const pil = buatPilihan(k.t, lain.map(x => x.t));
+      if (!pil) return;
+      out.push({ t: 'mcq', q: `Kata mana yang berarti “${k.arti}”?`, opts: pil.opts,
+        a: pil.a, why: `${k.t}${k.r ? ' (' + k.r + ')' : ''} = ${k.arti}`,
         tag: k.pak, romOpsi: true });
     } else {
-      const opsi = shuffle([k.arti, ...lain.map(x => x.arti)]);
-      out.push({ t: 'mcq', q: `Apa arti ${k.t}${k.r ? ` (${k.r})` : ''}?`, opts: opsi,
-        a: opsi.indexOf(k.arti), why: `${k.t} = ${k.arti}`, tag: k.pak });
+      const pil = buatPilihan(k.arti, lain.map(x => x.arti));
+      if (!pil) return;
+      out.push({ t: 'mcq', q: `Apa arti ${k.t}${k.r ? ` (${k.r})` : ''}?`, opts: pil.opts,
+        a: pil.a, why: `${k.t} = ${k.arti}`, tag: k.pak });
     }
   });
   return out;
@@ -105,11 +107,12 @@ function soalGrammar(code, b, n, rnd) {
       if (kata2.length < 2) return;
       const target = kata2[Math.floor(rnd() * kata2.length)];
       const bolong = c.t.replace(target, '_____');
-      const salah = ambil(b.contoh.filter(x => x !== c), 3, rnd)
+      const salah = ambil(b.contoh.filter(x => x !== c), 10, rnd)
         .map(x => (x.t.split(/\s+/).find(w => w.length > 1) || x.t).slice(0, 12));
       if (salah.length < 3) return;
-      const opsi = shuffle([target, ...salah]);
-      out.push({ t: 'mcq', q: `Lengkapi: ${bolong}`, opts: opsi, a: opsi.indexOf(target),
+      const pil = buatPilihan(target, salah);
+      if (!pil) return;
+      out.push({ t: 'mcq', q: `Lengkapi: ${bolong}`, opts: pil.opts, a: pil.a,
         why: `Kalimat utuh: ${c.t} — ${c.arti}`, tag: c.topik });
     });
   }
@@ -123,17 +126,19 @@ function soalSimak(code, b, n, rnd) {
   ambil(sumber, Math.min(n, sumber.length), rnd).forEach((s, i) => {
     const audio = { text: s.t, rom: rom(code, s.t, s.r) };
     if (i % 2 === 0) {
-      const lain = ambil(sumber.filter(x => x.arti !== s.arti), 3, rnd);
+      const lain = ambil(sumber.filter(x => x.arti !== s.arti), 10, rnd);
       if (lain.length < 3) return;
-      const opsi = shuffle([s.arti, ...lain.map(x => x.arti)]);
-      out.push({ t: 'mcq', q: 'Dengarkan, lalu pilih artinya.', opts: opsi,
-        a: opsi.indexOf(s.arti), audio, why: `Yang diputar: ${s.t} = ${s.arti}`, tag: 'Menyimak' });
+      const pil = buatPilihan(s.arti, lain.map(x => x.arti));
+      if (!pil) return;
+      out.push({ t: 'mcq', q: 'Dengarkan, lalu pilih artinya.', opts: pil.opts,
+        a: pil.a, audio, why: `Yang diputar: ${s.t} = ${s.arti}`, tag: 'Menyimak' });
     } else {
-      const lain = ambil(sumber.filter(x => x.t !== s.t), 3, rnd);
+      const lain = ambil(sumber.filter(x => x.t !== s.t), 10, rnd);
       if (lain.length < 3) return;
-      const opsi = shuffle([s.t, ...lain.map(x => x.t)]);
-      out.push({ t: 'mcq', q: 'Dengarkan, lalu pilih yang kamu dengar.', opts: opsi,
-        a: opsi.indexOf(s.t), audio, why: `Yang diputar: ${s.t} = ${s.arti}`,
+      const pil = buatPilihan(s.t, lain.map(x => x.t));
+      if (!pil) return;
+      out.push({ t: 'mcq', q: 'Dengarkan, lalu pilih yang kamu dengar.', opts: pil.opts,
+        a: pil.a, audio, why: `Yang diputar: ${s.t} = ${s.arti}`,
         tag: 'Menyimak', romOpsi: true });
     }
   });
@@ -154,11 +159,12 @@ function soalBaca(code, b, n, rnd) {
   if (out.length < n) {
     const kalimat = [...b.contoh, ...b.frasa].filter(x => x.arti);
     ambil(kalimat, n - out.length, rnd).forEach(k => {
-      const lain = ambil(kalimat.filter(x => x.arti !== k.arti), 3, rnd);
+      const lain = ambil(kalimat.filter(x => x.arti !== k.arti), 10, rnd);
       if (lain.length < 3) return;
-      const opsi = shuffle([k.arti, ...lain.map(x => x.arti)]);
-      out.push({ t: 'mcq', q: `Apa maksud kalimat berikut?\n\n${k.t}`, opts: opsi,
-        a: opsi.indexOf(k.arti), why: `${k.t} — ${k.arti}`, tag: k.topik || 'Pemahaman' });
+      const pil = buatPilihan(k.arti, lain.map(x => x.arti));
+      if (!pil) return;
+      out.push({ t: 'mcq', q: `Apa maksud kalimat berikut?\n\n${k.t}`, opts: pil.opts,
+        a: pil.a, why: `${k.t} — ${k.arti}`, tag: k.topik || 'Pemahaman' });
     });
   }
   return out.slice(0, n);
@@ -252,8 +258,11 @@ export function bangunUjian(code, L, tingkat, benih = 1, ringkas = false) {
         const asal = items[putar % items.length];
         putar++;
         if (!Array.isArray(asal.opts)) continue;
-        const opsi = shuffle(asal.opts.slice());
-        items.push({ ...asal, opts: opsi, a: opsi.indexOf(asal.opts[asal.a]) });
+        /* Indeks kunci diambil dari POSISI setelah diacak, bukan lewat
+           indexOf — indexOf menunjuk salinan pertama, jadi ia rusak persis
+           ketika ada dua pilihan bertulisan sama. */
+        const urut = shuffle(asal.opts.map((teks, k) => ({ teks, kunci: k === asal.a })));
+        items.push({ ...asal, opts: urut.map(x => x.teks), a: urut.findIndex(x => x.kunci) });
       }
     }
     const menit = ringkas && sec.kind !== 'write'

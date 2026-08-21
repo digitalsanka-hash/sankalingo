@@ -9,6 +9,7 @@
    Semua soal boleh punya: level, tag, why (pembahasan).            */
 
 import { el, html, raw, esc, shuffle, toast, beep, bump } from './ui.js';
+export { buatPilihan } from './ui.js';
 import { say, listen, stopListening, scoreSpeech, sttReady, ttsReady } from './speech.js';
 import { norm, similarity, cocokKalimat } from './teks.js';
 import { addXP, state, recordQuiz } from './state.js';

@@ -137,15 +137,20 @@ export const BLUEPRINTS = {
         sections: [ S('l', 'Hören', 'listen', 20, 30, 25, ''),
                     S('r', 'Lesen', 'read', 20, 30, 25, ''),
                     S('w', 'Schreiben', 'write', 2, 30, 25, '') ] },
-      { id: 'b1', nama: 'B1', untuk: 'Menengah', total: 100, lulus: 60,
+      /* minBagian 60 = 60% poin tiap modul. Tanpa ini, `nilai()` di
+         js/mockgen.js hanya memeriksa TOTAL, sehingga peserta yang
+         mendapat nol di satu modul tetap dinyatakan "Lulus" — padahal
+         aturan yang dicetak aplikasi di layar hasil yang sama berbunyi
+         "mulai B1 tiap modul dinilai terpisah, masing-masing lulus 60". */
+      { id: 'b1', nama: 'B1', untuk: 'Menengah', total: 100, lulus: 60, minBagian: 60,
         sections: [ S('r', 'Lesen', 'read', 30, 65, 100, 'Lima bagian: blog, iklan, pendapat, aturan.'),
                     S('l', 'Hören', 'listen', 30, 40, 100, 'Empat bagian; sebagian diputar dua kali.'),
                     S('w', 'Schreiben', 'write', 3, 60, 100, 'Surel pribadi, forum daring, surel formal.') ] },
-      { id: 'b2', nama: 'B2', untuk: 'Menengah atas', total: 100, lulus: 60,
+      { id: 'b2', nama: 'B2', untuk: 'Menengah atas', total: 100, lulus: 60, minBagian: 60,
         sections: [ S('r', 'Lesen', 'read', 30, 65, 100, ''),
                     S('l', 'Hören', 'listen', 30, 40, 100, ''),
                     S('w', 'Schreiben', 'write', 2, 75, 100, 'Komentar forum dan pesan formal.') ] },
-      { id: 'c1', nama: 'C1', untuk: 'Mahir', total: 100, lulus: 60,
+      { id: 'c1', nama: 'C1', untuk: 'Mahir', total: 100, lulus: 60, minBagian: 60,
         sections: [ S('r', 'Lesen', 'read', 30, 70, 100, ''),
                     S('l', 'Hören', 'listen', 30, 40, 100, ''),
                     S('w', 'Schreiben', 'write', 2, 80, 100, '') ] }

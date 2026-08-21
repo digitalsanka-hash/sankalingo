@@ -96,7 +96,12 @@ function buildTOEIC() {
     .map(q => ({ ...q, part:'Part 3 — Conversations' })));
   const talks = P.p4.flatMap(l => flat(l.questions, { kind:'audio', title:l.title, lines:l.lines })
     .map(q => ({ ...q, part:'Part 4 — Talks' })));
-  const p1 = P.p1.map(q => ({ ...q, ctx: { kind:'audio', title:'Part 1 — Photographs', lines:[q.audio] } }));
+  /* Judulnya harus UNIK per foto. `played` di runQuestionSection berkunci
+     ctx.title, dan bagian Listening memakai audioOnce — jadi dengan judul
+     yang sama untuk keenam foto, memutar yang pertama langsung menandai
+     kelimanya "sudah diputar" dan mematikan tombol putarnya sebelum
+     sekali pun berbunyi. */
+  const p1 = P.p1.map((q, i) => ({ ...q, ctx: { kind:'audio', title:`Part 1 — Photograph ${i + 1}`, lines:[q.audio] } }));
   const p2 = P.p2.map(q => ({ ...q, ctx: { kind:'audio', title:'Part 2 — ' + q.q.slice(0, 28), lines:[q.audio] } }));
 
   const p5 = E.quickBank.filter(q => /___/.test(q.q)).map(q => ({ ...q, part:'Part 5 — Incomplete Sentences' }));
@@ -226,7 +231,32 @@ function sectionIntro(stage, bp, sec, onGo) {
 async function runQuestionSection(stage, bp, sec, strict, done) {
   await sectionIntro(stage, bp, sec);
 
-  const items = sec.items;
+  /* Pilihan ganda DIACAK di sini.
+
+     js/quiz.js sudah lama mengacak pilihan sebelum menampilkannya, tetapi
+     simulasi ujian punya penggambar sendiri (renderInput) dan menampilkan
+     it.opts apa adanya. Kunci jawaban di bank soal tidak tersebar rata,
+     jadi hasilnya bisa dikarang tanpa membaca satu soal pun. Diukur pada
+     251 soal pilihan ganda ketiga simulasi:
+
+         selalu A → 22% benar        selalu C → 14% benar
+         selalu B → 63% benar        selalu D →  1% benar
+         (tebakan acak murni 4 pilihan → 25%)
+
+     Skor 63% itu dilaporkan sebagai perkiraan band IELTS / skor TOEFL,
+     jadi angka yang dibawa pulang pemelajar tidak berarti apa-apa.
+
+     `noShuffle` dihormati: TOEIC Part 1 dan Part 2 membacakan pilihannya
+     lewat audio ("A. ... B. ... C. ..."), sehingga mengacak teksnya akan
+     membuat audio dan layar tidak lagi cocok.
+
+     Diacak SEKALI saat bagian dimulai, bukan tiap gambar ulang, supaya
+     jawaban tersimpan dan layar tinjauan tetap menunjuk pilihan yang sama. */
+  const items = sec.items.map(it => {
+    if (it.t !== 'mcq' || it.noShuffle || !Array.isArray(it.opts)) return it;
+    const urut = shuffle(it.opts.map((_, k) => k));
+    return { ...it, opts: urut.map(k => it.opts[k]), a: urut.indexOf(it.a) };
+  });
   const answers = new Array(items.length).fill(null);
   const flags = new Set();
   const played = new Set();
