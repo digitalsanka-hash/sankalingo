@@ -7,11 +7,11 @@ import { tipBantuan } from '../comfortui.js';
 import { addXP, addMinutes, markLesson } from '../state.js';
 import { runQuiz } from '../quiz.js';
 import { flashSession } from './vocab.js';
-import { langMeta, phraseLexOf } from '../langctx.js';
+import { langMeta, phraseLexOf, lexOf } from '../langctx.js';
 import { unitsOf, unitById, lessonsOf, lessonDone, unitPct, levelPct,
          coursePct, nextLesson, lessonKey } from '../course.js';
 import { renderTopicBody } from './grammar.js';
-import { scriptTrainerInto, dikteInto, shadowingInto, lexOfPack } from './langpages.js';
+import { scriptTrainerInto, dikteInto, shadowingInto } from './langpages.js';
 
 const P = (code, sec) => `#/${code}${sec ? '/' + sec : ''}`;
 
@@ -234,7 +234,8 @@ export function lesson(code, L, unitId, lessonId) {
     body.innerHTML = `<div class="note" style="margin-bottom:var(--s-4)">
       <strong>${esc(pack.title)}</strong>${esc(pack.note || 'Kuasai kata-kata ini sampai otomatis.')}</div>
       <div id="fsHost"></div>`;
-    flashSession($('#fsHost'), lexOfPack(code, pack), { title: pack.title, limit: 20,
+    /* lexOf, bukan pembuat id sendiri — lihat catatannya di js/langctx.js. */
+    flashSession($('#fsHost'), lexOf(code, L, { pack }), { title: pack.title, limit: 20,
       lang: code, onDone: (pct, info) => selesai(pct ?? 100, info) });
     return;
   }

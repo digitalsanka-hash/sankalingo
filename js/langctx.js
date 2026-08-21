@@ -164,7 +164,22 @@ export function navFor(code, L) {
  *  Kemunculan pertama yang dipertahankan, jadi id kartunya tidak berubah
  *  dan kemajuan yang sudah tersimpan tetap sah. Halaman kosakata sendiri
  *  tetap menampilkan seluruh isi tiap paket. */
-export function lexOf(code, L) {
+/*  `pack` menyaring hasilnya ke SATU paket — dipakai pelajaran kosakata di
+ *  dalam kurikulum. Dulu pelajaran itu punya pembuat kartunya sendiri,
+ *  js/views/langpages.js lexOfPack, yang formatnya memang sama TETAPI
+ *  tidak membuang kata kembar. Kata yang di dek dibuang sebagai kembar
+ *  tetap dibuatkan kartu oleh pelajaran, dengan id yang tidak pernah ada
+ *  di dek: 258 kartu yatim di delapan bahasa (ar 38, de 44, es 31, fr 25,
+ *  ja 34, ko 31, ru 24, zh 31). Kartu itu tidak pernah muncul di halaman
+ *  Kartu Hafalan, tidak pernah dijadwalkan ulang, dan tidak pernah
+ *  dihitung sudah dipelajari.
+ *
+ *  Penyaringannya SESUDAH dek penuh dibentuk — kalau paketnya dilewati
+ *  lebih dulu, penyaring kembar memulai dari kosong untuk paket itu dan
+ *  kata yang mestinya dibuang muncul lagi, membawa kembali persoalan yang
+ *  sama. Pelajaran yang kata-katanya sudah tercakup paket lain memang jadi
+ *  lebih pendek; itu benar — kartunya memang sudah ada di dek. */
+export function lexOf(code, L, { pack } = {}) {
   if (!L?.vocab) return [];
   const sudah = new Set();
   const out = [];
@@ -181,7 +196,8 @@ export function lexOf(code, L) {
                   bagaimana ia dipakai dalam kalimat. */
                ex: w[3] || '', exId: w[4] || '', exRom: w[5] || '' });
   }));
-  return out;
+  const idPaket = typeof pack === 'string' ? pack : pack?.id;
+  return idPaket === undefined ? out : out.filter(k => k.pack === idPaket);
 }
 
 /** Kanji juga jadi kartu. Id-nya disamakan dengan yang dipakai halaman

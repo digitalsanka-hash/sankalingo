@@ -1007,12 +1007,6 @@ export function exam(code, L) {
 /* ── Pembungkus agar bisa dipakai kurikulum ───────────────────── */
 
 /** Ubah satu paket kosakata jadi kartu hafalan. */
-export const lexOfPack = (code, pack) => pack.words.map((w, i) => ({
-  id: `${code}-${pack.id}-${i}`, pack: pack.id, packTitle: pack.title,
-  level: pack.level || 'A1', w: w[0], ipa: '', pos: w[1], id_: w[2],
-  ex: w[3] || '', exId: w[4] || '', exRom: w[5] || ''
-}));
-
 /** Dikte yang bisa ditanam, memakai daftar frasa apa pun. */
 export async function dikteInto(host, code, items, onDone) {
   await ready();
