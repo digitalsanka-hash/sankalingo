@@ -78,6 +78,19 @@
 .lv-A1{background:var(--lv-a1)} .lv-A2{background:var(--lv-a2)} .lv-B1{background:var(--lv-b1)}
 .lv-B2{background:var(--lv-b2)} .lv-C1{background:var(--lv-c1)} .lv-C2{background:var(--lv-c2)}
 
+/* Skala SELAIN CEFR.
+   Kelasnya dibentuk `lv-${g.level}`, dan tiga bahasa memakai skala
+   ujiannya sendiri: Jepang N5-N1, Korea dan Mandarin 1-6. Kelas untuk itu
+   tidak pernah ada, jadi 61 lencana jatuh ke latar bawaan kartu sementara
+   .badge--lv tetap memaksa teksnya gelap (#08121f) — terukur latar
+   rgb(28,34,64) dengan teks rgb(8,18,31), gelap di atas gelap.
+   Dipetakan menurut URUTAN KESULITAN, jadi warnanya tetap berarti sama:
+   yang termudah hijau, yang tersulit merah. */
+.lv-N5{background:var(--lv-a1)} .lv-N4{background:var(--lv-a2)} .lv-N3{background:var(--lv-b1)}
+.lv-N2{background:var(--lv-b2)} .lv-N1{background:var(--lv-c1)}
+.lv-1{background:var(--lv-a1)} .lv-2{background:var(--lv-a2)} .lv-3{background:var(--lv-b1)}
+.lv-4{background:var(--lv-b2)} .lv-5{background:var(--lv-c1)} .lv-6{background:var(--lv-c2)}
+
 /* bar kemajuan */
 .bar{height:7px;border-radius:99px;background:var(--surface-3);overflow:hidden}
 .bar>i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--violet-400),var(--mint-400));

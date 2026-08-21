@@ -211,12 +211,40 @@ export const SPEC_TOEIC = {
 
 export const SPECS = { ielts: SPEC_IELTS, toefl: SPEC_TOEFL, toeic: SPEC_TOEIC };
 
-/* Konversi jumlah benar → skor, memakai tabel di atas. */
+/* Dasar skala resmi tiap ujian, dipakai ketika jumlah benarnya di bawah
+   baris terendah tabel konversi. */
+const DASAR = {
+  ielts: { nilai: 0, bulat: 0.5 },   /* band 0 = tidak dikerjakan sama sekali */
+  toeic: { nilai: 5, bulat: 5 }      /* skor terendah tiap bagian TOEIC = 5   */
+};
+
+/* Konversi jumlah benar → skor, memakai tabel di atas.
+ *
+ * Tabelnya tidak menutup jumlah benar yang rendah, dan baris terakhirnya
+ * dulu dikembalikan apa adanya untuk SEMUA nilai di bawahnya. Akibatnya
+ * peserta yang tidak menjawab satu soal pun tetap dilaporkan:
+ *
+ *     IELTS  0 dari 40 benar  →  Band 3,0
+ *     TOEIC  0 dari 200 benar →  95 + 85 = 180
+ *
+ * dan band IELTS 1 sampai 2,5 mustahil keluar berapa pun hasilnya.
+ *
+ * Di bawah baris terendah, skornya kini DIINTERPOLASI lurus turun ke dasar
+ * skala resmi. Tidak ada tabel yang dikarang: yang dipakai tetap titik
+ * terendah tabel yang sudah ada, ditarik ke titik (0 benar, dasar skala).
+ */
 export function convertScore(examId, sectionId, correct) {
   const table = SPECS[examId]?.convert?.[sectionId];
   if (!table) return null;
   for (const [raw, score] of table) if (correct >= raw) return score;
-  return table[table.length - 1][1];
+
+  const [rawTerendah, skorTerendah] = table[table.length - 1];
+  const d = DASAR[examId];
+  if (!d || rawTerendah <= 0) return skorTerendah;
+
+  const n = Math.max(0, correct);
+  const nilai = d.nilai + (skorTerendah - d.nilai) * (n / rawTerendah);
+  return Math.round(nilai / d.bulat) * d.bulat;
 }
 
 /** Pembulatan band IELTS: .25 → naik setengah, .75 → naik penuh. */

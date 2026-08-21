@@ -9,12 +9,14 @@ const arr = x => (Array.isArray(x) ? x : []);
 const KODE = ['ko', 'ja', 'zh', 'ar', 'ru', 'de', 'fr', 'es'];
 
 const T = {};
+const DATA = {};   /* modul tiap bahasa, dipakai lagi di laporan romanisasi */
 let tot = { kata: 0, frasa: 0, grammar: 0, latihan: 0, contoh: 0, aksara: 0, kanji: 0, kataKanji: 0, contohPakai: 0,
             unit: 0, pelajaran: 0, bacaan: 0, soalBacaan: 0, tingkat: 0 };
 
 for (const c of KODE) {
   const m = await imp(`data/lang/${c}.js`);
   const L = m[c.toUpperCase()] || Object.values(m)[0];
+  DATA[c] = L;
   let C = null;
   try { const cm = await imp(`data/lang/${c}-course.js`); C = cm.COURSE || Object.values(cm)[0]; } catch {}
   /* Perluasan materi hidup di berkas terpisah dan digabung saat aplikasi
@@ -78,6 +80,44 @@ console.log('TOT  ' + kol.map(k => String(KODE.reduce((a,c)=>a+(T[c][k]||0),0)).
 const butir = KODE.reduce((a,c) => a + T[c].kata + T[c].frasa + T[c].contoh + T[c].latihan + T[c].aksara + T[c].soalBacaan + T[c].kanji + T[c].kataKanji + T[c].contohPakai, 0);
 console.log(`\nTOTAL BUTIR MATERI (8 bahasa): ${butir}`);
 console.log(`Rata-rata per bahasa          : ${Math.round(butir / 8)}`);
+
+/* ── Kelengkapan romanisasi & tanda tekanan ───────────────────────
+
+   Romanisasi bukan hiasan: untuk bahasa beraksara asing, itulah yang
+   dibacakan mesin suara ketika perangkat pemelajar tidak punya suara
+   bahasa aslinya.
+
+   Tanda tekanan dilaporkan khusus untuk bahasa Rusia karena tekanan di
+   sana TIDAK BISA ditebak dari ejaannya dan mengubah makna (за́мок kastil
+   vs замо́к gembok). Aplikasi ini mengajarkannya untuk kosakata inti lalu
+   berhenti tanpa mengatakan apa-apa pada kosakata tambahan — pemelajar
+   tidak punya cara tahu bahwa yang satu lengkap dan yang lain tidak.
+
+   Menambalnya berarti menuliskan tekanan 150 kata Rusia satu per satu.
+   Itu pekerjaan penulisan materi, bukan perbaikan kode, dan menebaknya
+   akan mengajarkan pelafalan yang keliru — jadi di sini ia DILAPORKAN,
+   bukan dikarang. */
+const TEKANAN = /[áéíóúýàèìòùÁÉÍÓÚ]/;
+console.log('\nromanisasi kosakata (bahasa beraksara asing):');
+for (const c of ['ja', 'ko', 'zh', 'ar', 'ru']) {
+  const L = DATA[c];
+  if (!L?.vocab) continue;
+  /* Paket tambahan di <kode>-kata.js ikut dihitung: aplikasi
+     menggabungkannya saat berjalan, jadi laporan yang hanya membaca
+     <kode>.js akan menyebut 42 kata padahal pemelajar melihat 192. */
+  let TAMBAHAN = null;
+  try { TAMBAHAN = await imp(`data/lang/${c}-kata.js`).then(m => Object.values(m)[0]); } catch {}
+  const paketTambahan = arr(TAMBAHAN?.paket || TAMBAHAN?.vocab);
+  const kata = [...L.vocab, ...paketTambahan].flatMap(p => p.words || []);
+  const berrom = kata.filter(w => w[1]).length;
+  let baris = `  ${c}  ${berrom}/${kata.length} berromanisasi`;
+  if (c === 'ru') {
+    const tk = kata.filter(w => w[1] && TEKANAN.test(w[1])).length;
+    baris += `  ·  ${tk}/${berrom} bertanda tekanan` +
+      (tk < berrom ? `  ← ${berrom - tk} kata tanpa tekanan; tekanan Rusia tidak bisa ditebak dari ejaan` : '');
+  }
+  console.log(baris);
+}
 
 /* Alat ini MENGHITUNG, tidak menilai — tidak ada ambang yang bisa
    disebut lulus atau gagal, jadi ia selalu keluar dengan 0. Ditulis
