@@ -162,10 +162,15 @@ export function renderLesson(unitId, lessonId) {
   const body = el('div', { id: 'lessonBody' });
   $('#main').append(head, body);
 
-  const finish = (pct = 100) => {
+  /* Lihat catatan yang sama di js/views/langcourse.js: pelajaran tetap
+     ditandai selesai walau antrean kartunya kosong, tetapi XP dan waktu
+     belajar hanya diberikan atas pekerjaan yang benar-benar terjadi. */
+  const finish = (pct = 100, { adaKerja = true } = {}) => {
     markLesson(ls.id, pct);
-    addXP(ls.xp, ls.type === 'grammar' ? 'grammar' : ls.type === 'vocab' ? 'vocab' : ls.type);
-    addMinutes(8);
+    if (adaKerja) {
+      addXP(ls.xp, ls.type === 'grammar' ? 'grammar' : ls.type === 'vocab' ? 'vocab' : ls.type);
+      addMinutes(8);
+    }
     const next = u.lessons[u.lessons.indexOf(ls) + 1];
     body.innerHTML = html`
       <div class="card card--pad-lg t-c stack">
@@ -210,7 +215,8 @@ function lessonGrammar(body, ls, finish) {
 function lessonVocab(body, ls, finish) {
   const pack = packById(ls.ref) || ALL_PACKS.find(p => p.id === ls.ref);
   if (!pack) return body.innerHTML = '<p>Paket tidak ditemukan.</p>';
-  flashSession(body, pack.items, { title: pack.titleId, limit: 20, onDone: () => finish(100) });
+  flashSession(body, pack.items, { title: pack.titleId, limit: 20,
+    onDone: (pct, info) => finish(100, info) });
 }
 
 /* Kalimat contoh dari tata bahasa unit ini — bahan lab keterampilannya.

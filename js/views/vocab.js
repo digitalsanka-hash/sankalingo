@@ -127,7 +127,15 @@ export function flashSession(host, items, { title = 'Kartu Hafalan', limit = 25,
       <h3>Tidak ada kartu jatuh tempo</h3>
       <p class="small">Semua kartu di sini sudah kamu kuasai untuk hari ini.</p>
       <a class="btn btn--soft" href="#/vocab">Pilih paket lain</a></div>`;
-    onDone?.();
+    /* adaKerja:false — antreannya kosong, jadi TIDAK ADA satu kartu pun
+       yang dibuka. Pemanggil memakai penanda ini untuk tetap menandai
+       pelajarannya selesai tanpa memberi XP dan waktu belajar atas
+       pekerjaan yang tidak terjadi. Sebelumnya onDone dipanggil polos,
+       sehingga membuka ulang pelajaran kosakata atau frasa yang sudah
+       selesai langsung menampilkan "Pelajaran selesai · +30 XP · skor
+       100%" — dan menambah 8 menit "waktu belajar" — tanpa satu kartu
+       pun tampil. */
+    onDone?.(100, { adaKerja: false });
     return;
   }
 
@@ -207,7 +215,7 @@ export function flashSession(host, items, { title = 'Kartu Hafalan', limit = 25,
       </div>`;
     $('#againBtn', host).onclick = () => flashSession(host, items, { title, limit, onDone });
     if (!silent) bump(document.querySelector('#xpChip b'));
-    onDone?.(pct);
+    onDone?.(pct, { adaKerja: true });
   };
 
   flash.onclick = e => {

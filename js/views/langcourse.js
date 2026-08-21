@@ -173,13 +173,20 @@ export function lesson(code, L, unitId, lessonId) {
   const body = el('div', { id: 'lsBody' });
   $('#main').append(head, body);
 
-  const selesai = (pct = 100) => {
+  /* `adaKerja` menandai apakah pemelajar benar-benar mengerjakan sesuatu.
+     Pelajaran tetap DITANDAI SELESAI meski antrean kartunya kosong —
+     kalau tidak, pelajaran yang katanya sudah dikuasai tidak akan pernah
+     bisa ditutup — tetapi XP dan waktu belajar hanya diberikan atas
+     pekerjaan yang benar-benar terjadi. */
+  const selesai = (pct = 100, { adaKerja = true } = {}) => {
     markLesson(lessonKey(code, u.id, l.id), pct);
-    addXP(l.xp, l.type === 'grammar' ? 'grammar'
-      : l.type === 'vocab' || l.type === 'phrase' ? 'vocab'
-      : l.type === 'listen' ? 'listening'
-      : l.type === 'speak' ? 'speaking' : 'writing');
-    addMinutes(8);
+    if (adaKerja) {
+      addXP(l.xp, l.type === 'grammar' ? 'grammar'
+        : l.type === 'vocab' || l.type === 'phrase' ? 'vocab'
+        : l.type === 'listen' ? 'listening'
+        : l.type === 'speak' ? 'speaking' : 'writing');
+      addMinutes(8);
+    }
     const idx = u.lessons.indexOf(l);
     const next = u.lessons[idx + 1];
     body.innerHTML = html`
@@ -228,7 +235,7 @@ export function lesson(code, L, unitId, lessonId) {
       <strong>${esc(pack.title)}</strong>${esc(pack.note || 'Kuasai kata-kata ini sampai otomatis.')}</div>
       <div id="fsHost"></div>`;
     flashSession($('#fsHost'), lexOfPack(code, pack), { title: pack.title, limit: 20,
-      lang: code, onDone: pct => selesai(pct ?? 100) });
+      lang: code, onDone: (pct, info) => selesai(pct ?? 100, info) });
     return;
   }
 
@@ -240,7 +247,7 @@ export function lesson(code, L, unitId, lessonId) {
        js/langctx.js. Skema id yang berbeda membuat kartu frasa dari
        pelajaran ini terpisah dari dek Kartu Hafalan. */
     flashSession($('#fsHost'), phraseLexOf(code, L, { grup: g }), { title: 'Frasa ' + g.g, limit: 20,
-      lang: code, onDone: pct => selesai(pct ?? 100) });
+      lang: code, onDone: (pct, info) => selesai(pct ?? 100, info) });
     return;
   }
 
