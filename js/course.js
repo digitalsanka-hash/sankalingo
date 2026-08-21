@@ -75,11 +75,31 @@ export function pasangPakai(L, pakai) {
   if (!L?.vocab || !pakai) return L;
   for (const paket of L.vocab)
     for (const w of paket.words || []) {
-      const c = pakai[w[0]];
+      /* Kunci berlingkup paket didahulukan, kalau berkas datanya
+         menyediakannya ("paket|kata"). Beberapa kata memang homograf —
+         일 berarti 'pekerjaan', 'hari', dan 'satu' di tiga paket berbeda —
+         dan kunci berdasarkan ejaan saja memberi ketiganya satu kalimat
+         contoh yang sama. Bentuk berlingkup ini belum dipakai data mana
+         pun; ia disediakan supaya perbaikannya cukup di data, tanpa
+         menyentuh kode lagi. */
+      const c = pakai[`${paket.id}|${w[0]}`] || pakai[w[0]];
       if (!c) continue;
-      w[3] = c[0] || '';        // contoh kalimat
-      w[4] = c[1] || '';        // terjemahan Indonesia
-      w[5] = c[2] || '';        // romanisasi contoh (aksara non-Latin)
+
+      /* JANGAN menimpa dengan kosong.
+         langctx.js memanggil fungsi ini DUA KALI: sekali dengan
+         <kode>-pakai.js, lalu sekali lagi dengan bagian `pakai` di
+         <kode>-kata.js. Panggilan kedua menyapu seluruh kosakata lagi, dan
+         `w[5] = c[2] || ''` menghapus romanisasi yang baru saja dipasang
+         panggilan pertama kalau entri keduanya cuma dua unsur.
+
+         Terukur: 119 kata kehilangan romanisasi contohnya — ar 29, ja 27,
+         ko 25, ru 22, zh 16; nol di Jerman, Spanyol, dan Prancis yang
+         memang tidak memakai romanisasi. Untuk bahasa beraksara asing,
+         romanisasi itulah yang dibaca mesin suara ketika perangkat tidak
+         punya suara bahasa aslinya. */
+      if (c[0]) w[3] = c[0];    // contoh kalimat
+      if (c[1]) w[4] = c[1];    // terjemahan Indonesia
+      if (c[2]) w[5] = c[2];    // romanisasi contoh (aksara non-Latin)
     }
   return L;
 }
