@@ -168,7 +168,7 @@ export function renderLesson(unitId, lessonId) {
   const finish = (pct = 100, { adaKerja = true } = {}) => {
     markLesson(ls.id, pct);
     if (adaKerja) {
-      addXP(ls.xp, ls.type === 'grammar' ? 'grammar' : ls.type === 'vocab' ? 'vocab' : ls.type);
+      addXP(ls.xp, EMBER_KETERAMPILAN[ls.type] || '');
       addMinutes(8);
     }
     const next = u.lessons[u.lessons.indexOf(ls) + 1];
@@ -241,10 +241,15 @@ function lessonListen(body, u, finish) {
   const dariUnit = kalimatUnit(u);
   /* Kalau unitnya belum punya cukup kalimat, dilengkapi dari set dikte
      tingkatnya — supaya labnya tidak pernah kosong. */
-  const set = DICTATIONS.find(d => d.level === u.level) || DICTATIONS[0];
+  const bahan = bahanTerdekat(DICTATIONS, u.level);
+  const set = bahan.kolam[0];
   const kolam = dariUnit.length >= 4 ? dariUnit : [...dariUnit, ...set.items];
-  const items = sample(kolam, 6).map(t => ({ t: 'dictate', text: t, level: u.level }));
-  body.innerHTML = `<p class="soft" style="margin-bottom:1rem">Dengarkan lalu tulis persis.
+  /* Kalau kalimatnya datang dari unit ini, tingkatnya memang tingkat unit;
+     kalau dari set dikte cadangan, yang jujur adalah tingkat set itu. */
+  const tingkatButir = dariUnit.length >= 4 ? u.level : bahan.tingkat;
+  const items = sample(kolam, 6).map(t => ({ t: 'dictate', text: t, level: tingkatButir }));
+  body.innerHTML = (dariUnit.length >= 4 ? '' : catatanTingkat(bahan, u.level)) +
+    `<p class="soft" style="margin-bottom:1rem">Dengarkan lalu tulis persis.
     Kalimatnya diambil dari tata bahasa unit ini, jadi sekaligus mengulangnya.
     Kamu boleh memutar ulang dan memperlambat.</p>`;
   const box = el('div'); body.append(box);
@@ -253,18 +258,80 @@ function lessonListen(body, u, finish) {
 
 function lessonSpeak(body, u, finish) {
   const dariUnit = kalimatUnit(u);
-  const sh = SHADOWING.find(s => s.level === u.level) || SHADOWING[0];
-  const prompts = SPEAKING_PROMPTS.find(s => s.level === u.level) || SPEAKING_PROMPTS[0];
+  const bahanSh = bahanTerdekat(SHADOWING, u.level);
+  const bahanPr = bahanTerdekat(SPEAKING_PROMPTS, u.level);
+  const sh = bahanSh.kolam[0];
+  const prompts = bahanPr.kolam[0];
   const kolam = dariUnit.length >= 3 ? dariUnit : [...dariUnit, ...sh.lines];
+  const tingkatButir = dariUnit.length >= 3 ? u.level : bahanSh.tingkat;
   const items = [
-    ...sample(kolam, 4).map(t => ({ t: 'speak', text: t, level: u.level, tag: u.titleId })),
-    ...sample(prompts.items, 1).map(p => ({ t: 'speak', text: p, level: u.level, tag: 'Prompt', tol: 55 }))
+    ...sample(kolam, 4).map(t => ({ t: 'speak', text: t, level: tingkatButir, tag: u.titleId })),
+    ...sample(prompts.items, 1).map(p => ({ t: 'speak', text: p, level: bahanPr.tingkat, tag: 'Prompt', tol: 55 }))
   ];
-  body.innerHTML = `<p class="soft" style="margin-bottom:1rem">Dengarkan contoh, lalu ucapkan.
+  const perluCatatan = (dariUnit.length < 3 && !bahanSh.tepat) || !bahanPr.tepat;
+  body.innerHTML = (perluCatatan ? catatanTingkat(bahanPr.tepat ? bahanSh : bahanPr, u.level) : '') +
+    `<p class="soft" style="margin-bottom:1rem">Dengarkan contoh, lalu ucapkan.
     Kalimatnya dari unit ini. Skor dihitung dari kecocokan kata yang terdengar.</p>`;
   const box = el('div'); body.append(box);
   runQuiz(box, items, { skill: 'speaking', quizKey: 'spk:' + u.id, onDone: r => finish(r.pct) });
 }
+
+/* ── Memilih bahan ketika tingkatnya tidak punya apa-apa ──────────
+
+   Bahan keterampilan tidak lengkap untuk semua tingkat, dan tidak apa-apa
+   — yang tidak boleh adalah DIAM-DIAM memberi bahan yang jauh melenceng
+   lalu melabelinya dengan tingkat unitnya. Terukur:
+
+       READINGS          A1 1  A2 1  B1 1  B2 1  C1 1  C2 0
+       WRITING_TASKS     A1 0  A2 1  B1 1  B2 2  C1 1  C2 0
+       SHADOWING         A1 1  A2 1  B1 1  B2 1  C1 1  C2 0
+       SPEAKING_PROMPTS  A1 1  A2 1  B1 1  B2 1  C1 1  C2 0
+       DICTATIONS        A1 1  A2 1  B1 1  B2 1  C1 1  C2 0
+
+   Enam unit C2 tidak punya bahan sama sekali, dan A1 tidak punya tugas
+   menulis. Cadangannya dulu `|| X[0]` — elemen PERTAMA daftar, yang
+   kebetulan A1. Jadi pelajaran berbicara unit C2 menyajikan kalimat A1
+   dan melabelinya C2, sementara pemula A1 menerima tugas menulis A2.
+
+   Sekarang diambil tingkat TERDEKAT yang benar-benar ada, dan tingkat
+   aslinya dikembalikan supaya bisa dilabeli jujur di layar. */
+/* Jenis pelajaran → ember keterampilan di state().skills.
+   Keduanya memakai nama yang BERBEDA: pelajaran bertipe 'listen',
+   'speak', 'read', 'write', sedangkan embernya bernama 'listening',
+   'speaking', 'reading', 'writing'. addXP() membuang nama yang tidak
+   dikenalnya tanpa bersuara (`if (kind && s.skills[kind] !== undefined)`),
+   jadi XP dari 64 pelajaran keterampilan dan 44 ujian unit tidak pernah
+   masuk ember mana pun — dan grafik radar di halaman Kemajuan, yang
+   dibaca dari ember itu, tidak pernah bergerak.
+
+   'test' sengaja diarahkan ke 'grammar': ujian unit menguji tata
+   bahasanya, dan itu yang sudah dipakai kurikulum bahasa lain. */
+const EMBER_KETERAMPILAN = {
+  grammar: 'grammar', vocab: 'vocab', test: 'grammar',
+  listen: 'listening', speak: 'speaking', read: 'reading', write: 'writing'
+};
+
+const TANGGA = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
+export function bahanTerdekat(daftar, level) {
+  const tepat = daftar.filter(x => x.level === level);
+  if (tepat.length) return { kolam: tepat, tingkat: level, tepat: true };
+  const i = TANGGA.indexOf(level);
+  if (i >= 0)
+    for (let jarak = 1; jarak < TANGGA.length; jarak++)
+      for (const j of [i - jarak, i + jarak]) {
+        if (j < 0 || j >= TANGGA.length) continue;
+        const k = daftar.filter(x => x.level === TANGGA[j]);
+        if (k.length) return { kolam: k, tingkat: TANGGA[j], tepat: false };
+      }
+  return { kolam: daftar, tingkat: daftar[0]?.level || level, tepat: false };
+}
+
+/** Keterangan jujur ketika bahannya bukan dari tingkat unit ini. */
+const catatanTingkat = (b, level) => b.tepat ? '' :
+  `<div class="note note--warn small" style="margin-bottom:var(--s-4)">
+     Belum ada bahan tingkat ${esc(level)} untuk bagian ini, jadi dipakai bahan
+     tingkat <b>${esc(b.tingkat)}</b> — tingkat terdekat yang tersedia.</div>`;
 
 function lessonRead(body, u, finish) {
   const level = u.level;
@@ -272,26 +339,28 @@ function lessonRead(body, u, finish) {
      tingkat memakai bacaan yang sama — dengan hanya 10 bacaan untuk 44
      unit, pengulangan tidak terhindarkan, tapi setidaknya sekarang unit
      yang berdampingan tidak memakai teks yang sama persis. */
-  const sePeringkat = READINGS.filter(x => x.level === level);
-  const kolam = sePeringkat.length ? sePeringkat : READINGS;
+  const bahan = bahanTerdekat(READINGS, level);
+  const kolam = bahan.kolam;
   const r = kolam[(u.n - 1) % kolam.length];
   body.innerHTML = html`
+    ${raw(catatanTingkat(bahan, level))}
     <div class="card" style="margin-bottom:var(--s-5)">
       <div class="row row--between"><div class="card__title">${esc(r.title)}</div>
         <span class="badge">${r.words} kata · ~${r.minutes} menit</span></div>
       <div class="passage" style="margin-top:var(--s-4)">${esc(r.text)}</div>
     </div>`;
   const box = el('div'); body.append(box);
-  runQuiz(box, r.questions.map(q => ({ ...q, level, tag: 'Reading' })),
+  runQuiz(box, r.questions.map(q => ({ ...q, level: bahan.tingkat, tag: 'Reading' })),
     { skill: 'reading', quizKey: 'rd:' + u.id, onDone: res => finish(res.pct) });
 }
 
 function lessonWrite(body, u, finish) {
   const level = u.level;
-  const sePeringkat = WRITING_TASKS.filter(x => x.level === level);
-  const kolam = sePeringkat.length ? sePeringkat : WRITING_TASKS;
+  const bahan = bahanTerdekat(WRITING_TASKS, level);
+  const kolam = bahan.kolam;
   const t = kolam[(u.n - 1) % kolam.length];
   body.innerHTML = html`
+    ${raw(catatanTingkat(bahan, level))}
     <div class="card">
       <div class="card__title">${esc(t.type)} · ${t.minutes} menit · target ${t.words} kata</div>
       <p style="margin:var(--s-3) 0">${esc(t.prompt)}</p>
