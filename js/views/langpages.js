@@ -1013,12 +1013,6 @@ export const lexOfPack = (code, pack) => pack.words.map((w, i) => ({
   ex: w[3] || '', exId: w[4] || '', exRom: w[5] || ''
 }));
 
-/** Ubah satu grup frasa jadi kartu hafalan. */
-export const phraseLex = (code, grup) => grup.items.map((it, i) => ({
-  id: `${code}-ph-${grup.g}-${i}`, pack: 'phrases', packTitle: 'Frasa ' + grup.g,
-  level: 'A1', w: it[0], ipa: '', pos: it[1], id_: it[2], ex: '', exId: ''
-}));
-
 /** Dikte yang bisa ditanam, memakai daftar frasa apa pun. */
 export async function dikteInto(host, code, items, onDone) {
   await ready();

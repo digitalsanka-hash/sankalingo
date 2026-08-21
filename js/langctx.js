@@ -196,8 +196,29 @@ export function kanjiLexOf(code, L) {
   }));
 }
 
-/** Frasa juga bisa dijadikan kartu — sangat efektif untuk bahasa baru. */
-export function phraseLexOf(code, L) {
+/** Frasa juga bisa dijadikan kartu — sangat efektif untuk bahasa baru.
+ *
+ *  SATU-SATUNYA tempat id kartu frasa dibentuk. Dulu ada pembentuk kedua di
+ *  js/views/langpages.js (phraseLex) yang memakai NAMA grup, bukan
+ *  indeksnya: `ja-ph-Sapaan-0` versus `ja-ph-0-0`. Pelajaran frasa di
+ *  kurikulum memakai yang pertama, halaman Kartu Hafalan memakai yang
+ *  kedua, sehingga setiap frasa yang dilatih lewat kurikulum membuat kartu
+ *  SRS kedua yang tidak pernah muncul di dek, tidak pernah dijadwalkan
+ *  ulang, dan tidak pernah dihitung sudah dipelajari.
+ *
+ *  Pembentuk kedua itu dihapus. `grup` menyaring hasilnya ke satu grup
+ *  saja — id-nya tetap dihitung dari indeks grup yang sebenarnya, jadi
+ *  kartunya identik dengan yang ada di dek.
+ *
+ *  Penyaringannya dilakukan SESUDAH dek penuh dibentuk, bukan sebelumnya.
+ *  Kalau grupnya dilewati lebih awal, penyaring kembar (`sudah`) memulai
+ *  dari kosong untuk grup itu, sehingga frasa yang di dek penuh dibuang
+ *  sebagai kembar justru muncul kembali di sini — membawa id yang tidak
+ *  ada di dek, yaitu persis kartu yatim yang mau dihilangkan. Diukur:
+ *  ja 3 kartu yatim, ar 1, sebelum urutannya dibalik.
+ *
+ *  @param {object} [pilihan.grup] objek grup dari L.phrases, atau namanya. */
+export function phraseLexOf(code, L, { grup } = {}) {
   if (!L?.phrases) return [];
   const sudah = new Set();
   const out = [];
@@ -206,10 +227,11 @@ export function phraseLexOf(code, L) {
     if (!kunci || sudah.has(kunci)) return;
     sudah.add(kunci);
     out.push({ id: `${code}-ph-${gi}-${i}`, pack: 'phrases',
-               packTitle: 'Frasa ' + g.g, level: 'A1',
+               packTitle: 'Frasa ' + g.g, level: 'A1', grup: g.g,
                w: it[0], ipa: '', pos: it[1], id_: it[2], ex: '', exId: '' });
   }));
-  return out;
+  const namaGrup = typeof grup === 'string' ? grup : grup?.g;
+  return namaGrup === undefined ? out : out.filter(k => k.grup === namaGrup);
 }
 
 export const langMeta = langByCode;
