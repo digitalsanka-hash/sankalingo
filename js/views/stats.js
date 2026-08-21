@@ -1,7 +1,8 @@
 /* Kemajuan & pengaturan. */
 
 import { $, $$, el, html, raw, esc, toast, ring, radar, heatmap, sparkBars, nf, tanggal, confirmDialog } from '../ui.js';
-import { state, mutate, set, xpLevel, liveStreak, todayKey, unitPct, exportData, importData, resetAll } from '../state.js';
+import { state, mutate, set, xpLevel, liveStreak, todayKey, unitPct, exportData, importData, resetAll,
+         ringkasCadangan, ringkasSekarang } from '../state.js';
 import * as Awan from '../awan.js';
 import { stats as srsStats, forecast } from '../srs.js';
 import { englishVoices, rankedEnglishVoices, voiceQuality, VOICE_STYLES, say, loadVoices,
@@ -458,7 +459,28 @@ export function renderSettings() {
   on('impFile', 'change', e => {
     const f = e.target.files[0]; if (!f) return;
     const r = new FileReader();
-    r.onload = () => {
+    /* Memulihkan cadangan MENGGANTI seluruh kemajuan dan tidak bisa
+       dibatalkan. Tombol Hapus semua data di bawah sudah lama meminta
+       konfirmasi; jalur ini dulu tidak, padahal akibatnya sama persis —
+       satu salah pilih berkas di dialog unggah menghapus semuanya
+       sementara aplikasi melaporkan keberhasilan.
+
+       Yang dibandingkan diperlihatkan apa adanya, supaya pemakai bisa
+       melihat kalau cadangannya justru lebih kosong daripada kemajuan
+       yang sedang berjalan. */
+    r.onload = async () => {
+      let ringkas;
+      try { ringkas = ringkasCadangan(r.result); }
+      catch (err) { return toast('Berkas tidak dikenali: ' + err.message, 'bad'); }
+      const kini = ringkasSekarang();
+      const baris = (j, x) => `${j}: ${x.pelajaran} pelajaran · ${x.kartu} kartu · ${x.xp} XP`;
+      const yes = await confirmDialog('Ganti kemajuan dengan isi cadangan?',
+        `${baris('Sekarang di perangkat ini', kini)}<br>` +
+        `${baris('Isi berkas cadangan', ringkas)} (dibuat ${esc(ringkas.dibuat)})<br><br>` +
+        'Kemajuan yang sekarang akan hilang permanen dan tidak bisa dikembalikan. ' +
+        'Sebaiknya ekspor dulu.',
+        'Ya, ganti');
+      if (!yes) { e.target.value = ''; return; }
       try { importData(r.result); toast('Kemajuan dipulihkan.', 'ok'); renderSettings(); }
       catch (err) { toast('Berkas tidak dikenali: ' + err.message, 'bad'); }
     };

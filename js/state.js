@@ -241,9 +241,41 @@ export function perluCadangan() {
   const umur = daysBetween(acuan, todayKey());
   return umur >= 30 ? { hari: umur, pernah: !!S.lastExport, butir: nilai } : null;
 }
+/** Ringkas isi sebuah cadangan, untuk diperlihatkan sebelum memulihkan. */
+export function ringkasCadangan(json) {
+  const p = typeof json === 'string' ? JSON.parse(json) : json;
+  return {
+    dibuat: p?.createdAt || '(tidak tercatat)',
+    xp: Number(p?.xp) || 0,
+    pelajaran: Object.keys(p?.lessons || {}).length,
+    kartu: Object.keys(p?.srs || {}).length,
+    nama: String(p?.name || '').trim()
+  };
+}
+
+/** Ringkas kemajuan yang ADA SEKARANG, untuk dibandingkan dengannya. */
+export function ringkasSekarang() { return ringkasCadangan(S); }
+
 export function importData(json) {
   const parsed = typeof json === 'string' ? JSON.parse(json) : json;
-  if (!parsed || typeof parsed !== 'object') throw new Error('Berkas tidak dikenali');
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed))
+    throw new Error('Berkas tidak dikenali');
+
+  /* Bentuknya HARUS diperiksa, bukan cuma "objek".
+     Sebelumnya baris di bawah langsung menyebar apa pun ke atas blank(),
+     sehingga JSON apa saja — berkas setelan aplikasi lain, satu berkas
+     data yang salah pilih di dialog unggah — diterima, menghapus seluruh
+     kartu hafalan, XP, rentetan, dan pelajaran secara permanen, lalu
+     aplikasi melaporkan "Kemajuan dipulihkan." Tidak ada undo.
+
+     Cadangan yang sah selalu punya penanda versi `v` dan sekurangnya satu
+     wadah kemajuan yang benar-benar berupa objek. */
+  const wadah = ['lessons', 'srs', 'units', 'quiz', 'history', 'drills'];
+  const punyaWadah = wadah.some(k =>
+    parsed[k] && typeof parsed[k] === 'object' && !Array.isArray(parsed[k]));
+  if (parsed.v === undefined || !punyaWadah)
+    throw new Error('bukan berkas cadangan SankaLingo GO');
+
   S = { ...blank(), ...parsed };
   persist(); emit();
 }
