@@ -136,7 +136,11 @@ export const SEARCH_INDEX = [
   ...READINGS.map(r => ({ t: r.title, k: 'Bacaan ' + r.level, href: `#/reading/${r.id}` })),
   ...EXAM_LIST.map(e => ({ t: e.name, k: 'Ujian', href: `#/exam/${e.id}` })),
   ...PLANS.map(p => ({ t: p.name, k: 'Rencana', href: `#/plan/${p.id}` })),
-  ...TRICKS.map((t, i) => ({ t: t.t, k: 'Trik ' + t.g, href: `#/tricks#t${i}` })),
+  /* '?t=' bukan '#t'. Alamat berpagar dua — '#/tricks#t3' — membuat router
+     membaca seluruh 'tricks#t3' sebagai satu ruas rute; ruas itu tidak ada
+     di LEGACY, jadi 62 hasil pencarian Trik mendarat di beranda tanpa
+     penjelasan. Halaman Trik membaca ?t= lalu menggulir ke butirnya. */
+  ...TRICKS.map((t, i) => ({ t: t.t, k: 'Trik ' + t.g, href: `#/tricks?t=${i}` })),
   { t: 'Kartu Hafalan (SRS)', k: 'Latihan', href: '#/review' },
   { t: 'Tes Penempatan', k: 'Mulai', href: '#/placement' },
   { t: 'Pelafalan & IPA', k: 'Keterampilan', href: '#/pronunciation' },

@@ -134,6 +134,19 @@ let navCode = null;   // bahasa yang sedang tergambar di menu
 
 /* ── Router ───────────────────────────────────────────────────── */
 async function route() {
+  /* Jangkar DALAM HALAMAN dibiarkan lewat.
+
+     Router ini melucuti '#' maupun '#/' dengan pola yang sama, sehingga
+     '#main' — tautan "Lompat ke konten" di index.html:49 — terbaca
+     sebagai rute 'main'. Rute itu tidak ada, LEGACY tidak mengenalnya,
+     dan cabang terakhir melempar pemakai ke beranda. Justru fitur
+     ketermudahan-akses yang rusak: pemakai papan ketik atau pembaca layar
+     yang menekan Tab lalu Enter di halaman pelajaran kehilangan tempatnya.
+
+     Rute aplikasi ini SELALU berbentuk '#/...'. Hash yang tidak berawalan
+     '#/' berarti jangkar biasa; biarkan peramban menggulir ke sana. */
+  if (location.hash && !location.hash.startsWith('#/')) return;
+
   const raw_ = location.hash.replace(/^#\/?/, '');
   const [pathRaw] = [raw_];
   const path = pathRaw.split('?')[0];
@@ -152,6 +165,15 @@ async function route() {
     return;
   }
 
+  /* Bagian ?kueri dipertahankan saat mengalihkan.
+
+     Tanpa ini, tautan hasil pencarian '#/vocab/<paket>?q=<kata>' kehilangan
+     ?q= begitu dialihkan ke '#/en/kosakata/<paket>', sehingga pemelajar
+     yang mencari SATU kata dijatuhkan di paket berisi ratusan kata tanpa
+     kata itu tersaring — penyaringnya sudah ada di js/views/vocab.js:52,
+     hanya tidak pernah menerima nilainya. */
+  const kueri = raw_.includes('?') ? '?' + raw_.split('?').slice(1).join('?') : '';
+
   /* Tanpa awalan bahasa → alihkan ke bahasa aktif */
   if (!isLangCode(seg[0])) {
     const code = currentLang();
@@ -164,7 +186,7 @@ async function route() {
     if (head !== undefined) {
       const rest = [head, ...seg.slice(1)].filter(Boolean).join('/');
       if (seg[0] === 'mock') return location.replace(`#/${code}/ujian/${seg[1]}/simulasi`);
-      return location.replace(`#/${code}/${rest}`);
+      return location.replace(`#/${code}/${rest}${kueri}`);
     }
     return location.replace('#/' + code);
   }
@@ -496,8 +518,17 @@ function boot() {
   });
 
   document.addEventListener('click', e => {
-    const act = e.target.closest('[data-act]')?.dataset.act;
+    const pemicu = e.target.closest('[data-act]');
+    const act = pemicu?.dataset.act;
     if (!act) return;
+    /* Aksi ini menjalankan sesuatu, bukan berpindah halaman. Beberapa di
+       antaranya ditulis sebagai <a href="#"> di dalam pesan sembul; tanpa
+       preventDefault peramban tetap mengubah hash, router ikut jalan, dan
+       pemakai dilempar ke beranda. Untuk tautan "Unduh cadangan sekarang"
+       yang muncul enam detik sesudah aplikasi terbuka, itu berarti berkas
+       cadangannya terunduh TAPI pelajaran atau simulasi yang sedang
+       dikerjakan ditinggalkan. */
+    if (pemicu.tagName === 'A') e.preventDefault();
     if (act === 'toggle-theme') applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
     if (act === 'open-nav') { $('#shell').classList.add('nav-open'); $('.sidebar__scrim').hidden = false; }
     if (act === 'close-nav') { $('#shell').classList.remove('nav-open'); $('.sidebar__scrim').hidden = true; }

@@ -217,6 +217,20 @@ export function renderTricks() {
       </div>`).join('');
   };
   paint();
+
+  /* Hasil pencarian menunjuk trik tertentu lewat '#/trik?t=<indeks>'.
+     Dipakai kueri, bukan pagar kedua: alamat berpagar dua ('#/trik#t3')
+     terbaca router sebagai satu ruas rute dan berujung di beranda. */
+  const t = new URLSearchParams(location.hash.split('?')[1] || '').get('t');
+  if (t !== null) {
+    const sasaran = $('#t' + Number(t));
+    if (sasaran) {
+      sasaran.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      sasaran.classList.add('is-sorot');
+      setTimeout(() => sasaran.classList.remove('is-sorot'), 2400);
+    }
+  }
+
   $$('#tTabs button').forEach(b => b.onclick = () => {
     $$('#tTabs button').forEach(x => x.classList.remove('is-active'));
     b.classList.add('is-active'); f = b.dataset.g; paint();

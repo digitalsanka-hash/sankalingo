@@ -105,11 +105,17 @@ export function renderStats() {
     </div>
   </div>
 
+  <!-- Tautannya WAJIB berawalan #/en. Topik di daftar ini berasal dari
+       GRAMMAR bahasa Inggris, tetapi halaman Kemajuan juga dibuka dari
+       dalam delapan bahasa lain, dan tautan tanpa awalan bahasa dialihkan
+       ke bahasa yang sedang aktif. ROUTES_LANG hanya punya /^grammar$/ —
+       tanpa /^grammar\/(.+)$/ — sehingga dari bahasa mana pun selain
+       Inggris tautan ini berujung "Halaman tidak ditemukan". -->
   ${raw(weakGrammar.length ? `<div class="card" style="margin-top:var(--s-4)">
     <div class="card__title">⚠ Topik yang perlu diulang (${weakGrammar.length})</div>
     <p class="small soft" style="margin:.3rem 0 1rem">Skor terbaikmu masih di bawah 80% pada topik berikut.</p>
     <div class="pill-row">${weakGrammar.map(g =>
-      `<a class="badge badge--warn" href="#/grammar/${g.id}">${esc(g.titleId)} · ${s.quiz['g:' + g.id].best}%</a>`).join('')}</div>
+      `<a class="badge badge--warn" href="#/en/grammar/${g.id}">${esc(g.titleId)} · ${s.quiz['g:' + g.id].best}%</a>`).join('')}</div>
   </div>` : '')}
 
   ${raw(s.exams.length ? `<div class="card" style="margin-top:var(--s-4)">

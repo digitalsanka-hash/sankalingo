@@ -600,3 +600,8 @@
   .tense-grid__w{grid-column:1 / -1}
   .tense-key__r{grid-template-columns:1fr;gap:2px}
 }
+
+/* Sorotan sementara untuk butir yang dituju hasil pencarian. */
+.is-sorot{outline:2px solid var(--brand);outline-offset:3px;
+  animation:sorot 2.4s ease-out}
+@keyframes sorot{0%{background:var(--brand-soft)}100%{background:transparent}}
