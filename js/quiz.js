@@ -212,7 +212,21 @@ export function runQuiz(mount, items, opts = {}) {
           bank.append(b);
         });
       };
-      const pool = shuffle(it.words), used = new Set();
+      /* Satu butir data yang lupa `words` dulu menghentikan SELURUH sesi
+         latihan, bukan cuma soal itu: shuffle(undefined) melempar
+         TypeError di dalam render(), tepat sesudah body dikosongkan, jadi
+         layar tinggal kosong tanpa tombol dan runQuiz tidak pernah
+         selesai — kemajuan sesi hilang seluruhnya. Persis itu yang
+         terjadi pada topik a1-26, pelajaran keempat unit PERTAMA.
+
+         Kalau larik katanya hilang, kata-katanya dipecah dari kuncinya
+         sendiri. Latihannya jadi lebih mudah (urutan kata kunci terlihat
+         apa adanya sebelum diacak), tetapi jauh lebih baik daripada
+         pemelajar menabrak dinding. */
+      const kataButir = Array.isArray(it.words) && it.words.length
+        ? it.words
+        : String(Array.isArray(it.a) ? it.a[0] : it.a ?? '').trim().split(/\s+/).filter(Boolean);
+      const pool = shuffle(kataButir), used = new Set();
       const undo = el('button', { class: 'btn btn--ghost btn--sm' }, '↶ Hapus terakhir');
       undo.onclick = () => {
         if (!chosen.length) return;

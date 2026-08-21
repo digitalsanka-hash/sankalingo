@@ -208,7 +208,12 @@ export const PLUS_A1 = [
   drills: [
     { t: 'mcq', q: 'Which sentence is correct?', opts: ['He plays well football.', 'He plays football well.', 'He well plays football.', 'Well he plays football.'], a: 1 },
     { t: 'mcq', q: 'Choose the correct order.', opts: ['I usually am late.', 'I am usually late.', 'Usually I am late for.', 'I am late usually for.'], a: 1 },
-    { t: 'order', q: 'Susun: quietly / she / the letter / read', a: 'She read the letter quietly.' },
+    /* `words` WAJIB ada untuk butir 'order' — js/quiz.js membangun bank
+       kata dari larik ini. Tanpa larik itu latihan seluruh unit berhenti
+       di tengah jalan dengan layar kosong. */
+    { t: 'order', q: 'Susun: quietly / she / the letter / read',
+      words: ['She', 'read', 'the letter', 'quietly.'],
+      a: 'She read the letter quietly.' },
     { t: 'fill', q: 'Perbaiki: "They like very much the film." → They like the film ___ ___.', a: ['very much'] },
     { t: 'trans', id: 'Saya sering makan siang di kantor.', a: ['I often have lunch at the office.', 'I often eat lunch at the office.'] },
   ],

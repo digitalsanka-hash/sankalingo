@@ -150,8 +150,13 @@ export function flashSession(host, items, { title = 'Kartu Hafalan', limit = 25,
   const flash = $('#flash', host);
   const byId = new Map(items.filter(Boolean).map(x => [x.id, x]));
   const draw = () => {
-    const it = byId.get(queue[i]) || lexById(queue[i]);
-    if (!it) return next(true);
+    /* Cabang lexById dipakai kalau entri di byId ADA tetapi KOSONG —
+       bukan hanya kalau tidak ada sama sekali. Sebelumnya syaratnya
+       cuma "tidak ada", sehingga sebuah stub {id} yang truthy tetapi
+       tanpa kata apa pun lolos dan tergambar sebagai kartu putih. */
+    const dariDaftar = byId.get(queue[i]);
+    const it = (dariDaftar && dariDaftar.w) ? dariDaftar : (lexById(queue[i]) || dariDaftar);
+    if (!it || !it.w) return next(true);
     flash.classList.remove('is-flip');
     $('#fBar', host).style.width = `${(i / queue.length) * 100}%`;
     $('#fCount', host).textContent = `${i + 1} / ${queue.length}`;
@@ -263,7 +268,22 @@ export function renderReview() {
   </div>`)}`;
 
   if (due.length) {
-    flashSession($('#revHost'), due.map(id => ({ id })), { title: 'Ulangan harian', limit: 60 });
+    /* Dulu di sini dikirim `due.map(id => ({ id }))` — stub yang hanya
+       berisi id. Di dalam flashSession, draw() mencari kartunya lewat
+       `byId.get(...) || lexById(...)`, dan byId dibangun dari items yang
+       baru saja dikirim. Stub itu TRUTHY, jadi cabang lexById — yang
+       memang disiapkan untuk mengisi datanya — tidak pernah dijalankan.
+       Hasilnya setiap kartu tergambar kosong: tanpa kata, tanpa IPA,
+       tanpa arti, tanpa contoh. Tombol nilai tetap hidup, sehingga
+       pemelajar menilai kartu yang tidak bisa dibacanya dan jadwal SM-2
+       seluruh deknya rusak.
+
+       Sekarang kartunya diisi lebih dulu, sama seperti yang sudah lama
+       dilakukan halaman bahasa lain (js/views/langpages.js:778).
+       filter(Boolean) sekaligus membuang id yang bukan milik dek Inggris
+       — dueIds() tidak menyaring bahasa. */
+    const kartuJatuhTempo = due.map(id => lexById(id)).filter(Boolean);
+    flashSession($('#revHost'), kartuJatuhTempo, { title: 'Ulangan harian', limit: 60 });
   } else {
     const b = $('#mixBtn');
     if (b) b.onclick = () => {

@@ -136,6 +136,22 @@ for (const [lv, daftar] of Object.entries(BERKAS)) {
         if (!rapi(d.a)) lapor(lv, id, `${n} tanpa kunci urutan`);
         /* Susun kata perlu lebih dari dua kata, kalau tidak tak ada yang disusun. */
         else if (rapi(d.a).split(/\s+/).length < 3) lapor(lv, id, `${n} kunci terlalu pendek`);
+
+        /* `words` adalah bank kata yang ditekan pemelajar. Cabang ini dulu
+           hanya memeriksa d.a dan tidak pernah menyentuh d.words, sehingga
+           satu butir yang melupakannya lolos dengan "0 masalah" — padahal
+           di layar ia menghentikan seluruh sesi latihan unit pertama.
+
+           Isinya juga diperiksa, bukan cuma keberadaannya: kalau bank
+           katanya tidak bisa dirangkai menjadi kuncinya, soal itu mustahil
+           dijawab benar. Perbandingannya memakai normalisasi yang sama
+           dengan js/quiz.js — huruf kecil, tanda baca dibuang. */
+        const bakuKata = s => String(s ?? '').toLowerCase()
+          .replace(/[.,!?;:"]/g, '').split(/\s+/).filter(Boolean).sort().join(' ');
+        if (!Array.isArray(d.words) || !d.words.length)
+          lapor(lv, id, `${n} tanpa larik words — bank katanya kosong dan latihan berhenti di layar kosong`);
+        else if (rapi(d.a) && bakuKata(d.words.join(' ')) !== bakuKata(d.a))
+          lapor(lv, id, `${n} bank kata tidak bisa merangkai kuncinya: [${d.words.join(' | ')}] vs "${d.a}"`);
       }
     });
   }
