@@ -269,6 +269,12 @@ function gambarSoal(sec) {
     const ta = e.target.closest('[data-tulis]');
     if (!ta) return;
     const i = +ta.dataset.tulis;
+    /* Jawabannya DISIMPAN. Sebelumnya penangan ini hanya memperbarui
+       penghitung huruf, jadi teks yang diketik peserta hilang begitu
+       bagiannya ditutup — dan layar tinjauan pun tidak pernah
+       menampilkannya. Untuk bagian menulis, teks itulah satu-satunya
+       hasil kerjanya. */
+    sesi.jawaban[`${sec.id}:teks:${i}`] = ta.value;
     const n = ta.value.trim().length;
     const info = $(`#mkHit${i}`, host);
     const it = sec.items[i];
@@ -329,7 +335,7 @@ function kartuTulis(sec, it, i) {
     <p class="small soft" style="margin-top:.5rem">${esc(it.petunjuk)}</p>
     <label class="sr-only" for="mkTa${i}">Jawaban tertulis soal ${i + 1}</label>
     <textarea class="textarea" id="mkTa${i}" data-tulis="${i}" rows="8"
-      style="margin-top:var(--s-3)" placeholder="Tulis jawabanmu di sini…"></textarea>
+      style="margin-top:var(--s-3)" placeholder="Tulis jawabanmu di sini…">${esc(sesi?.jawaban?.[`${sec.id}:teks:${i}`] || '')}</textarea>
     <div class="row row--between" style="margin-top:.4rem">
       <span class="xs muted" id="mkHit${i}">0 huruf${it.min ? ` · target ${nf(it.min)}` : ''}</span>
     </div>
@@ -455,8 +461,19 @@ function gambarTinjauan() {
   box.innerHTML = paket.sections.map(sec => `
     <h2 class="sec-h" style="margin:var(--s-6) 0 var(--s-3)">${esc(sec.name)}</h2>
     ${sec.items.map((it, i) => {
-      if (it.t === 'write') return `<div class="card" style="margin-bottom:var(--s-3)">
-        <b>${esc(it.q)}</b><p class="small soft">${esc(it.petunjuk)}</p></div>`;
+      if (it.t === 'write') {
+        const teks = sesi.jawaban[`${sec.id}:teks:${i}`] || '';
+        const jml = teks.trim() ? teks.trim().split(/\s+/).length : 0;
+        return `<div class="card" style="margin-bottom:var(--s-3)">
+          <b>${esc(it.q)}</b><p class="small soft">${esc(it.petunjuk)}</p>
+          ${teks.trim()
+            ? `<div class="row row--between" style="margin-top:.6rem">
+                 <span class="xs muted">Tulisanmu</span>
+                 <span class="badge">${jml} kata${it.min ? ` · target ${nf(it.min)} huruf` : ''}</span></div>
+               <div class="passage small" style="margin-top:.3rem">${esc(teks)}</div>`
+            : `<p class="xs muted" style="margin-top:.6rem">Tidak ada jawaban tertulis.</p>`}
+        </div>`;
+      }
       const jwb = sesi.jawaban[`${sec.id}:${i}`];
       const benar = jwb === it.a;
       return `<div class="card ${benar ? '' : 'card--bad'}" style="margin-bottom:var(--s-3)">

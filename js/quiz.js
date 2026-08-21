@@ -270,8 +270,14 @@ export function runQuiz(mount, items, opts = {}) {
       const row = el('div', { class: 'row', style: 'margin-top:.9rem' });
       const play = el('button', { class: 'btn btn--soft' }, '🔊 Putar');
       const slow = el('button', { class: 'btn btn--ghost btn--sm' }, '🐢 Pelan');
-      play.onclick = () => say(it.text);
-      slow.onclick = () => say(it.text, { rate: 0.62 });
+      /* `audio` didahulukan kalau ada — sama seperti buildMCQ.
+         Latihan "Angka & Ejaan" di js/views/skills.js menyiapkan
+         it.audio berisi nama yang dieja huruf per huruf ("B, U, D, I"),
+         tetapi kartu dikte memutar it.text, sehingga namanya dibacakan
+         utuh dan seluruh maksud latihan mengeja itu hilang. */
+      const suara = it.audio || it.text;
+      play.onclick = () => say(suara);
+      slow.onclick = () => say(suara, { rate: 0.62 });
       row.append(play, slow);
       const ta = el('textarea', { class: 'textarea', style: 'margin-top:.9rem;min-height:80px', placeholder: 'Tulis di sini…' });
       const go = el('button', { class: 'btn btn--primary', style: 'margin-top:.8rem' }, 'Periksa');
