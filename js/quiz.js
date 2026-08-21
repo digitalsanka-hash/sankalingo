@@ -9,11 +9,9 @@
    Semua soal boleh punya: level, tag, why (pembahasan).            */
 
 import { el, html, raw, esc, shuffle, toast, beep, bump } from './ui.js';
-import { say, listen, stopListening, scoreSpeech, sttReady, ttsReady, similarity } from './speech.js';
+import { say, listen, stopListening, scoreSpeech, sttReady, ttsReady } from './speech.js';
+import { norm, similarity, cocokKalimat } from './teks.js';
 import { addXP, state, recordQuiz } from './state.js';
-
-const norm = s => String(s ?? '').toLowerCase().trim()
-  .replace(/[.,!?;:"]/g, '').replace(/\s+/g, ' ');
 
 export function checkAnswer(item, given) {
   switch (item.t) {
@@ -26,7 +24,13 @@ export function checkAnswer(item, given) {
     case 'trans':
     case 'dictate': {
       const keys = Array.isArray(item.a) ? item.a : [item.a ?? item.text];
-      return keys.some(k => similarity(k, given) >= (item.tol ?? 88));
+      /* Dikte dinilai ketat: kartunya berbunyi "tulis PERSIS apa yang kamu
+         dengar", jadi kata yang hilang tidak boleh lolos hanya karena
+         kalimatnya panjang. Terjemah tetap longgar — kalimat Indonesia
+         yang sama sah diterjemahkan dengan jumlah kata berbeda, dan
+         variasinya sudah ditampung daftar kunci. */
+      return keys.some(k => cocokKalimat(k, given, item.tol ?? 88,
+                                         { ketat: item.t === 'dictate' }));
     }
     case 'speak': return scoreSpeech(item.text, given).score >= (item.tol ?? 70);
     default: return false;

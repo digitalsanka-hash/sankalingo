@@ -249,6 +249,11 @@ export function speechDiagnostics() {
 }
 
 /* ── Penilaian ucapan sederhana ──────────────────────────────── */
+/* Sengaja BERBEDA dari norm() di js/teks.js. Yang ini untuk menilai
+   UCAPAN: apa pun yang bukan huruf, angka, atau apostrof dibuang sama
+   sekali, karena pengenal ucapan tidak menghasilkan tanda baca yang
+   bisa dipercaya. norm() di teks.js hanya membuang tanda baca kalimat
+   dan dipakai untuk menilai jawaban TERTULIS. Jangan disatukan. */
 const norm = s => String(s).toLowerCase().replace(/[^a-z0-9' ]/g, ' ').replace(/\s+/g, ' ').trim();
 
 /** Bandingkan kalimat target dengan hasil dengar → skor 0-100 + tanda per kata. */
@@ -269,23 +274,8 @@ export function scoreSpeech(target, heard) {
   return { score, marks, extra };
 }
 
-export function lev(a, b) {
-  const m = a.length, n = b.length;
-  if (!m) return n; if (!n) return m;
-  let prev = Array.from({ length: n + 1 }, (_, i) => i), cur = new Array(n + 1);
-  for (let i = 1; i <= m; i++) {
-    cur[0] = i;
-    for (let j = 1; j <= n; j++)
-      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
-    [prev, cur] = [cur, prev];
-  }
-  return prev[n];
-}
+/* lev & similarity kini tinggal di js/teks.js yang bebas DOM, supaya
+   aturan penilaian jawaban bisa diuji tanpa peramban. Diekspor ulang di
+   sini karena pemanggil lama (js/views/skills.js) mengambilnya dari sini. */
+export { lev, similarity } from './teks.js';
 
-/** Kemiripan teks 0-100 — dipakai dikte & jawaban isian. */
-export function similarity(a, b) {
-  const x = norm(a), y = norm(b);
-  if (!x && !y) return 100;
-  const d = lev(x, y);
-  return Math.max(0, Math.round((1 - d / Math.max(x.length, y.length, 1)) * 100));
-}
