@@ -175,6 +175,20 @@ export const unitById = (L, id) => unitsOf(L).find(u => u.id === id);
 /* ── Kemajuan ─────────────────────────────────────────────────── */
 export const lessonKey = (code, unitId, lessonId) => `L:${code}:${unitId}:${lessonId}`;
 
+/** Berapa pelajaran BAHASA INGGRIS yang sudah selesai.
+ *
+ *  state().lessons cuma satu objek untuk kesembilan bahasa. Kurikulum
+ *  Inggris menulis kunci polos ('a1-u1-g1'); delapan bahasa lain menulis
+ *  lewat lessonKey() di atas, yang selalu berawalan 'L:'.
+ *
+ *  Beranda dan halaman Kemajuan dulu menghitung Object.keys(lessons)
+ *  seluruhnya lalu membaginya dengan jumlah pelajaran Inggris. Pemelajar
+ *  yang belajar Korea diberi tahu ia sudah menyelesaikan sepertiga
+ *  kurikulum Inggris tanpa pernah menyentuhnya, dan persentasenya bisa
+ *  melewati 100%. */
+export const jumlahPelajaranInggris = lessons =>
+  Object.keys(lessons || {}).filter(k => !k.startsWith('L:')).length;
+
 export function lessonDone(code, unitId, lessonId) {
   return !!state().lessons[lessonKey(code, unitId, lessonId)];
 }

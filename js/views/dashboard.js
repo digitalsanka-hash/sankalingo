@@ -3,8 +3,10 @@
 import { $, html, raw, esc, ring, radar, heatmap, sparkBars, nf } from '../ui.js';
 import { tipBantuan } from '../comfortui.js';
 import { state, liveStreak, xpLevel, todayKey, unitPct, planDay, planTaskDone, togglePlanTask } from '../state.js';
-import { stats as srsStats, dueCount, forecast } from '../srs.js';
-import { LEVELS, ALL_LESSONS, ALL_UNITS, CONTENT_STATS, PLANS, EXAM_LIST } from '../data.js';
+import { stats as srsStats, dueIds, forecast } from '../srs.js';
+import { jumlahPelajaranInggris } from '../course.js';
+import { LEVELS, ALL_LESSONS, ALL_UNITS, CONTENT_STATS, PLANS, EXAM_LIST,
+         ID_LEX_INGGRIS } from '../data.js';
 
 const greeting = () => {
   const h = new Date().getHours();
@@ -32,7 +34,10 @@ export function render() {
   const s = state();
   const lv = xpLevel();
   const nx = nextLesson();
-  const done = Object.keys(s.lessons).length;
+  /* Hanya pelajaran Inggris. Objek lessons dipakai bersama kesembilan
+     bahasa, jadi menghitungnya seluruhnya membuat pemelajar Korea
+     diberi tahu kurikulum Inggrisnya sudah berjalan sepertiga. */
+  const done = jumlahPelajaranInggris(s.lessons);
   const pctAll = Math.round((done / ALL_LESSONS.length) * 100);
   const hist = s.history;
   const last14 = Array.from({ length: 14 }, (_, i) => {
@@ -60,7 +65,7 @@ export function render() {
       : 'Kamu sudah menyelesaikan seluruh kurikulum. Lanjutkan dengan simulasi ujian dan kartu hafalan.')}</p>
     <div class="hero__actions">
       ${raw(nx ? `<a class="btn btn--primary btn--lg" href="#/lesson/${nx.unit.id}/${nx.lesson.id}">▶ Lanjut belajar</a>` : '')}
-      <a class="btn btn--soft btn--lg" href="#/review">⟳ Kartu jatuh tempo (${dueCount()})</a>
+      <a class="btn btn--soft btn--lg" href="#/review">⟳ Kartu jatuh tempo (${dueIds(ID_LEX_INGGRIS).length})</a>
       ${raw(!s.placed ? '<a class="btn btn--ghost btn--lg" href="#/placement">🧭 Tes penempatan</a>' : '')}
     </div>
     <div class="hero__meta">

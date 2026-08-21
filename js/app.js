@@ -13,14 +13,14 @@ import { pasangPanelCepat, pasangSpandukLuring, pasangAjakanInstal,
          pasangPenutupTip, gambarTabbar, setTabbarDue } from './comfortui.js';
 import { daftarkan as daftarkanLuring } from './luring.js';
 import { pasangOtomatis as pasangSinkronAwan } from './awan.js';
-import { dueCount, dueIds } from './srs.js';
+import { dueIds } from './srs.js';
 import { loadVoices, stopSpeaking, say, ttsReady, englishVoices } from './speech.js';
 import { ucap as ucapLang, stop as stopUcap, ready as suaraSiap } from './voice.js';
-import { search, CONTENT_STATS } from './data.js';
+import { search, CONTENT_STATS, ID_LEX_INGGRIS } from './data.js';
 import { ico } from './icons.js';
 import { LANGS, langByCode } from '../data/lang/registry.js';
 import { currentLang, setLang, loadLangData, cachedLang, applyAccent, navFor,
-         lexOf, phraseLexOf, isLangCode } from './langctx.js';
+         lexOf, phraseLexOf, kanjiLexOf, isLangCode } from './langctx.js';
 
 import * as Dash from './views/dashboard.js';
 import * as Curr from './views/curriculum.js';
@@ -305,9 +305,18 @@ function paintChromeFor(code, L) {
   const meta = code === 'hub' ? null : langByCode(code);
   let due = 0, total = 0, learned = 0;
 
-  if (code === 'en') { due = dueCount(); total = CONTENT_STATS.kata; }
+  /* Kolamnya WAJIB disaring per bahasa. state().srs menyimpan kartu
+     kesembilan bahasa dalam satu objek, jadi dueCount() tanpa kolam
+     menampilkan kartu Jepang dan Korea di lencana antarmuka Inggris —
+     pemelajar yang belum punya satu pun kartu Inggris tetap melihat
+     angka besar, menekannya, lalu mendapat sesi berisi bahasa lain. */
+  if (code === 'en') { due = dueIds(ID_LEX_INGGRIS).length; total = CONTENT_STATS.kata; }
   else if (meta && L) {
-    const lex = [...lexOf(code, L), ...phraseLexOf(code, L)];
+    /* Kanji IKUT dihitung. Sebelumnya kolamnya hanya kosakata dan frasa,
+       sehingga pemelajar Jepang yang kartunya seluruhnya kanji melihat
+       lencananya HILANG — bukan cuma salah angka — padahal halaman Kartu
+       Hafalan tetap menagih kartu-kartu itu (js/views/langpages.js:758). */
+    const lex = [...lexOf(code, L), ...phraseLexOf(code, L), ...kanjiLexOf(code, L)];
     const ids = lex.map(x => x.id);
     due = dueIds(ids).length; total = lex.length;
     learned = lex.filter(x => s.srs[x.id]).length;

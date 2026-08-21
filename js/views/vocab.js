@@ -7,7 +7,7 @@ import { state, addMinutes } from '../state.js';
 import { say, stopSpeaking } from '../speech.js';
 import { ucap, stop as stopVoice } from '../voice.js';
 import { grade, card, buildQueue, dueIds, stats as srsStats, GRADES } from '../srs.js';
-import { ALL_PACKS, ALL_LEX, lexById, CONTENT_STATS } from '../data.js';
+import { ALL_PACKS, ALL_LEX, lexById, CONTENT_STATS, ID_LEX_INGGRIS } from '../data.js';
 
 /* ── Daftar paket ─────────────────────────────────────────────── */
 export function renderIndex() {
@@ -24,7 +24,7 @@ export function renderIndex() {
       <p>Setiap entri punya IPA, arti Indonesia, dan contoh kalimat dua bahasa.
          Klik ikon suara untuk mendengar pengucapannya.</p>
     </div>
-    <a class="btn btn--primary" href="#/review">⟳ Ulangi kartu jatuh tempo (${dueIds().length})</a>
+    <a class="btn btn--primary" href="#/review">⟳ Ulangi kartu jatuh tempo (${dueIds(ID_LEX_INGGRIS).length})</a>
   </div>
 
   <div class="grid grid--3">
@@ -238,7 +238,11 @@ export function flashSession(host, items, { title = 'Kartu Hafalan', limit = 25,
 
 /* ── Ulangan harian gabungan ──────────────────────────────────── */
 export function renderReview() {
-  const due = dueIds();
+  /* Halaman ini dek BAHASA INGGRIS. Tanpa kolam, dueIds() memungut
+     kartu kesembilan bahasa dari satu objek state().srs yang sama,
+     sehingga kartu Korea dan Jepang ikut masuk antrean ulangan Inggris
+     dan angka "jatuh tempo" di kartu statistik jadi menyesatkan. */
+  const due = dueIds(ID_LEX_INGGRIS);
   const st = srsStats();
 
   $('#main').innerHTML = html`

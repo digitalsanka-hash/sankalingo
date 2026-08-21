@@ -69,6 +69,15 @@ export const ALL_LEX = [...ALL_VOCAB, ...PHRASAL_ITEMS, ...IDIOM_ITEMS, ...COLLO
 export const ALL_PACKS = [...VOCAB_PACKS, ...LEX_PACKS];
 export const lexById = id => ALL_LEX.find(x => x.id === id);
 
+/* Kolam kartu milik dek BAHASA INGGRIS saja.
+   Kemajuan SRS kesembilan bahasa disimpan dalam SATU objek state().srs,
+   jadi dueIds() tanpa kolam mengembalikan kartu semua bahasa sekaligus.
+   Di antarmuka Inggris itu menghasilkan lencana "jatuh tempo" berisi
+   kartu Jepang dan Korea, dan sesi ulangan Inggris yang memuat kartu
+   bahasa lain. Semua tempat yang menghitung kartu Inggris harus
+   menyaring lewat kolam ini. */
+export const ID_LEX_INGGRIS = ALL_LEX.map(x => x.id);
+
 /* ── Tata bahasa ──────────────────────────────────────────────── */
 export const GRAMMAR = GRAMMAR_SEMUA;
 export const grammarById = id => GRAMMAR.find(g => g.id === id);

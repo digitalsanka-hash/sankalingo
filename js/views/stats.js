@@ -12,6 +12,7 @@ import { currentLang } from '../langctx.js';
 import { ready as voiceReady, resolve as voiceResolve, suaraUntuk, allVoices as semuaSuara,
          voicePilihan, setVoicePilihan, ucap, namaBahasa, PANDUAN_PASANG } from '../voice.js';
 import { LEVELS, ALL_LESSONS, GRAMMAR, ALL_PACKS, CONTENT_STATS } from '../data.js';
+import { jumlahPelajaranInggris } from '../course.js';
 import { comfort, setComfort, resetComfort, PILIHAN,
          sudahTerpasang, bisaDipasang, pasangAplikasi } from '../comfort.js';
 import { lupakanTipTertutup } from '../comfortui.js';
@@ -23,7 +24,10 @@ export function renderStats() {
   const s = state();
   const lv = xpLevel();
   const st = srsStats();
-  const doneLessons = Object.keys(s.lessons).length;
+  /* Lihat catatan yang sama di js/views/dashboard.js: kunci pelajaran
+     kedelapan bahasa lain berawalan 'L:' dan tidak boleh ikut dihitung
+     sebagai kemajuan kurikulum Inggris. */
+  const doneLessons = jumlahPelajaranInggris(s.lessons);
   const last30 = Array.from({ length: 30 }, (_, i) => {
     const d = new Date(); d.setDate(d.getDate() - (29 - i));
     return s.history[todayKey(d)]?.xp || 0;
