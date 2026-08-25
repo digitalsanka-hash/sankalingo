@@ -32,6 +32,9 @@ export const loadCourse = code => muatBerkas(`${code}-course`);
  *  dan bisa dibaca manusia, penambahan bisa dibatalkan dengan menghapus satu
  *  berkas, dan penulisan materi baru tidak pernah berisiko merusak yang lama. */
 export const loadPlus = code => muatBerkas(`${code}-plus`);
+/* Perluasan KEDUA. Dipisah dari -plus.js supaya penambahan bisa
+   dibatalkan dengan menghapus satu berkas, sama seperti yang pertama. */
+export const loadPlus2 = code => muatBerkas(`${code}-plus2`);
 export const loadPakai = code => muatBerkas(`${code}-pakai`);
 /* Sistem kata kerja/kala bahasa ini. Boleh tidak ada — halamannya
    hanya muncul di menu kalau berkasnya benar-benar termuat. */
@@ -122,17 +125,42 @@ function gabung(L, b) {
       if (lv.cando?.length) ada.cando = [...(ada.cando || []), ...lv.cando];
     }
   }
-  if (b.grammar?.length) L.grammar = [...(L.grammar || []), ...b.grammar];
+  /* Topik tata bahasa yang ID-nya SUDAH ADA tidak digandakan — isinya
+     disambung ke topik itu.
+
+     Sebelumnya baris ini menyambung apa adanya, jadi berkas perluasan yang
+     memakai id yang sama akan memunculkan DUA topik berjudul sama di
+     halaman tata bahasa, dan kartu kuisnya berbagi satu quizKey sehingga
+     skornya saling menimpa. Belum pernah terjadi karena tiap berkas
+     perluasan memakai awalan id sendiri, tetapi itu kesepakatan yang tidak
+     dijaga apa pun.
+
+     Dengan penggabungan ini, berkas perluasan juga bisa MENAMBAH latihan
+     ke topik yang sudah ada — yang memang paling dibutuhkan: latihan per
+     topik di delapan bahasa non-Inggris cuma 2,0-2,9, sedangkan Inggris
+     4,7. */
+  if (b.grammar?.length) {
+    L.grammar = L.grammar || [];
+    for (const g of b.grammar) {
+      const ada = L.grammar.find(x => x.id === g.id);
+      if (!ada) { L.grammar.push(g); continue; }
+      for (const k of ['drills', 'ex', 'traps', 'notes'])
+        if (g[k]?.length) ada[k] = [...(ada[k] || []), ...g[k]];
+      for (const k of ['title', 'titleId', 'why', 'form', 'level'])
+        if (g[k] !== undefined && ada[k] === undefined) ada[k] = g[k];
+    }
+  }
   if (b.vocab?.length)   L.vocab   = [...(L.vocab || []), ...b.vocab];
   if (b.phrases?.length) L.phrases = [...(L.phrases || []), ...b.phrases];
 }
 
 /** Gabungkan kursus + perluasan ke modul bahasa (idempoten). */
-export function mergeCourse(L, course, plus, kata) {
+export function mergeCourse(L, course, plus, kata, plus2) {
   if (!L || L.__merged) return L;
   L.levels = course?.levels || [];
   gabung(L, { ...(course || {}), levels: null });
   gabung(L, plus);
+  gabung(L, plus2);
   /* Paket kosakata tambahan menyusul paling akhir supaya urutan paket
      lama tidak bergeser — halaman kosakata menampilkannya berurutan. */
   if (kata?.vocab) gabung(L, { vocab: kata.vocab });

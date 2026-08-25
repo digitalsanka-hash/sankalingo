@@ -6,7 +6,7 @@
 
 import { LANGS, langByCode } from '../data/lang/registry.js';
 import { state, mutate } from './state.js';
-import { loadCourse, loadPlus, loadPakai, loadVerba, loadKata, loadGoresan, pasangGoresan, loadContohAksara, mergeCourse, pasangPakai } from './course.js';
+import { loadCourse, loadPlus, loadPlus2, loadPakai, loadVerba, loadKata, loadGoresan, pasangGoresan, loadContohAksara, mergeCourse, pasangPakai } from './course.js';
 import { daftarkanKamus } from './translit.js';
 
 const cache = new Map();
@@ -35,7 +35,7 @@ export async function loadLangData(code) {
     const mod = await import(`../data/lang/${code}.js`);
     const data = mod[code.toUpperCase()] || Object.values(mod)[0];
     const kata = await loadKata(code);
-    mergeCourse(data, await loadCourse(code), await loadPlus(code), kata);
+    mergeCourse(data, await loadCourse(code), await loadPlus(code), kata, await loadPlus2(code));
     /* Dua sumber contoh pemakaian: berkas -pakai.js untuk kosakata lama,
        dan bagian `pakai` di -kata.js untuk kata yang baru ditambahkan. */
     pasangPakai(data, await loadPakai(code));
