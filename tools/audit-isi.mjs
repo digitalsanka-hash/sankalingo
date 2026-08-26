@@ -82,7 +82,12 @@ for (const c of KODE) {
     latihan:   gab.grammar.reduce((a, g) => a + arr(g.drills).length, 0),
     contoh:    gab.grammar.reduce((a, g) => a + arr(g.ex).length, 0),
     aksara:    arr(L.scripts).reduce((a, s) => a + arr(s.chars).length, 0),
-    contohPakai: PK ? Object.keys(PK).length : 0,
+    /* Bank contoh hidup di DUA tempat: <kode>-pakai.js dan peta `pakai`
+       di dalam <kode>-kata.js, yang dipasang belakangan oleh langctx.js.
+       Menghitung yang pertama saja membuat berkas ini melaporkan 2.905
+       sementara validasi-pakai.mjs melaporkan 3.986 untuk data yang sama
+       persis. Dua alat yang berselisih membuat keduanya tidak dipercaya. */
+    contohPakai: new Set([...Object.keys(PK || {}), ...Object.keys(K?.pakai || {})]).size,
     kanji:     arr(L.kanji).length,
     kataKanji: arr(L.kanji).reduce((a, k) => a + arr(k.kata).length, 0),
     bacaan:    bc.length,
