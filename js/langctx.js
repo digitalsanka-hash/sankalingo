@@ -6,7 +6,7 @@
 
 import { LANGS, langByCode } from '../data/lang/registry.js';
 import { state, mutate } from './state.js';
-import { loadCourse, loadPlus, loadPlus2, loadPakai, loadVerba, loadKata, loadGoresan, pasangGoresan, loadContohAksara, mergeCourse, pasangPakai } from './course.js';
+import { loadCourse, loadPlus, loadPlus2, loadPakai, loadVerba, loadKata, loadGoresan, pasangGoresan, loadContohAksara, mergeCourse, pasangPakai, loadAjar, pasangAjar } from './course.js';
 import { daftarkanKamus } from './translit.js';
 
 const cache = new Map();
@@ -39,6 +39,7 @@ export async function loadLangData(code) {
     /* Dua sumber contoh pemakaian: berkas -pakai.js untuk kosakata lama,
        dan bagian `pakai` di -kata.js untuk kata yang baru ditambahkan. */
     pasangPakai(data, await loadPakai(code));
+    pasangAjar(data, await loadAjar(code));
     if (kata?.pakai) pasangPakai(data, kata.pakai);
     /* Sistem kata kerja disimpan apa adanya; halaman & menunya
        hanya muncul kalau berkasnya ada. */

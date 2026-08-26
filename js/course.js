@@ -35,6 +35,19 @@ export const loadPlus = code => muatBerkas(`${code}-plus`);
 /* Perluasan KEDUA. Dipisah dari -plus.js supaya penambahan bisa
    dibatalkan dengan menghapus satu berkas, sama seperti yang pertama. */
 export const loadPlus2 = code => muatBerkas(`${code}-plus2`);
+
+/* Bahan ajar bertahap per topik: bagian "Pahami dulu" yang mengajarkan
+   konsepnya SEBELUM rumus dan latihan. Disimpan terpisah dari topiknya
+   karena bentuknya beda (peta id -> bagian) dan supaya bisa ditulis
+   bahasa demi bahasa tanpa menyentuh berkas topik. */
+export const loadAjar = code => muatBerkas(`${code}-ajar`);
+
+/** Tempelkan bahan ajar ke tiap topik ber-id sama. */
+export function pasangAjar(L, ajar) {
+  if (!L?.grammar || !ajar) return L;
+  for (const g of L.grammar) if (ajar[g.id]) g.ajar = ajar[g.id];
+  return L;
+}
 export const loadPakai = code => muatBerkas(`${code}-pakai`);
 /* Sistem kata kerja/kala bahasa ini. Boleh tidak ada — halamannya
    hanya muncul di menu kalau berkasnya benar-benar termuat. */

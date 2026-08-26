@@ -166,6 +166,20 @@ export function renderTopicBody(g, code = 'en') {
       <strong>Mengapa ini penting</strong>${esc(g.why)}
     </div>
 
+    ${raw(g.ajar?.length ? `<div class="card">
+      <div class="card__title">Pahami dulu</div>
+      <div class="stack" style="margin-top:.6rem">
+        ${g.ajar.map(([judul, teks, ex], i) => `
+        <div class="stack stack--sm">
+          <strong style="color:var(--brand-text)">${i + 1}. ${esc(judul)}</strong>
+          <p class="soft" style="margin:0;line-height:1.65">${esc(teks)}</p>
+          ${ex ? `<div class="ex" style="margin-top:.2rem">
+            <span class="en">${esc(ex[0])} ${tombolSuara(ex[0], ex[2])}</span>
+            ${ex[2] ? `<span class="mono xs" style="color:var(--info)">${esc(ex[2])}</span>` : ''}
+            <span class="id-txt">${esc(ex[1])}</span></div>` : ''}
+        </div>`).join('')}
+      </div></div>` : '')}
+
     <div class="card">
       <div class="card__title">Rumus</div>
       <div class="formula" style="margin-top:.6rem">${esc(g.form)}</div>

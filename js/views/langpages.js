@@ -670,6 +670,18 @@ export function grammar(code, L) {
       </div>
       <div class="card__sub">${esc(g.title)}</div>
       <div class="note" style="margin-top:.8rem"><strong>Mengapa penting</strong>${esc(g.why)}</div>
+      ${g.ajar?.length ? `<div style="margin-top:.8rem">
+        <div class="card__title">Pahami dulu</div>
+        ${g.ajar.map(([judul, teks, ex], i) => `
+        <div style="margin-top:.7rem">
+          <strong style="color:var(--brand-text)">${i + 1}. ${esc(judul)}</strong>
+          <p class="soft" style="margin:.25rem 0 0;line-height:1.65">${esc(teks)}</p>
+          ${ex ? `<div class="ex" style="margin-top:.35rem">
+            <span class="en">${esc(ex[0])} ${spk(ex[0], ex[2] || '', 13)}</span>
+            ${ex[2] ? `<span class="mono xs" style="color:var(--info)">${esc(ex[2])}</span>` : ''}
+            <span class="id-txt">${esc(ex[1])}</span></div>` : ''}
+        </div>`).join('')}
+      </div>` : ''}
       <div class="formula" style="margin-top:.8rem">${esc(g.form)}</div>
       <ul class="stack stack--sm" style="margin-top:.8rem">
         ${g.notes.map(n => `<li class="small soft">• ${esc(n)}</li>`).join('')}
