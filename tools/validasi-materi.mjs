@@ -125,6 +125,34 @@ for (const c of KODE) {
     arr(u.script).forEach(x => { if (!idS.has(x)) catat(c, `unit:${u.id}`, `aksara "${x}" tidak ada`); });
   }));
 
+  /* ── Bahan ajar wajib lengkap ─────────────────────────────────
+     Keluhan yang memicu aturan ini nyata: pelajaran berisi rumus
+     setengah baris lalu langsung menilai. Sesudah bahan ajarnya
+     ditulis (data/lang/<kode>-ajar.js), aturan ini menjaga supaya
+     topik baru TIDAK bisa masuk tanpa bagian "Pahami dulu"-nya —
+     kalau tidak dijaga, dalam setahun keluhan yang sama kembali. */
+  let AJAR = null;
+  try { AJAR = (await imp(`data/lang/${c}-ajar.js`)).AJAR; } catch {}
+  if (!AJAR) {
+    catat(c, 'ajar', 'berkas <kode>-ajar.js tidak ada atau tidak memuat AJAR');
+  } else {
+    for (const g of grammar) {
+      const a = AJAR[g.id];
+      if (!a || !a.length) { catat(c, 'ajar', `topik ${g.id} belum punya bahan ajar`); continue; }
+      if (a.length < 2) catat(c, 'ajar', `topik ${g.id} bahan ajarnya cuma ${a.length} bagian (minimal 2)`);
+      a.forEach(([judul, teks, ex], i) => {
+        if (!judul || !teks) catat(c, 'ajar', `topik ${g.id} bagian ${i} kosong`);
+        else if (String(teks).split(/\s+/).length < 15)
+          catat(c, 'ajar', `topik ${g.id} bagian ${i} terlalu pendek untuk disebut penjelasan`);
+        if (ex && (!Array.isArray(ex) || !ex[0] || !ex[1]))
+          catat(c, 'ajar', `topik ${g.id} bagian ${i} contohnya cacat`);
+      });
+    }
+    for (const id of Object.keys(AJAR))
+      if (!grammar.find(g => g.id === id))
+        catat(c, 'ajar', `bahan ajar untuk "${id}" menggantung — topiknya tidak ada`);
+  }
+
   /* Kata kembar — hanya DI DALAM satu paket yang salah.
 
      Pemeriksaan ini dulu menghitung kembar di seluruh bahasa sekaligus,
