@@ -225,4 +225,16 @@ console.log(`\nSebaran kunci pilihan ganda (${jmlMcq} soal): ` +
 console.log(`\n${masalah.length} masalah`);
 /* Condong letak jawaban TIDAK dihitung masalah: quiz.js mengacak
    pilihan, jadi tidak ada yang sampai ke pemelajar. */
+/* ── Bahan ajar Inggris wajib lengkap — alasan yang sama dengan
+     penjaga di validasi-materi.mjs untuk bahasa asing. */
+{
+  const semuaTopik = Object.values(BERKAS).flat();
+  for (const g of semuaTopik) {
+    if (!g.ajar || g.ajar.length < 2) { lapor(g.level, g.id, `belum punya bahan ajar (${g.ajar ? g.ajar.length : 0} bagian)`); continue; }
+    for (const [i, b] of g.ajar.entries())
+      if (!b[0] || !b[1] || String(b[1]).split(/\s+/).length < 15)
+        lapor(g.level, g.id, `bagian ajar ${i} terlalu pendek atau kosong`);
+  }
+}
+
 process.exit(masalah.length ? 1 : 0);

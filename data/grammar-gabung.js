@@ -27,8 +27,14 @@ import { PLUS_C1, PLUS_C2 } from './grammar-plus-c.js';
 import { ISI_AB } from './grammar-isi-ab.js';
 import { ISI_C } from './grammar-isi-c.js';
 import { KELOMPOK_TOPIK } from './grammar-kelompok.js';
+/* Bahan ajar bertahap — bagian "Pahami dulu" tiap topik. Digabung di
+   sini supaya validator dan aplikasi membaca susunan yang sama. */
+import { AJAR_A } from './grammar-ajar-a.js';
+import { AJAR_B } from './grammar-ajar-b.js';
+import { AJAR_C } from './grammar-ajar-c.js';
 
 const ISI = { ...ISI_AB, ...ISI_C };
+const AJAR = { ...AJAR_A, ...AJAR_B, ...AJAR_C };
 
 /* Menyambung dua daftar TANPA kembar.
 
@@ -64,9 +70,10 @@ function sambung(g) {
   /* Kelompok tema dipasang di sini, bukan di tiap berkas materi: dengan
      begitu satu topik tidak bisa punya dua kelompok yang berbeda. */
   const kel = KELOMPOK_TOPIK[g.id] || null;
-  if (!t) return { ...g, kel };
+  const ajar = AJAR[g.id] || null;
+  if (!t) return { ...g, kel, ajar };
   return {
-    ...g, kel,
+    ...g, kel, ajar,
     why:    t.why || g.why,
     ex:     tanpaKembar(g.ex     || [], t.ex     || []),
     traps:  tanpaKembar(g.traps  || [], t.traps  || []),
