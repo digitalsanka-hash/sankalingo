@@ -23,25 +23,49 @@ for (const c of KODE) {
      berjalan; audit harus ikut membacanya, kalau tidak angkanya bohong. */
   let P = null;
   try { const pm = await imp(`data/lang/${c}-plus.js`); P = pm.PLUS || Object.values(pm)[0]; } catch {}
+  /* Perluasan kedua ikut dihitung — kalau tidak, angka audit lebih kecil
+     daripada yang benar-benar dilihat pemelajar. */
+  let P2 = null;
+  try { const p2 = await imp(`data/lang/${c}-plus2.js`); P2 = p2.PLUS2 || Object.values(p2)[0]; } catch {}
   /* Bank contoh pemakaian: satu kalimat per kata, memperlihatkan kata itu
      benar-benar dipakai. Ikut dihitung karena inilah yang membedakan
      daftar kata dari bahan belajar. */
   let PK = null;
   try { const km = await imp(`data/lang/${c}-pakai.js`); PK = km.PAKAI || Object.values(km)[0]; } catch {}
+  /* Paket kosakata di <kode>-kata.js DIGABUNG saat aplikasi berjalan
+     (mergeCourse di js/course.js baris 166). Sebelumnya berkas ini hanya
+     membacanya di bagian laporan romanisasi, jadi kolom "kata" melaporkan
+     410 untuk Korea padahal pemelajar melihat 560. Angka yang lebih kecil
+     dari kenyataan tetap angka yang salah. */
+  let K = null;
+  try { const kk = await imp(`data/lang/${c}-kata.js`); K = kk.KATA || Object.values(kk)[0]; } catch {}
 
   /* Unit perluasan menyatu ke level yang ID-nya sudah ada — sama seperti
      yang dilakukan gabung() di js/course.js. */
   const levels = arr(C?.levels).map(lv => ({ ...lv, units: [...arr(lv.units)] }));
-  for (const lv of arr(P?.levels)) {
+  for (const lv of [...arr(P?.levels), ...arr(P2?.levels)]) {
     const ada = levels.find(x => x.id === lv.id);
     if (ada) ada.units.push(...arr(lv.units));
     else levels.push(lv);
   }
 
   const gab = {
-    vocab:   [...arr(L.vocab), ...arr(C?.vocab), ...arr(P?.vocab)],
-    phrases: [...arr(L.phrases), ...arr(C?.phrases), ...arr(P?.phrases)],
-    grammar: [...arr(L.grammar), ...arr(C?.grammar), ...arr(P?.grammar)],
+    vocab:   [...arr(L.vocab), ...arr(C?.vocab), ...arr(P?.vocab), ...arr(P2?.vocab), ...arr(K?.vocab || K?.paket)],
+    phrases: [...arr(L.phrases), ...arr(C?.phrases), ...arr(P?.phrases), ...arr(P2?.phrases)],
+    /* Topik ber-id sama DIGABUNG, bukan dihitung dua kali — sama seperti
+       yang dilakukan gabung() di js/course.js. Perluasan kedua menambah
+       latihan ke topik yang sudah ada, jadi menghitungnya sebagai topik
+       terpisah akan melaporkan jumlah topik yang mengembang palsu. */
+    grammar: (() => {
+      const out = [];
+      for (const g of [...arr(L.grammar), ...arr(C?.grammar), ...arr(P?.grammar), ...arr(P2?.grammar)]) {
+        const ada = out.find(x => x.id === g.id);
+        if (!ada) { out.push({ ...g, drills: [...arr(g.drills)], ex: [...arr(g.ex)] }); continue; }
+        ada.drills.push(...arr(g.drills));
+        ada.ex.push(...arr(g.ex));
+      }
+      return out;
+    })(),
     levels
   };
   const { BACAAN } = await imp('data/lang/exam-bacaan.js');

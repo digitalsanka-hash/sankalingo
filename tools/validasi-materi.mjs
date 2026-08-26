@@ -26,7 +26,7 @@ for (const c of KODE) {
   const m = await imp(`data/lang/${c}.js`);
   const L = m[c.toUpperCase()] || Object.values(m)[0];
   const bundel = [L];
-  for (const tambahan of [`${c}-course`, `${c}-plus`]) {
+  for (const tambahan of [`${c}-course`, `${c}-plus`, `${c}-plus2`]) {
     if (!existsSync(join(AKAR, 'data', 'lang', `${tambahan}.js`))) continue;
     const mod = await imp(`data/lang/${tambahan}.js`);
     bundel.push(mod.COURSE || mod.PLUS || Object.values(mod)[0]);
@@ -34,7 +34,21 @@ for (const c of KODE) {
 
   const vocab = bundel.flatMap(b => arr(b?.vocab));
   const phrases = bundel.flatMap(b => arr(b?.phrases));
-  const grammar = bundel.flatMap(b => arr(b?.grammar));
+  /* Topik ber-id sama DIGABUNG, persis seperti gabung() di js/course.js.
+     Berkas perluasan kedua sengaja memakai id topik yang sudah ada untuk
+     MENAMBAH latihan ke topik itu; menghitungnya sebagai dua topik akan
+     melaporkan 18 "id ganda" palsu di tiap bahasa dan menutupi id ganda
+     yang benar-benar keliru. */
+  const grammar = [];
+  for (const g of bundel.flatMap(b => arr(b?.grammar))) {
+    const ada = grammar.find(x => x.id === g.id);
+    if (!ada) { grammar.push({ ...g, drills: [...arr(g.drills)], ex: [...arr(g.ex)], traps: [...arr(g.traps)] }); continue; }
+    ada.drills.push(...arr(g.drills));
+    ada.ex.push(...arr(g.ex));
+    ada.traps.push(...arr(g.traps));
+    for (const k of ['title', 'titleId', 'why', 'form', 'level'])
+      if (g[k] !== undefined && ada[k] === undefined) ada[k] = g[k];
+  }
   const levels = bundel.flatMap(b => arr(b?.levels));
   const re = AKSARA[c];
 

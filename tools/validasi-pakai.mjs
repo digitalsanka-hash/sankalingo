@@ -17,6 +17,7 @@
    Jalankan: node tools/validasi-pakai.mjs                              */
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { existsSync } from 'node:fs';
 
 const AKAR = join(dirname(fileURLToPath(import.meta.url)), '..');
 const imp = p => import(pathToFileURL(join(AKAR, p)).href);
@@ -191,6 +192,66 @@ function cocokKata(kataAsli, contohAsli) {
         if (g.length - potong >= 4 && v.includes(g.slice(0, -potong))) return true;
     }
 
+  /* ── Kata kerja terpisah Jerman ─────────────────────────────────
+     herunterladen → "Ich lade die Datei herunter." Awalannya terlempar
+     ke akhir kalimat dan akarnya ikut ditasrifkan, jadi tidak ada satu
+     penggalan pun yang utuh. Diterima kalau AWALAN dan tiga huruf
+     pertama akarnya sama-sama muncul — cukup ketat untuk tidak asal
+     lolos, karena keduanya harus hadir sekaligus. */
+  const AWALAN_DE = ['herunter', 'heraus', 'hinein', 'zurück', 'durch',
+                     'unter', 'über', 'hoch', 'fest', 'frei',
+                     'nach', 'auf', 'aus', 'ein', 'mit', 'vor', 'zu',
+                     'her', 'hin', 'weg', 'los', 'bei', 'ab', 'an', 'um'];
+  for (const a of anggota) {
+    if (a.includes(' ')) continue;
+    for (const aw of AWALAN_DE) {
+      if (!a.startsWith(aw) || a.length - aw.length < 5) continue;
+      const akar = a.slice(aw.length, aw.length + 3);
+      if (contoh.includes(aw) && contoh.includes(akar)) return true;
+    }
+  }
+
+  /* ── Akar tiga huruf Arab ───────────────────────────────────────
+     قَدَم → الأَقْدَام, نَجْم → النُّجُوم. Jamak taksir mengubah pola vokal
+     dan menyisipkan huruf, jadi pencocokan harfiah tidak pernah kena.
+     Yang TIDAK berubah adalah urutan huruf akarnya. Diterima kalau
+     seluruh huruf akar kunci muncul BERURUTAN di dalam satu kata pada
+     kalimatnya. */
+  if (/[ء-ي]/.test(kataAsli)) {
+    const hurufSaja = t => t.replace(/[^ء-ي]/g, '')
+                            .replace(/^ال/, '').replace(/[ةى]/g, 'ه');
+    const akar = hurufSaja(kataAsli);
+    if (akar.length >= 3) {
+      for (const kataKal of contohAsli.split(/\s+/)) {
+        const kal = hurufSaja(kataKal);
+        let i = 0;
+        for (const ch of kal) if (ch === akar[i]) i++;
+        if (i === akar.length) return true;
+      }
+    }
+  }
+
+  /* ── Kata kerja Korea berakar vokal ㅡ ──────────────────────────
+     끄다 → 껐어요, 쓰다 → 썼어요, 크다 → 커요. Vokal ㅡ pada suku
+     terakhir akar LULUH begitu bertemu akhiran, berganti ㅓ atau ㅏ.
+     Yang bertahan cuma konsonan awalnya, jadi itulah yang dicocokkan —
+     dan hanya untuk akar yang memang bervokal ㅡ, supaya aturan ini
+     tidak melonggarkan pencocokan Korea secara umum. */
+  for (const a of kataNFC.split('/').map(x => x.trim()).filter(Boolean))
+    for (const akar of akarKorea(a)) {
+      const c = akar.codePointAt(akar.length - 1);
+      if (c < HANGUL_AWAL || c > HANGUL_AKHIR) continue;
+      const kode = c - HANGUL_AWAL;
+      if (Math.floor(kode / 28) % 21 !== 18) continue;   // jungseong ㅡ
+      const awalan = akar.slice(0, -1), cho = Math.floor(kode / 588);
+      if (contohNFC.split(/[^가-힣]+/).some(w => {
+        if (!w.startsWith(awalan)) return false;
+        const suku = w.codePointAt(awalan.length);
+        return suku >= HANGUL_AWAL && suku <= HANGUL_AKHIR &&
+               Math.floor((suku - HANGUL_AWAL) / 588) === cho;
+      })) return true;
+    }
+
   /* Kata pendek (di bawah empat aksara) diperiksa sebagai kata utuh saja,
      supaya "das" tidak dianggap muncul di dalam "Adresse". Dicocokkan
      dengan memecah kalimatnya, bukan dengan regex yang harus di-escape. */
@@ -214,13 +275,50 @@ for (const c of KODE) {
   const sumber = [L];
   try { sumber.push((await imp(`data/lang/${c}-course.js`)).COURSE); } catch {}
   try { sumber.push((await imp(`data/lang/${c}-plus.js`)).PLUS); } catch {}
+  /* Perluasan kedua dan paket <kode>-kata.js juga digabung saat aplikasi
+     berjalan; tanpa keduanya, alat ini menganggap kata baru "tidak ada di
+     paket kosakata mana pun" dan menolak contoh yang justru benar. */
+  try { sumber.push((await imp(`data/lang/${c}-plus2.js`)).PLUS2); } catch {}
+  try { const k = await imp(`data/lang/${c}-kata.js`); sumber.push(Object.values(k)[0]); } catch {}
   for (const s of sumber)
     for (const p of (s?.vocab || []))
       for (const w of (p.words || []))
         if (w?.[0] && !kata.has(w[0])) kata.set(w[0], { paket: p.id, level: p.level || '-' });
 
+  /* Berkas yang RUSAK dan berkas yang BELUM ADA harus dibedakan.
+     Sebelumnya keduanya ditelan satu catch dan dilaporkan sama: "belum
+     ada berkas". Akibatnya salah ketik satu koma pada berkas yang sudah
+     berisi 340 entri terbaca sebagai "belum ditulis" — persis kesalahan
+     yang membuat alat pemeriksa tidak ada gunanya. */
   let PAKAI = null;
-  try { PAKAI = (await imp(`data/lang/${c}-pakai.js`)).PAKAI; } catch {}
+  const jalurPakai = join(AKAR, 'data', 'lang', `${c}-pakai.js`);
+  if (existsSync(jalurPakai)) {
+    try {
+      PAKAI = (await imp(`data/lang/${c}-pakai.js`)).PAKAI;
+      if (!PAKAI) masalah.push(`${c}-pakai.js ada tetapi tidak mengekspor PAKAI`);
+    } catch (e) {
+      masalah.push(`${c}-pakai.js GAGAL DIMUAT: ${e.message}`);
+      ringkas.push([c, kata.size, 0, 0, '× berkas rusak']);
+      continue;
+    }
+  }
+  /* Bank contoh TIDAK hanya hidup di <kode>-pakai.js. Paket tema di
+     <kode>-kata.js membawa peta `pakai` sendiri, dan langctx.js
+     memasangnya SESUDAH berkas utama — jadi untuk kata yang ada di
+     kedua tempat, yang benar-benar dilihat pemelajar adalah yang dari
+     <kode>-kata.js.
+
+     Alat ini dulu hanya membaca berkas utama dan melaporkan liputan
+     100% karena penyebutnya pun hanya kosakata inti. Begitu penyebutnya
+     diperbaiki (paket tema ikut dihitung), angkanya jatuh ke 71-75% dan
+     tampak seperti 1.081 kata tanpa contoh — padahal semuanya sudah
+     punya, hanya di berkas yang tidak dibaca. Satu alat yang setengah
+     benar lebih menyesatkan daripada alat yang jelas-jelas salah. */
+  let DARI_KATA = null;
+  try { DARI_KATA = (await imp(`data/lang/${c}-kata.js`)).KATA?.pakai
+        || Object.values(await imp(`data/lang/${c}-kata.js`))[0]?.pakai || null; } catch {}
+  if (DARI_KATA) PAKAI = { ...(PAKAI || {}), ...DARI_KATA };
+
   if (!PAKAI) { ringkas.push([c, kata.size, 0, 0, '— belum ada berkas']); continue; }
 
   const entri = Object.entries(PAKAI);
