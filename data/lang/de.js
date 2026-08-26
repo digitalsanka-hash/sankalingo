@@ -42,9 +42,9 @@ scripts: [
     G('ö','ö','O dengan dua titik. Bulatkan bibir seperti "o", lalu ucapkan "e".',
       ['M50 42 C34 42 24 54 24 64 C24 76 34 86 50 86 C66 86 76 76 76 64 C76 54 66 42 50 42','M38.0 20.0 L38.0 28.0','M62.0 20.0 L62.0 28.0'],'o-umlaut'),
     G('ü','ü','U dengan dua titik. Bulatkan bibir seperti "u", lalu ucapkan "i".',
-      ['M26 42 L26 70 C26 82 38 88 50 84','M74 42 L74 86','M38.0 20.0 L38.0 28.0','M62.0 20.0 L62.0 28.0'],'u-umlaut'),
+      ['M26 42 L26 70 C26 82 38 88 50 88 C62 88 74 82 74 70','M74 42 L74 86','M38.0 20.0 L38.0 28.0','M62.0 20.0 L62.0 28.0'],'u-umlaut'),
     G('ß','ß','Eszett — dibaca "ss" panjang. Hanya muncul setelah vokal panjang.',
-      ['M30 88 L30 40 C30 24 46 18 58 24 C68 30 66 44 54 48 C68 50 76 62 70 74 C64 84 46 86 38 80'],'eszett'),
+      ['M30 88 L30 40 C30 25 44 18 55 25 C64 31 62 43 51 47 C66 50 74 61 70 72 C67 81 56 84 47 79'],'eszett'),
     G('Ä','Ä','Bentuk kapitalnya.',
       ['M50 34 L24 88','M50 34 L76 88','M34 72 L66 72','M38.0 14.0 L38.0 22.0','M62.0 14.0 L62.0 22.0'],'A-umlaut'),
     G('Ö','Ö','Bentuk kapitalnya.',
@@ -52,7 +52,7 @@ scripts: [
     G('Ü','Ü','Bentuk kapitalnya.',
       ['M26 34 L26 68 C26 82 38 88 50 88 C62 88 74 82 74 68 L74 34','M38.0 14.0 L38.0 22.0','M62.0 14.0 L62.0 22.0'],'U-umlaut'),
     G('sch','sch','Tiga huruf, satu bunyi: "sy". Muncul di ribuan kata.',
-      ['M22 60 C22 48 40 46 44 56','M56 40 L56 86','M56 60 C60 48 78 48 78 60 L78 86'],'gugus sch')
+      ['M32 54 C32 47 20 45 16 51 C12 58 28 60 30 67 C32 75 20 77 14 71','M60 55 C56 47 42 47 42 61 C42 75 56 75 60 67','M70 36 L70 80','M70 58 C74 48 88 48 88 60 L88 80'],'gugus sch')
   ]
 }
 ],

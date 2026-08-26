@@ -272,6 +272,58 @@ for (const kode of KODE) {
   ringkas[kode] = { huruf, goresan, cacat };
 }
 
+/* ── Arah aksen ────────────────────────────────────────────────────
+
+   Kesalahan yang memicu bagian ini: SEMUA huruf beraksen Spanyol
+   digambar dengan aksen GRAVIS, padahal bahasa Spanyol tidak mengenal
+   gravis sama sekali — á é í ó ú seluruhnya akut. Bahasa Prancis lebih
+   buruk lagi: é dan è tertukar, jadi tiap huruf mengajarkan huruf yang
+   satunya.
+
+   Cacat ini tidak bisa dilihat pemeriksa mutu jalur mana pun: garisnya
+   lurus, pendek, dan rapi. Yang salah cuma TANDANYA — dan tanda itu
+   ditentukan huruf apa yang sedang digambar, sesuatu yang bisa dibaca
+   pasti dari penguraian Unicode.
+
+   Ingat sumbu SVG: y membesar ke BAWAH.
+     akut ´ (U+0301) naik ke kanan  → y mengecil
+     gravis ` (U+0300) turun ke kanan → y membesar                     */
+const TANDA = { '́': ['akut ´', -1], '̀': ['gravis `', +1] };
+
+for (const kode of KODE) {
+  const berkasAksen = `../data/lang/${kode}.js`;
+  if (!existsSync(new URL(berkasAksen, import.meta.url))) continue;
+  const L = Object.values(await import(berkasAksen))[0];
+  if (!L?.scripts) continue;
+  /* Goresan pengganti sudah ditempelkan ke c.strokes oleh gelung utama
+     di atas — modulnya sama, jadi yang terbaca di sini pun yang benar. */
+  for (const set of L.scripts)
+    for (const g of (set.chars || [])) {
+      const urai = [...String(g.c).normalize('NFD')];
+      const mark = urai.find(ch => TANDA[ch]);
+      if (!mark) continue;
+      const [nama, arah] = TANDA[mark];
+      const strokes = g.strokes || [];
+
+      /* Goresan aksennya adalah garis lurus dua titik yang seluruhnya
+         berada di sepertiga atas kotak. Huruf dasarnya tidak pernah
+         setinggi itu, jadi tidak ada yang tertukar. */
+      const calon = strokes
+        .map(d => d.match(/^M\s*([\d.]+)\s+([\d.]+)\s+L\s*([\d.]+)\s+([\d.]+)$/))
+        .filter(m => m && Math.max(+m[2], +m[4]) < 40)
+        .map(m => [+m[1], +m[2], +m[3], +m[4]]);
+
+      if (!calon.length) { masalah.push([kode, g.c, `beraksen ${nama} tetapi tidak ada goresan aksen di bagian atas`]); continue; }
+      for (let [x1, y1, x2, y2] of calon) {
+        if (x1 > x2) { [x1, x2] = [x2, x1]; [y1, y2] = [y2, y1]; }
+        if (Math.abs(x2 - x1) < 3) continue;          /* tegak: titik, bukan aksen */
+        const turun = Math.sign(y2 - y1);
+        if (turun !== arah)
+          masalah.push([kode, g.c, `aksen tergambar ${turun > 0 ? 'gravis `' : 'akut ´'}, seharusnya ${nama}`]);
+      }
+    }
+}
+
 /* ── Laporan ──────────────────────────────────────────────────────── */
 if (masalah.length) {
   const per = {};
