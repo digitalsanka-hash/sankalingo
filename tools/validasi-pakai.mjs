@@ -17,6 +17,7 @@
    Jalankan: node tools/validasi-pakai.mjs                              */
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { existsSync } from 'node:fs';
 
 const AKAR = join(dirname(fileURLToPath(import.meta.url)), '..');
 const imp = p => import(pathToFileURL(join(AKAR, p)).href);
@@ -214,13 +215,33 @@ for (const c of KODE) {
   const sumber = [L];
   try { sumber.push((await imp(`data/lang/${c}-course.js`)).COURSE); } catch {}
   try { sumber.push((await imp(`data/lang/${c}-plus.js`)).PLUS); } catch {}
+  /* Perluasan kedua dan paket <kode>-kata.js juga digabung saat aplikasi
+     berjalan; tanpa keduanya, alat ini menganggap kata baru "tidak ada di
+     paket kosakata mana pun" dan menolak contoh yang justru benar. */
+  try { sumber.push((await imp(`data/lang/${c}-plus2.js`)).PLUS2); } catch {}
+  try { const k = await imp(`data/lang/${c}-kata.js`); sumber.push(Object.values(k)[0]); } catch {}
   for (const s of sumber)
     for (const p of (s?.vocab || []))
       for (const w of (p.words || []))
         if (w?.[0] && !kata.has(w[0])) kata.set(w[0], { paket: p.id, level: p.level || '-' });
 
+  /* Berkas yang RUSAK dan berkas yang BELUM ADA harus dibedakan.
+     Sebelumnya keduanya ditelan satu catch dan dilaporkan sama: "belum
+     ada berkas". Akibatnya salah ketik satu koma pada berkas yang sudah
+     berisi 340 entri terbaca sebagai "belum ditulis" — persis kesalahan
+     yang membuat alat pemeriksa tidak ada gunanya. */
   let PAKAI = null;
-  try { PAKAI = (await imp(`data/lang/${c}-pakai.js`)).PAKAI; } catch {}
+  const jalurPakai = join(AKAR, 'data', 'lang', `${c}-pakai.js`);
+  if (existsSync(jalurPakai)) {
+    try {
+      PAKAI = (await imp(`data/lang/${c}-pakai.js`)).PAKAI;
+      if (!PAKAI) masalah.push(`${c}-pakai.js ada tetapi tidak mengekspor PAKAI`);
+    } catch (e) {
+      masalah.push(`${c}-pakai.js GAGAL DIMUAT: ${e.message}`);
+      ringkas.push([c, kata.size, 0, 0, '× berkas rusak']);
+      continue;
+    }
+  }
   if (!PAKAI) { ringkas.push([c, kata.size, 0, 0, '— belum ada berkas']); continue; }
 
   const entri = Object.entries(PAKAI);
