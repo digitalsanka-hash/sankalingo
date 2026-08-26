@@ -401,4 +401,5 @@ export const PAKAI = {
 'страховка': ['Страховка покрывает эти расходы.', 'Asuransi menanggung biaya ini.', 'Strakhovka pokryvayet eti raskhody.'],
 'скорая помощь': ['Ночью приехала скорая помощь.', 'Malam itu ambulans datang.', 'Nocyu priyekhala skoraya pomosyc.'],
 'выздоровление': ['Выздоровление идёт медленно.', 'Kesembuhannya berjalan lambat.', 'Vyzdorovleniye idyot medlenno.'],
+'сутки': ['Поезд идёт целые сутки.', 'Keretanya berjalan sehari semalam penuh.', 'Poyezd idyot tselyye sutki.'],
 };
