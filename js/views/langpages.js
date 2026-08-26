@@ -669,33 +669,68 @@ export function grammar(code, L) {
         <span class="badge badge--lv lv-${g.level}">${g.level}</span>
       </div>
       <div class="card__sub">${esc(g.title)}</div>
-      <div class="note" style="margin-top:.8rem"><strong>Mengapa penting</strong>${esc(g.why)}</div>
-      ${g.ajar?.length ? `<div style="margin-top:.8rem">
-        <div class="card__title">Pahami dulu</div>
-        ${g.ajar.map(([judul, teks, ex], i) => `
-        <div style="margin-top:.7rem">
-          <strong style="color:var(--brand-text)">${i + 1}. ${esc(judul)}</strong>
-          <p class="soft" style="margin:.25rem 0 0;line-height:1.65">${esc(teks)}</p>
-          ${ex ? `<div class="ex" style="margin-top:.35rem">
-            <span class="en">${esc(ex[0])} ${spk(ex[0], ex[2] || '', 13)}</span>
-            ${ex[2] ? `<span class="mono xs" style="color:var(--info)">${esc(ex[2])}</span>` : ''}
-            <span class="id-txt">${esc(ex[1])}</span></div>` : ''}
-        </div>`).join('')}
-      </div>` : ''}
-      <div class="formula" style="margin-top:.8rem">${esc(g.form)}</div>
-      <ul class="stack stack--sm" style="margin-top:.8rem">
-        ${g.notes.map(n => `<li class="small soft">• ${esc(n)}</li>`).join('')}
-      </ul>
-      <div class="ex-list" style="margin-top:.8rem">
-        ${g.ex.map(([t, id2, rom]) => `<div class="ex"><span class="en">${esc(t)}
-          ${spk(t, rom || '', 13)}</span>
-          ${rom ? `<span class="mono xs" style="color:var(--info)">${esc(rom)}</span>` : ''}
-          <span class="id-txt">${esc(id2)}</span></div>`).join('')}
+      <div class="lesson-body" style="margin-top:var(--s-4)">
+        <p class="lesson-lead">${esc(g.why)}</p>
+
+        ${g.ajar?.length ? `<div class="lesson-card lc--paham">
+          <div class="lesson-card__head">
+            <span class="lesson-card__mark">${ico('book', { size: 17 })}</span>
+            <span class="lesson-card__title">Pahami dulu</span>
+          </div>
+          <div class="ajar">
+            ${g.ajar.map(([judul, teks, ex], i) => `
+            <div class="ajar__step">
+              <span class="ajar__num">${i + 1}</span>
+              <div>
+                <h3 class="ajar__title">${esc(judul)}</h3>
+                <p class="ajar__text">${esc(teks)}</p>
+                ${ex ? `<div class="ajar__ex">
+                  <span class="en">${esc(ex[0])} ${spk(ex[0], ex[2] || '', 13)}</span>
+                  ${ex[2] ? `<span class="mono xs" style="color:var(--acc)">${esc(ex[2])}</span>` : ''}
+                  <span class="id-txt">${esc(ex[1])}</span></div>` : ''}
+              </div>
+            </div>`).join('')}
+          </div></div>` : ''}
+
+        <div class="lesson-card lc--rumus">
+          <div class="lesson-card__head">
+            <span class="lesson-card__mark">${ico('grammar', { size: 17 })}</span>
+            <span class="lesson-card__title">Rumus</span>
+          </div>
+          <div class="formula">${esc(g.form)}</div>
+        </div>
+
+        ${g.notes?.length ? `<div class="lesson-card lc--catatan">
+          <div class="lesson-card__head">
+            <span class="lesson-card__mark">${ico('bulb', { size: 17 })}</span>
+            <span class="lesson-card__title">Catatan kunci</span>
+          </div>
+          <ul class="lesson-list">${g.notes.map(n => `<li><span>${esc(n)}</span></li>`).join('')}</ul>
+        </div>` : ''}
+
+        ${g.ex?.length ? `<div class="lesson-card lc--contoh">
+          <div class="lesson-card__head">
+            <span class="lesson-card__mark">${ico('quote', { size: 17 })}</span>
+            <span class="lesson-card__title">Contoh</span>
+          </div>
+          <div class="ex-list">
+            ${g.ex.map(([t, id2, rom]) => `<div class="ex"><span class="en">${esc(t)}
+              ${spk(t, rom || '', 13)}</span>
+              ${rom ? `<span class="mono xs" style="color:var(--info)">${esc(rom)}</span>` : ''}
+              <span class="id-txt">${esc(id2)}</span></div>`).join('')}
+          </div></div>` : ''}
+
+        ${g.traps?.length ? `<div class="lesson-card lc--jebakan">
+          <div class="lesson-card__head">
+            <span class="lesson-card__mark">${ico('warn', { size: 17 })}</span>
+            <span class="lesson-card__title">Jebakan khas penutur Indonesia</span>
+          </div>
+          <div class="ex-list">
+            ${g.traps.map(([b, gd, w]) => `<div class="ex ex--bad"><span class="en">${esc(b)}</span>
+              <span class="en" style="color:var(--ok);text-decoration:none">✓ ${esc(gd)}</span>
+              <span class="id-txt">${esc(w)}</span></div>`).join('')}
+          </div></div>` : ''}
       </div>
-      ${g.traps ? `<div class="ex-list" style="margin-top:.6rem">
-        ${g.traps.map(([b, gd, w]) => `<div class="ex ex--bad"><span class="en">${esc(b)}</span>
-          <span class="en" style="color:var(--ok);text-decoration:none">${esc(gd)}</span>
-          <span class="id-txt">${esc(w)}</span></div>`).join('')}</div>` : ''}
       <button class="btn btn--primary btn--sm" style="margin-top:.9rem" data-drill="${esc(g.id)}">
         ${ico('play', { size: 14 })} Latihan</button>
       <div id="d-${esc(g.id)}"></div>

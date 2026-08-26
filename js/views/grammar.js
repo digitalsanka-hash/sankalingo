@@ -1,6 +1,7 @@
 /* Tata bahasa: indeks 162 topik + halaman topik dengan latihan. */
 
 import { $, $$, el, html, raw, esc, toast } from '../ui.js';
+import { ico } from '../icons.js';
 import { state, recordQuiz, toggleSave, isSaved } from '../state.js';
 import { say } from '../speech.js';
 import { runQuiz } from '../quiz.js';
@@ -160,50 +161,59 @@ export function renderTopicBody(g, code = 'en') {
     : `<button class="speak-btn" data-say-lang="${esc(teks)}" data-say-code="${esc(code)}"
          data-rom="${esc(rom || '')}" aria-label="Dengarkan"
          style="display:inline-grid;vertical-align:middle">🔊</button>`;
-  return html`
-  <div class="stack">
-    <div class="note">
-      <strong>Mengapa ini penting</strong>${esc(g.why)}
-    </div>
+  /* Kepala kartu: lambang berwarna + judul. Lambangnya memakai ikon
+     yang sudah ada di js/icons.js, bukan emoji — supaya bentuk dan
+     ketebalannya seragam dengan seluruh aplikasi. */
+  const kepala = (ikon, judul) =>
+    `<div class="lesson-card__head">
+       <span class="lesson-card__mark">${ico(ikon, { size: 17 })}</span>
+       <span class="lesson-card__title">${esc(judul)}</span>
+     </div>`;
 
-    ${raw(g.ajar?.length ? `<div class="card">
-      <div class="card__title">Pahami dulu</div>
-      <div class="stack" style="margin-top:.6rem">
+  return html`
+  <div class="lesson-body">
+    <p class="lesson-lead">${esc(g.why)}</p>
+
+    ${raw(g.ajar?.length ? `<div class="lesson-card lc--paham">
+      ${kepala('book', 'Pahami dulu')}
+      <div class="ajar">
         ${g.ajar.map(([judul, teks, ex], i) => `
-        <div class="stack stack--sm">
-          <strong style="color:var(--brand-text)">${i + 1}. ${esc(judul)}</strong>
-          <p class="soft" style="margin:0;line-height:1.65">${esc(teks)}</p>
-          ${ex ? `<div class="ex" style="margin-top:.2rem">
-            <span class="en">${esc(ex[0])} ${tombolSuara(ex[0], ex[2])}</span>
-            ${ex[2] ? `<span class="mono xs" style="color:var(--info)">${esc(ex[2])}</span>` : ''}
-            <span class="id-txt">${esc(ex[1])}</span></div>` : ''}
+        <div class="ajar__step">
+          <span class="ajar__num">${i + 1}</span>
+          <div>
+            <h3 class="ajar__title">${esc(judul)}</h3>
+            <p class="ajar__text">${esc(teks)}</p>
+            ${ex ? `<div class="ajar__ex">
+              <span class="en">${esc(ex[0])} ${tombolSuara(ex[0], ex[2])}</span>
+              ${ex[2] ? `<span class="mono xs" style="color:var(--acc)">${esc(ex[2])}</span>` : ''}
+              <span class="id-txt">${esc(ex[1])}</span></div>` : ''}
+          </div>
         </div>`).join('')}
       </div></div>` : '')}
 
-    <div class="card">
-      <div class="card__title">Rumus</div>
-      <div class="formula" style="margin-top:.6rem">${esc(g.form)}</div>
+    <div class="lesson-card lc--rumus">
+      ${raw(kepala('grammar', 'Rumus'))}
+      <div class="formula">${esc(g.form)}</div>
     </div>
 
-    ${raw(g.notes?.length ? `<div class="card">
-      <div class="card__title">Catatan kunci</div>
-      <ul class="stack stack--sm" style="margin-top:.6rem">
-        ${g.notes.map(n => `<li class="row" style="align-items:flex-start;gap:.6rem">
-          <span style="color:var(--brand-text)">▸</span><span>${esc(n)}</span></li>`).join('')}
+    ${raw(g.notes?.length ? `<div class="lesson-card lc--catatan">
+      ${kepala('bulb', 'Catatan kunci')}
+      <ul class="lesson-list">
+        ${g.notes.map(n => `<li><span>${esc(n)}</span></li>`).join('')}
       </ul></div>` : '')}
 
-    ${raw(g.ex?.length ? `<div class="card">
-      <div class="card__title">Contoh</div>
-      <div class="ex-list" style="margin-top:.6rem">
+    ${raw(g.ex?.length ? `<div class="lesson-card lc--contoh">
+      ${kepala('quote', 'Contoh')}
+      <div class="ex-list">
         ${g.ex.map(([en, id, rom]) => `<div class="ex">
           <span class="en">${esc(en)} ${tombolSuara(en, rom)}</span>
-          ${rom ? `<span class="mono xs" style="color:var(--info)">${esc(rom)}</span>` : ''}
+          ${rom ? `<span class="mono xs" style="color:var(--acc)">${esc(rom)}</span>` : ''}
           <span class="id-txt">${esc(id)}</span></div>`).join('')}
       </div></div>` : '')}
 
-    ${raw(g.traps?.length ? `<div class="card">
-      <div class="card__title">⚠ Jebakan khas penutur Indonesia</div>
-      <div class="ex-list" style="margin-top:.6rem">
+    ${raw(g.traps?.length ? `<div class="lesson-card lc--jebakan">
+      ${kepala('warn', 'Jebakan khas penutur Indonesia')}
+      <div class="ex-list">
         ${g.traps.map(([bad, good, why]) => `<div class="ex ex--bad">
           <span class="en">${esc(bad)}</span>
           <span class="en" style="color:var(--ok);text-decoration:none">✓ ${esc(good)}</span>

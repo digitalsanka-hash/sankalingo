@@ -67,6 +67,13 @@
   --info:          var(--sky-500);
   --info-soft:     #2ea8e629;
 
+  /* Ungu khusus badan pelajaran. TIDAK boleh memakai --brand: langctx.js
+     menimpa --brand dengan warna khas tiap bahasa, jadi kartu "Rumus"
+     ikut berubah — di Jerman malah jadi abu-abu #4a5568 dan peran
+     kartunya hilang. Warna peran harus sama di sembilan bahasa. */
+  --ajar-ungu:      var(--violet-400);
+  --ajar-ungu-soft: #6c5ce72e;
+
   --glow: radial-gradient(1100px 520px at 12% -12%, #6c5ce730, transparent 62%),
           radial-gradient(900px 460px at 96% 4%, #17c49322, transparent 60%);
   --shadow-1: 0 1px 2px #0006;
@@ -103,6 +110,8 @@
   --bad-soft:      #f0576f1f;
   --info:          #14688f;
   --info-soft:     #2ea8e61f;
+  --ajar-ungu:      var(--violet-600);
+  --ajar-ungu-soft: #6c5ce71c;
 
   --glow: radial-gradient(1000px 480px at 10% -14%, #6c5ce71f, transparent 60%),
           radial-gradient(800px 420px at 98% 0%, #17c4931a, transparent 58%);

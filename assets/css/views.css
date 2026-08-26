@@ -605,3 +605,148 @@
 .is-sorot{outline:2px solid var(--brand);outline-offset:3px;
   animation:sorot 2.4s ease-out}
 @keyframes sorot{0%{background:var(--brand-soft)}100%{background:transparent}}
+
+/* ── Badan pelajaran tata bahasa ───────────────────────────────────
+   Keluhan yang memicu bagian ini: "terlalu padat, warnanya susah
+   dibedakan". Dua akar masalahnya:
+
+   1. Seluruh kartu memakai warna netral yang sama, jadi mata tidak
+      punya pegangan — mana penjelasan, mana rumus, mana jebakan.
+   2. Paragraf melar selebar layar. Pada monitor lebar satu baris bisa
+      120 karakter; mata kehilangan awal baris berikutnya. Batas nyaman
+      baca 65-75 karakter, dan proyek ini sudah punya --max-read:72ch
+      yang belum dipakai di sini.
+
+   Perbaikannya: tiap kartu diberi WARNA PERAN lewat satu variabel
+   --acc, dan seluruh prosa dibatasi --max-read.                     */
+
+.lesson-body {
+  display: grid; gap: var(--s-5);
+  /* --max-read global bernilai 72ch, tapi satuan ch diukur dari lebar
+     angka "0" font yang dipakai — di sini 1ch = 11px, jadi 72ch jadi
+     790px alias ~105 karakter per baris, jauh di atas batas nyaman.
+     Satuan em bisa diramal: 36em = 36 x 15px = 540px = ~68 karakter. */
+  --max-read: 36em;
+}
+
+/* Kalimat pembuka "kenapa ini perlu dipelajari". Sengaja BUKAN kartu:
+   satu kartu lagi hanya menambah padat, padahal isinya cuma satu
+   kalimat. Cukup garis ungu dan huruf sedikit lebih besar. */
+.lesson-lead {
+  max-width: var(--max-read); margin: 0;
+  padding: var(--s-2) 0 var(--s-2) var(--s-4);
+  border-left: 3px solid var(--ajar-ungu);
+  font-size: var(--fs-lg); line-height: 1.7;
+  color: var(--text); font-weight: 500;
+}
+
+.lesson-card {
+  --acc: var(--brand);
+  --acc-bg: var(--brand-soft);
+  position: relative;
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: var(--s-5);
+  padding-left: calc(var(--s-5) + 5px);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+}
+/* Pita warna di tepi kiri: penanda peran yang terbaca bahkan saat
+   kartunya tergulung setengah keluar layar. */
+.lesson-card::before {
+  content: ''; position: absolute; inset: 0 auto 0 0;
+  width: 5px; background: var(--acc);
+}
+.lesson-card__head {
+  display: flex; align-items: center; gap: var(--s-3);
+  margin-bottom: var(--s-4);
+}
+.lesson-card__mark {
+  width: 32px; height: 32px; border-radius: var(--r-sm); flex: none;
+  display: grid; place-items: center;
+  background: var(--acc-bg); color: var(--acc);
+}
+.lesson-card__mark svg { width: 17px; height: 17px; }
+.lesson-card__title {
+  font-weight: 800; font-size: var(--fs-lg); letter-spacing: -.012em;
+  color: var(--text); line-height: 1.25;
+}
+.lesson-prose {
+  max-width: var(--max-read); margin: 0;
+  line-height: 1.78; color: var(--text-soft);
+}
+
+/* Warna peran. Urutannya sengaja mengikuti alur belajar:
+   biru memahami -> ungu rumus -> kuning catatan -> hijau contoh benar
+   -> merah jebakan. Kelimanya token tetap, bukan --brand, supaya arti
+   warnanya persis sama di sembilan bahasa. */
+.lc--paham   { --acc: var(--info);      --acc-bg: var(--info-soft); }
+.lc--rumus   { --acc: var(--ajar-ungu); --acc-bg: var(--ajar-ungu-soft); }
+.lc--catatan { --acc: var(--warn);  --acc-bg: var(--warn-soft); }
+.lc--contoh  { --acc: var(--ok);    --acc-bg: var(--ok-soft); }
+.lc--jebakan { --acc: var(--bad);   --acc-bg: var(--bad-soft); }
+
+/* ── Alur bernomor "Pahami dulu" ─────────────────────────────────
+   Nomor dibuat lingkaran berwarna dan disambung garis tipis, supaya
+   terbaca sebagai URUTAN — bukan tiga paragraf yang kebetulan
+   bernomor. Jarak antarlangkah sengaja lebar: ruang kosong itulah
+   yang menghilangkan kesan padat. */
+.ajar { display: grid; gap: var(--s-6); }
+.ajar__step {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--s-4); position: relative;
+}
+.ajar__step:not(:last-child)::before {
+  content: ''; position: absolute; left: 15px; top: 38px;
+  bottom: calc(var(--s-6) * -1); width: 2px;
+  background: var(--line-strong); border-radius: 2px;
+}
+.ajar__num {
+  width: 32px; height: 32px; border-radius: var(--r-full); flex: none;
+  display: grid; place-items: center; position: relative; z-index: 1;
+  background: var(--acc); color: #fff;
+  font-weight: 800; font-size: var(--fs-sm); font-variant-numeric: tabular-nums;
+  box-shadow: 0 0 0 4px var(--surface-solid);
+}
+.ajar__title {
+  font-weight: 700; font-size: var(--fs-base); color: var(--text);
+  margin: .34rem 0 .5rem; line-height: 1.4;
+}
+.ajar__text { max-width: var(--max-read); margin: 0; line-height: 1.78; color: var(--text-soft); }
+
+/* Contoh di dalam langkah memakai warna kartunya, bukan hijau —
+   supaya tidak tertukar dengan kartu Contoh yang berdiri sendiri. */
+.ajar__ex {
+  margin-top: var(--s-3); padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-sm); background: var(--acc-bg);
+  border-left: 3px solid var(--acc); max-width: var(--max-read);
+}
+.ajar__ex .en { display: block; font-weight: 700; color: var(--text); }
+.ajar__ex .id-txt { display: block; font-size: var(--fs-sm); margin-top: 2px; }
+.ajar__ex .mono { display: block; margin-top: 1px; }
+
+/* Catatan kunci: butir bertanda warna, jarak antarbutir dilonggarkan. */
+.lesson-list { display: grid; gap: var(--s-3); margin: 0; padding: 0; list-style: none; }
+.lesson-list li {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-3);
+  max-width: var(--max-read); line-height: 1.7; color: var(--text-soft);
+}
+.lesson-list li::before {
+  content: ''; width: 7px; height: 7px; border-radius: var(--r-full);
+  background: var(--acc); margin-top: .55em;
+}
+
+/* Rumus: dibuat lebih lega dan tidak melar selebar layar. */
+.lesson-card .formula {
+  max-width: var(--max-read); line-height: 1.9;
+  background: var(--acc-bg); border: 1px solid var(--line);
+}
+
+@media (max-width: 640px) {
+  .lesson-card { padding: var(--s-4); padding-left: calc(var(--s-4) + 5px); }
+  .ajar { gap: var(--s-5); }
+  .ajar__step { gap: var(--s-3); }
+  .ajar__num { width: 28px; height: 28px; }
+  .ajar__step:not(:last-child)::before { left: 13px; top: 34px; }
+}
