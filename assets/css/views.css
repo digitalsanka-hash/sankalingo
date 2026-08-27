@@ -737,10 +737,63 @@
   background: var(--acc); margin-top: .55em;
 }
 
-/* Rumus: dibuat lebih lega dan tidak melar selebar layar. */
-.lesson-card .formula {
-  max-width: var(--max-read); line-height: 1.9;
-  background: var(--acc-bg); border: 1px solid var(--line);
+/* ── Rumus ────────────────────────────────────────────────────────
+   Dulu rumus adalah satu balok monospace bergaris putus-putus: label,
+   imbuhan, dan pemisah semuanya berbobot sama, jadi tidak ada yang
+   menonjol. Sekarang tiap baris berdiri sendiri, label ditarik ke kolom
+   kiri supaya sejajar, imbuhan diwarnai, dan pemisah diredupkan.
+   Lihat rumusHTML() di js/ui.js untuk sisi markupnya. */
+.rumus {
+  max-width: var(--max-read);
+  background: var(--acc-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: var(--s-4) var(--s-4);
+  overflow-x: auto;
+}
+.rumus__baris {
+  display: grid; grid-template-columns: subgrid;
+  grid-column: 1 / -1; align-items: baseline;
+  padding: var(--s-2) 0;
+}
+.rumus__baris + .rumus__baris { border-top: 1px solid var(--line); }
+.rumus--berlabel { display: grid; grid-template-columns: max-content minmax(0, 1fr); }
+.rumus:not(.rumus--berlabel) .rumus__baris { display: block; }
+.rumus__jeda { height: var(--s-3); grid-column: 1 / -1; }
+
+/* Label ("Negatif", "Langkah 1") — kecil, kapital, warna kartunya. */
+.rumus__tag {
+  font-family: var(--font-sans); font-size: var(--fs-xs); font-weight: 800;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--acc); white-space: nowrap;
+  padding-right: var(--s-4);
+}
+.rumus__tag--kosong { padding: 0; }
+
+.rumus__isi {
+  font-family: var(--font-mono); font-size: var(--fs-md);
+  line-height: 1.85; color: var(--text);
+  white-space: pre-wrap; word-break: break-word;
+}
+
+/* Imbuhan (-e, -st, -en): inti pelajarannya, jadi paling terang. */
+.rumus__imbuhan {
+  color: var(--acc); font-weight: 700;
+  background: var(--surface-solid); border-radius: 5px;
+  padding: 1px 5px; margin: 0 1px;
+}
+/* Pemisah dan panah cuma perekat kalimat — diredupkan supaya isinya
+   yang terbaca duluan. <i> dipakai demi ringkas; miringnya dimatikan. */
+.rumus__pisah, .rumus__panah {
+  font-style: normal; color: var(--text-mute);
+}
+.rumus__pisah { padding: 0 .15em; }
+
+@media (max-width: 640px) {
+  .rumus--berlabel { grid-template-columns: minmax(0, 1fr); }
+  .rumus__baris { display: block; }
+  .rumus__tag { display: block; padding: 0 0 var(--s-1) 0; }
+  .rumus__tag--kosong { display: none; }
 }
 
 @media (max-width: 640px) {

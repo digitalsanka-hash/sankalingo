@@ -276,3 +276,58 @@ export function beep(ok = true) {
     o.start(); o.stop(actx.currentTime + 0.23);
   } catch {}
 }
+
+/* ── Penyaji rumus tata bahasa ────────────────────────────────────
+   Sebelumnya rumus dicetak sebagai satu balok <pre> monospace. Isinya
+   sebenarnya berstruktur — banyak baris berlabel ("Negatif:", "Langkah
+   1:"), dipisah titik tengah, dan memuat imbuhan seperti -e, -st, -en —
+   tapi semuanya tampil dengan bobot yang sama, jadi mata tidak tahu
+   harus melihat ke mana.
+
+   Penyaji ini TIDAK menafsirkan bahasanya. Ia hanya mengenali empat hal
+   yang bentuknya sama di semua bahasa:
+     1. label di awal baris sebelum titik dua  -> jadi tag, disejajarkan
+     2. imbuhan berawalan tanda hubung (-en)   -> diwarnai, ditebalkan
+     3. titik tengah · sebagai pemisah         -> diredupkan
+     4. panah → dan pisah em —                 -> diredupkan
+
+   Spasi tetap dipertahankan (white-space: pre-wrap) karena beberapa
+   rumus Arab memakai spasi untuk meratakan kolom. */
+
+const RUMUS_LABEL = /^([^\s:][^:\n]{0,23}):[ \t]+(.*)$/;
+const RUMUS_TAK_LAYAK = /[·→—]/;
+
+/* Dipanggil SESUDAH esc(), jadi teksnya sudah berisi entitas seperti
+   &amp;. Ketiga pola di bawah tidak mengandung & atau ; sehingga tidak
+   mungkin merusak entitas. Tiap pola dijalankan satu lintasan dan hasil
+   sisipannya tidak dipindai ulang. */
+function rumusHias(sudahEsc) {
+  return sudahEsc
+    .replace(/(^|[\s(])(-[^\s,.;:()·—]+)/gu, (_, awal, imbuhan) =>
+      `${awal}<b class="rumus__imbuhan">${imbuhan}</b>`)
+    .replace(/·/g, '<i class="rumus__pisah">·</i>')
+    .replace(/(→|⇒|—)/g, '<i class="rumus__panah">$1</i>');
+}
+
+export function rumusHTML(form) {
+  const baris = String(form ?? '').split('\n');
+  const urai = baris.map(b => {
+    if (!b.trim()) return null;                      // baris kosong = jeda
+    const m = b.match(RUMUS_LABEL);
+    if (m && !RUMUS_TAK_LAYAK.test(m[1])) return { label: m[1], isi: m[2] };
+    return { label: '', isi: b };
+  });
+  const adaLabel = urai.some(u => u && u.label);
+
+  const sel = urai.map(u => {
+    if (!u) return '<div class="rumus__jeda"></div>';
+    const isi = `<span class="rumus__isi">${rumusHias(esc(u.isi))}</span>`;
+    if (!adaLabel) return `<div class="rumus__baris">${isi}</div>`;
+    const tag = u.label
+      ? `<span class="rumus__tag">${esc(u.label)}</span>`
+      : '<span class="rumus__tag rumus__tag--kosong"></span>';
+    return `<div class="rumus__baris">${tag}${isi}</div>`;
+  }).join('');
+
+  return `<div class="rumus${adaLabel ? ' rumus--berlabel' : ''}">${sel}</div>`;
+}

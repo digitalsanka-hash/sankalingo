@@ -4,7 +4,7 @@
    berlapis, jadi tombol suara tetap berguna walau suara asli bahasa
    targetnya belum terpasang di perangkat. */
 
-import { $, $$, el, html, raw, esc, toast, sample, shuffle } from '../ui.js';
+import { $, $$, el, html, raw, esc, toast, sample, shuffle, rumusHTML } from '../ui.js';
 import { ico } from '../icons.js';
 import { state, mutate, addXP, addMinutes, lastVisit } from '../state.js';
 import { nextLesson, coursePct, unitsOf } from '../course.js';
@@ -697,7 +697,7 @@ export function grammar(code, L) {
             <span class="lesson-card__mark">${ico('grammar', { size: 17 })}</span>
             <span class="lesson-card__title">Rumus</span>
           </div>
-          <div class="formula">${esc(g.form)}</div>
+          ${rumusHTML(g.form)}
         </div>
 
         ${g.notes?.length ? `<div class="lesson-card lc--catatan">

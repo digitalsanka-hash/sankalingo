@@ -1,6 +1,6 @@
 /* Tata bahasa: indeks 162 topik + halaman topik dengan latihan. */
 
-import { $, $$, el, html, raw, esc, toast } from '../ui.js';
+import { $, $$, el, html, raw, esc, toast, rumusHTML } from '../ui.js';
 import { ico } from '../icons.js';
 import { state, recordQuiz, toggleSave, isSaved } from '../state.js';
 import { say } from '../speech.js';
@@ -193,7 +193,7 @@ export function renderTopicBody(g, code = 'en') {
 
     <div class="lesson-card lc--rumus">
       ${raw(kepala('grammar', 'Rumus'))}
-      <div class="formula">${esc(g.form)}</div>
+      ${raw(rumusHTML(g.form))}
     </div>
 
     ${raw(g.notes?.length ? `<div class="lesson-card lc--catatan">
