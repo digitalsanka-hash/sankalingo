@@ -34,6 +34,12 @@ const simpanSesi = s => localStorage.setItem(KUNCI_SESI, JSON.stringify(s));
 export const masukSebagai = () => sesi()?.user?.email || null;
 
 /* ── Pemanggil REST ───────────────────────────────────────────── */
+/* Diekspor supaya js/lisensi.js bisa memakai kembali penyegaran token,
+   penerjemahan galat, dan penyusunan alamat yang sama. Menulis fetch
+   sendiri di sana berarti menyalin ketiganya — dan yang tersalin
+   biasanya cuma dua. */
+export async function panggilAwan(jalur, opsi) { return panggil(jalur, opsi); }
+
 async function panggil(jalur, { metode = 'GET', badan, pakaiToken = true, tambahan = {} } = {}) {
   if (!awanSiap()) throw new Error('Penyelarasan awan belum dikonfigurasi.');
   const kepala = {

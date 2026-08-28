@@ -186,6 +186,25 @@ const waktuLalu = t => {
   return `${Math.round(d / 86400)} hari lalu`;
 };
 
+/* Kartu admin hanya muncul untuk pemilik. Tidak digabung ke menu
+   samping karena menu dibangun serentak sementara profil harus diambil
+   dari jaringan; menunggu jaringan cuma untuk menggambar satu tautan
+   akan menunda seluruh menu. */
+async function isiKartuAdmin() {
+  const kotak = $('#kartuAdmin');
+  if (!kotak || !Awan.awanSiap() || !Awan.masukSebagai()) return;
+  let p = null;
+  try { p = await (await import('../lisensi.js')).profil(); } catch { return; }
+  if (!p?.admin) return;
+  kotak.innerHTML = `
+  <div class="card" style="margin-top:var(--s-4)">
+    <div class="card__title">Panel admin</div>
+    <p class="small soft" style="margin:.4rem 0 1rem">
+      Cetak kode akses, tandai kode yang sudah dikirim, dan atur masa aktif pembeli.</p>
+    <a class="btn btn--primary" href="#/admin">Buka panel admin</a>
+  </div>`;
+}
+
 export function renderSettings() {
   const s = state();
   loadVoices().then(() => { const sel = $('#voiceSel'); if (sel) fillVoices(sel); });
@@ -278,6 +297,7 @@ export function renderSettings() {
   </div>
 
   ${raw(kartuAwan())}
+  <div id="kartuAdmin"></div>
 
   <div class="card" style="margin-top:var(--s-4)">
     <div class="card__title">Data</div>
@@ -331,6 +351,7 @@ export function renderSettings() {
 
   pasangKendaliKenyamanan();
   gambarPenyimpanan();
+  isiKartuAdmin();
 
 
   /* daftar suara per bahasa */

@@ -36,6 +36,7 @@ import * as LP from './views/langpages.js';
 import * as LC from './views/langcourse.js';
 import * as Pandu from './views/panduan.js';
 import * as Audit from './views/auditsuara.js';
+import * as Adm from './views/admin.js';
 import * as MockL from './views/mocklang.js';
 import * as Tense from './views/tenses.js';
 import { mulaiPandu, sudahDipandu } from './views/onboard.js';
@@ -70,7 +71,8 @@ const ROUTES_EN = [
   [/^kemajuan$/,                  () => Acct.renderStats()],
   [/^pengaturan$/,                () => Acct.renderSettings()],
   [/^panduan$/,                   () => Pandu.renderPanduan()],
-  [/^suara$/,                     () => Audit.renderAuditSuara()]
+  [/^suara$/,                     () => Audit.renderAuditSuara()],
+  [/^admin$/,                     () => Adm.renderAdmin()]
 ];
 
 /* ── Rute bahasa lain (satu tabel, dipakai kedelapan bahasa) ──── */
@@ -101,7 +103,8 @@ const ROUTES_LANG = [
   [/^kemajuan$/,          () => Acct.renderStats()],
   [/^pengaturan$/,        () => Acct.renderSettings()],
   [/^panduan$/,           () => Pandu.renderPanduan()],
-  [/^suara$/,             () => Audit.renderAuditSuara()]
+  [/^suara$/,             () => Audit.renderAuditSuara()],
+  [/^admin$/,             () => Adm.renderAdmin()]
 ];
 
 /* Kanji hanya ada di bahasa Jepang. Datanya 105 butir, jadi berkasnya
@@ -126,7 +129,7 @@ const LEGACY = {
   placement: 'penempatan', tricks: 'trik', stats: 'kemajuan', settings: 'pengaturan',
   grammar: 'grammar', level: 'level', unit: 'unit', lesson: 'lesson',
   pengaturan: 'pengaturan', panduan: 'panduan', kemajuan: 'kemajuan', help: 'panduan',
-  suara: 'suara'
+  suara: 'suara', admin: 'admin'
 };
 
 const main = () => $('#main');

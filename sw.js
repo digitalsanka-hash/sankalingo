@@ -5,7 +5,7 @@
    · berkas sendiri → coba jaringan (batas 4 detik) → simpanan
    · huruf Google   → simpanan dulu (tidak pernah berubah)                */
 
-const VERSI = 'fasih-v21';
+const VERSI = 'fasih-v22';
 const SHELL = `${VERSI}-shell`;
 const ISI   = `${VERSI}-isi`;
 const LUAR  = `${VERSI}-luar`;
@@ -60,12 +60,12 @@ const KERANGKA = [
   './data/exam-toeic-bank.js',
   './data/grammar-a1.js',
   './data/grammar-a2.js',
-  './data/grammar-b1.js',
-  './data/grammar-b2.js',
-  './data/grammar-c.js',
   './data/grammar-ajar-a.js',
   './data/grammar-ajar-b.js',
   './data/grammar-ajar-c.js',
+  './data/grammar-b1.js',
+  './data/grammar-b2.js',
+  './data/grammar-c.js',
   './data/grammar-gabung.js',
   './data/grammar-isi-ab.js',
   './data/grammar-isi-c.js',
@@ -97,6 +97,7 @@ const KERANGKA = [
   './js/data.js',
   './js/icons.js',
   './js/langctx.js',
+  './js/lisensi.js',
   './js/luring.js',
   './js/mockgen.js',
   './js/quiz.js',
@@ -107,6 +108,7 @@ const KERANGKA = [
   './js/teks.js',
   './js/translit.js',
   './js/ui.js',
+  './js/views/admin.js',
   './js/views/auditsuara.js',
   './js/views/curriculum.js',
   './js/views/dashboard.js',
