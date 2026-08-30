@@ -5,7 +5,7 @@
    · berkas sendiri → coba jaringan (batas 4 detik) → simpanan
    · huruf Google   → simpanan dulu (tidak pernah berubah)                */
 
-const VERSI = 'fasih-v24';
+const VERSI = 'fasih-v25';
 const SHELL = `${VERSI}-shell`;
 const ISI   = `${VERSI}-isi`;
 const LUAR  = `${VERSI}-luar`;
@@ -96,6 +96,7 @@ const KERANGKA = [
   './js/course.js',
   './js/data.js',
   './js/icons.js',
+  './js/kamus.js',
   './js/langctx.js',
   './js/lisensi.js',
   './js/luring.js',
@@ -114,6 +115,7 @@ const KERANGKA = [
   './js/views/dashboard.js',
   './js/views/exams.js',
   './js/views/grammar.js',
+  './js/views/kamus.js',
   './js/views/lang.js',
   './js/views/langcourse.js',
   './js/views/langpages.js',

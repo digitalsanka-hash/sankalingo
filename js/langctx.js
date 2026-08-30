@@ -90,6 +90,7 @@ const NAV_EN = [
   { to: 'grammar', ico: 'grammar', label: 'Tata Bahasa' },
   { to: 'tenses', ico: 'clock', label: '12 Tenses' },
   { to: 'kosakata', ico: 'cards', label: 'Kosakata' },
+  { to: 'kamus', ico: 'book', label: 'Kamus' },
   { to: 'kartu', ico: 'repeat', label: 'Kartu Hafalan', badge: 'due' },
   { group: 'Keterampilan' },
   { to: 'menyimak', ico: 'headphones', label: 'Menyimak' },
@@ -126,6 +127,7 @@ const navOther = (L, meta) => {
   nav.push(
     { to: 'grammar', ico: 'grammar', label: 'Tata Bahasa' },
     { to: 'kosakata', ico: 'cards', label: 'Kosakata' },
+  { to: 'kamus', ico: 'book', label: 'Kamus' },
     { to: 'kartu', ico: 'repeat', label: 'Kartu Hafalan', badge: 'due' },
     { group: 'Keterampilan' },
     { to: 'frasa', ico: 'quote', label: 'Frasa & Angka' },

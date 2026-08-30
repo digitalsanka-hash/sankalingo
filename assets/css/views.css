@@ -803,3 +803,52 @@
   .ajar__num { width: 28px; height: 28px; }
   .ajar__step:not(:last-child)::before { left: 13px; top: 34px; }
 }
+
+/* ── Kamus ────────────────────────────────────────────────────────
+   Tiap entri adalah kartu kecil yang berdiri sendiri: lema besar di
+   atas, lalu arti, bentuk kata, contoh kalimat, dan frasa. Urutannya
+   sengaja begitu — mata mencari lemanya dulu, baru membaca ke bawah. */
+.kamus-bar { display: grid; gap: var(--s-3); margin-bottom: var(--s-4); }
+.kamus-bar .input { max-width: 420px; }
+
+.kamus-list {
+  display: grid; gap: var(--s-3);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+.kamus-item {
+  background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: var(--r-lg); padding: var(--s-4);
+  display: grid; gap: var(--s-3); align-content: start;
+}
+.kamus-item__kepala {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-3); flex-wrap: wrap;
+}
+.kamus-item__k { font-size: var(--fs-xl); font-weight: 800; letter-spacing: -.01em; }
+.kamus-item__r { color: var(--info); margin-left: .4rem; }
+.kamus-item__a { margin: 0; color: var(--ok); font-size: var(--fs-md); font-weight: 600; }
+
+/* Bentuk kata (V1/V2/V3, artikel+jamak, aspek) — dibariskan supaya
+   pola perubahannya terbaca sekali lihat, bukan dieja satu per satu. */
+.kamus-bentuk {
+  display: flex; flex-wrap: wrap; gap: var(--s-3);
+  padding: var(--s-3); border-radius: var(--r-sm);
+  background: var(--surface-3); border: 1px solid var(--line);
+}
+.kamus-bentuk__i { display: grid; gap: 1px; min-width: 0; }
+.kamus-bentuk__i b { font-family: var(--font-mono); font-size: var(--fs-sm); }
+
+.kamus-contoh, .kamus-frasa { display: grid; gap: 2px; }
+.kamus-contoh {
+  padding-left: var(--s-3); border-left: 3px solid var(--info);
+}
+.kamus-frasa {
+  padding-left: var(--s-3); border-left: 3px solid var(--warn);
+}
+.kamus-contoh__t, .kamus-frasa__t { font-weight: 600; }
+.kamus-contoh__id, .kamus-frasa__id { font-size: var(--fs-sm); color: var(--text-mute); font-style: italic; }
+.kamus-contoh .mono { color: var(--info); }
+
+@media (max-width: 640px) {
+  .kamus-list { grid-template-columns: minmax(0, 1fr); }
+}
