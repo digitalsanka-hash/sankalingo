@@ -5,7 +5,7 @@
    · berkas sendiri → coba jaringan (batas 4 detik) → simpanan
    · huruf Google   → simpanan dulu (tidak pernah berubah)                */
 
-const VERSI = 'fasih-v25';
+const VERSI = 'fasih-v26';
 const SHELL = `${VERSI}-shell`;
 const ISI   = `${VERSI}-isi`;
 const LUAR  = `${VERSI}-luar`;

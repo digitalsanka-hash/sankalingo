@@ -138,9 +138,14 @@ for (const f of berkas) {
 
     if (e.p && !KELAS.has(e.p)) masalah.push(`${di}: kelas kata '${e.p}' tidak dikenal`);
 
-    const kunci = String(e.k ?? '').trim().toLowerCase();
-    if (kunci) {
-      if (lihat.has(kunci)) masalah.push(`${di}: lema kembar dengan indeks ${lihat.get(kunci)}`);
+    /* Kunci kembar memakai lema DAN kelas katanya. Di Jerman kata benda
+       ditulis berhuruf besar, sehingga essen (kata kerja) dan das Essen
+       (kata benda) adalah dua kata berbeda yang kebetulan sama ejaannya;
+       begitu juga morgen (besok) dan der Morgen (pagi). Membandingkan
+       lema saja menuduh pasangan sah itu sebagai duplikat. */
+    const kunci = `${String(e.k ?? '').trim().toLowerCase()}|${e.p ?? ''}`;
+    if (String(e.k ?? '').trim()) {
+      if (lihat.has(kunci)) masalah.push(`${di}: lema kembar (kelas kata sama) dengan indeks ${lihat.get(kunci)}`);
       else lihat.set(kunci, i);
     }
 
@@ -169,8 +174,12 @@ for (const f of berkas) {
     if (e.c && e.f && longgar(e.c) === longgar(e.f))
       masalah.push(`${di}: contoh dan frasa sama persis`);
 
+    /* Peringatan, bukan kesalahan: kata serapan memang berarti dirinya
+       sendiri dalam bahasa Indonesia — Musik, Film, Taxi, Hotel, Radio.
+       Menolaknya memaksa penulisan arti yang dipaksakan dan justru
+       kurang tepat. */
     if (e.a && e.k && longgar(e.a) === longgar(e.k))
-      masalah.push(`${di}: arti menyalin lemanya`);
+      peringatan.push(`${di}: arti sama dengan lemanya (kata serapan?)`);
 
     if (e.b !== undefined) {
       if (!Array.isArray(e.b)) masalah.push(`${di}: 'b' bukan larik`);

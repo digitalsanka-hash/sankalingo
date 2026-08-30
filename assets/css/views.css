@@ -852,3 +852,13 @@
 @media (max-width: 640px) {
   .kamus-list { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Lema, romanisasi, dan tombol suara harus satu baris. .speak-btn punya
+   margin-left:auto dari gaya kosakata; di sini itu mendorongnya sampai
+   turun baris sendiri di bawah lemanya. */
+.kamus-item__kepala > div {
+  display: flex; align-items: baseline; gap: .4rem;
+  flex-wrap: wrap; min-width: 0;
+}
+.kamus-item__kepala .speak-btn { margin-left: 0; align-self: center; }
+.kamus-contoh .speak-btn, .kamus-frasa .speak-btn { margin-left: .35rem; }
