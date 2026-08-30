@@ -190,6 +190,84 @@ const waktuLalu = t => {
    samping karena menu dibangun serentak sementara profil harus diambil
    dari jaringan; menunggu jaringan cuma untuk menggambar satu tautan
    akan menunda seluruh menu. */
+/* Kartu lisensi: tempat pembeli menempel kode aksesnya.
+
+   Diletakkan tepat di bawah kartu penyelarasan karena urutannya memang
+   begitu — masuk dulu dengan email, baru kodenya bisa ditempelkan.
+   Hak akses menempel pada AKUN, bukan pada kode, jadi tanpa akun tidak
+   ada tempat untuk menaruhnya. */
+async function isiKartuLisensi() {
+  const kotak = $('#kartuLisensi');
+  if (!kotak || !Awan.awanSiap()) return;
+
+  const gambar = p => {
+    if (!Awan.masukSebagai()) {
+      kotak.innerHTML = `
+      <div class="card" style="margin-top:var(--s-4)">
+        <div class="card__title">Kode akses</div>
+        <p class="small soft" style="margin-top:.4rem">
+          Sudah beli SankaLingo GO? Masuk dulu dengan emailmu di kotak di atas,
+          lalu kode aksesnya bisa ditempelkan di sini.</p>
+      </div>`;
+      return;
+    }
+    if (p?.kode) {
+      const sampai = p.akses_sampai
+        ? `berlaku sampai ${esc(new Date(p.akses_sampai).toLocaleDateString('id-ID',
+            { day: 'numeric', month: 'long', year: 'numeric' }))}`
+        : 'berlaku selamanya';
+      kotak.innerHTML = `
+      <div class="card" style="margin-top:var(--s-4)">
+        <div class="card__title">Kode akses</div>
+        <p class="small soft" style="margin-top:.4rem">
+          <span class="badge badge--ok">aktif</span>
+          Kode <b>${esc(p.kode)}</b> sudah ditebus — ${sampai}.</p>
+      </div>`;
+      return;
+    }
+    kotak.innerHTML = `
+    <div class="card" style="margin-top:var(--s-4)">
+      <div class="card__title">Kode akses</div>
+      <p class="small soft" style="margin:.4rem 0 1rem">
+        Tempel kode yang kamu terima setelah membeli. Sekali ditebus, kodenya
+        menempel pada akun ini selamanya.</p>
+      <div class="row">
+        <input type="text" id="lisKode" class="inp" placeholder="SL-XXXX-XXXX"
+               autocomplete="off" spellcheck="false"
+               style="flex:1;min-width:11rem;text-transform:uppercase" />
+        <button class="btn btn--primary" id="lisTebus">Aktifkan</button>
+      </div>
+      <div id="lisPesan" class="small" style="margin-top:.6rem"></div>
+    </div>`;
+
+    const tombol = $('#lisTebus'), isian = $('#lisKode'), pesan = $('#lisPesan');
+    const kirim = async () => {
+      const kode = isian.value.trim();
+      if (!kode) { pesan.textContent = 'Kodenya belum diisi.'; return; }
+      tombol.disabled = true;
+      pesan.textContent = 'Memeriksa…';
+      try {
+        const baru = await (await import('../lisensi.js')).tebus(kode);
+        toast('Akses aktif. Selamat belajar!');
+        gambar(baru);
+      } catch (e) {
+        /* Pesan dari server dipakai apa adanya: ia sudah membedakan
+           "kode tidak sah" dari "sesi kedaluwarsa", dan menggantinya
+           dengan satu pesan umum justru menyembunyikan bedanya. */
+        pesan.textContent = e.message;
+        pesan.style.color = 'var(--bad)';
+        tombol.disabled = false;
+      }
+    };
+    tombol.onclick = kirim;
+    isian.onkeydown = e => { if (e.key === 'Enter') kirim(); };
+  };
+
+  let p = null;
+  try { p = await (await import('../lisensi.js')).profil(); } catch { /* biar null */ }
+  gambar(p);
+}
+
 async function isiKartuAdmin() {
   const kotak = $('#kartuAdmin');
   if (!kotak || !Awan.awanSiap() || !Awan.masukSebagai()) return;
@@ -297,6 +375,7 @@ export function renderSettings() {
   </div>
 
   ${raw(kartuAwan())}
+  <div id="kartuLisensi"></div>
   <div id="kartuAdmin"></div>
 
   <div class="card" style="margin-top:var(--s-4)">
@@ -351,6 +430,7 @@ export function renderSettings() {
 
   pasangKendaliKenyamanan();
   gambarPenyimpanan();
+  isiKartuLisensi();
   isiKartuAdmin();
 
 
