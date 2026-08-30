@@ -127,6 +127,55 @@ export async function verifikasiKode(email, kode) {
   return hasil;
 }
 
+/* ── Masuk lewat tautan email ──────────────────────────────────────
+
+   Aplikasi ini meminta kode enam angka, dan Supabase memang bisa
+   mengirimkannya — tapi hanya kalau templat emailnya memuat {{ .Token }}.
+   Di paket Free tanpa SMTP sendiri, templat itu TERKUNCI: yang terkirim
+   selalu templat bawaan yang cuma berisi tautan.
+
+   Jadi kedua jalan harus dilayani. Kalau yang datang tautan, Supabase
+   mengembalikan pengguna ke Site URL dengan sesinya tertempel di hash:
+
+     https://sankalingo.vercel.app/#access_token=...&refresh_token=...
+
+   Fungsi ini menangkap hash itu sebelum router sempat membacanya —
+   kalau tidak, router melihat rute tak dikenal lalu melempar pengguna ke
+   beranda, dan sesinya hilang begitu saja padahal sudah sah.
+
+   Sesudah sesi tersimpan, hash dibersihkan lewat replaceState supaya
+   tokennya tidak tertinggal di kotak alamat, tidak masuk riwayat
+   peramban, dan tidak ikut terkirim kalau pengguna membagikan URL-nya. */
+export function tangkapTautanMasuk() {
+  const h = location.hash || '';
+  if (!h.includes('access_token=')) return false;
+
+  const p = new URLSearchParams(h.replace(/^#\/?/, ''));
+  const access_token = p.get('access_token');
+  const refresh_token = p.get('refresh_token');
+  if (!access_token) return false;
+
+  /* Payload JWT dibaca sekadar untuk mengambil id dan email pengguna,
+     BUKAN untuk memeriksa keabsahannya. Yang memeriksa tanda tangan
+     adalah Supabase di tiap permintaan; token palsu tidak akan lolos di
+     sana, jadi tidak ada gunanya berpura-pura memeriksanya di sini. */
+  let user = null;
+  try {
+    const badan = JSON.parse(atob(access_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    user = { id: badan.sub, email: badan.email };
+  } catch { /* biarkan null; sinkron akan gagal dengan pesan yang jelas */ }
+
+  simpanSesi({
+    access_token, refresh_token,
+    expires_at: Number(p.get('expires_at')) ||
+                Math.floor(Date.now() / 1000) + (Number(p.get('expires_in')) || 3600),
+    user
+  });
+
+  history.replaceState(null, '', location.pathname + location.search + '#/');
+  return true;
+}
+
 export function keluar() {
   localStorage.removeItem(KUNCI_SESI);
   localStorage.removeItem(KUNCI_SINKRON);

@@ -12,7 +12,7 @@ import { comfort, setComfort, terapkan as terapkanComfort,
 import { pasangPanelCepat, pasangSpandukLuring, pasangAjakanInstal,
          pasangPenutupTip, gambarTabbar, setTabbarDue } from './comfortui.js';
 import { daftarkan as daftarkanLuring } from './luring.js';
-import { pasangOtomatis as pasangSinkronAwan } from './awan.js';
+import { pasangOtomatis as pasangSinkronAwan, tangkapTautanMasuk } from './awan.js';
 import { dueIds } from './srs.js';
 import { loadVoices, stopSpeaking, say, ttsReady, englishVoices } from './speech.js';
 import { ucap as ucapLang, stop as stopUcap, ready as suaraSiap } from './voice.js';
@@ -577,6 +577,9 @@ function boot() {
   });
 
   onChange(() => paintChromeFor(currentLang(), cachedLang(currentLang())));
+  /* Harus SEBELUM route(): kalau pengguna baru kembali dari tautan
+     masuk, hash-nya berisi token, bukan rute. */
+  tangkapTautanMasuk();
   window.addEventListener('hashchange', route);
   loadVoices();
   suaraSiap();          /* daftar suara dimuat lebih awal supaya klik pertama tidak menunggu */
