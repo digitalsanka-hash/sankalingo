@@ -141,3 +141,119 @@ dipindahkan ke Supabase dan hanya dikirim ke pembeli yang sudah masuk, lalu
 disimpan di perangkat supaya tetap bisa dipakai luring. Selama itu belum
 dikerjakan, gerbangnya bersifat lunak: ia menghalangi orang kebanyakan, bukan
 orang yang mau membuka DevTools.
+
+
+---
+
+# Kirim kode otomatis: Scalev → Resend
+
+Sesudah ini, pembeli yang membayar di Scalev menerima kodenya sendiri
+lewat email dalam hitungan detik. Kamu tidak membuka apa pun.
+
+Urutannya penting: domain dulu (paling lama menunggu), baru sisanya.
+
+## 1. Domain pengirim
+
+Resend hanya mengizinkan `onboarding@resend.dev` mengirim ke alamat
+pemilik akun. Untuk mengirim ke pembeli, kamu butuh domain sendiri.
+
+- Sudah punya domain? Pakai subdomain saja, misal `mail.domainmu.com`.
+  Memakai subdomain menjaga reputasi domain utama kalau ada masalah
+  pengiriman.
+- Belum punya? Beli yang murah (~Rp150–200 ribu/tahun) di Niagahoster,
+  Domainesia, atau Cloudflare Registrar.
+
+## 2. Akun Resend
+
+1. Daftar di https://resend.com (paket gratis: 3.000 email/bulan,
+   100/hari — cukup untuk ratusan pembeli)
+2. **Domains → Add Domain** → masukkan `mail.domainmu.com`
+3. Resend menampilkan beberapa data DNS (MX, SPF berupa TXT, dan
+   DKIM). Salin semuanya ke pengaturan DNS domainmu.
+4. Tunggu sampai statusnya **Verified** — biasanya 5–30 menit.
+5. **API Keys → Create API Key** → hak akses cukup *Sending access*.
+   Salin kuncinya sekarang; ia hanya ditampilkan sekali.
+
+Jangan tempel kunci itu ke berkas mana pun di repositori ini. Ia
+dipasang sebagai secret di langkah 4.
+
+## 3. Tabel penerima pesanan
+
+SQL Editor → tempel seluruh isi `supabase/webhook.sql` → Run.
+
+Isinya dua hal: tabel `pesanan_scalev` (riwayat + penjaga anti-kembar)
+dan fungsi `ambil_kode_siap` yang mengunci satu kode agar dua pesanan
+yang tiba bersamaan tidak memperebutkan kode yang sama.
+
+## 4. Rahasia
+
+```bash
+supabase secrets set SCALEV_WEBHOOK_SIGNING_SECRET=<isi dari Scalev, langkah 6>
+supabase secrets set RESEND_API_KEY=<kunci dari langkah 2>
+supabase secrets set RESEND_FROM="SankaLingo GO <kode@mail.domainmu.com>"
+supabase secrets set APP_URL=https://sankalingo.vercel.app
+supabase secrets set ADMIN_EMAIL=<emailmu>
+```
+
+`ADMIN_EMAIL` dipakai untuk satu hal saja: memberitahumu kalau ada
+pesanan masuk sementara stok kode habis — uang sudah diterima tetapi
+barangnya belum berangkat, dan itu harus kamu ketahui menit itu juga.
+
+Punya produk lain di Scalev yang sama? Tambahkan saringan:
+
+```bash
+supabase secrets set SCALEV_PRODUK="SankaLingo"
+```
+
+## 5. Pasang fungsinya
+
+```bash
+supabase functions deploy webhook-scalev --no-verify-jwt
+```
+
+`--no-verify-jwt` wajib: Scalev tidak mungkin membawa JWT-mu. Yang
+menjaga endpoint ini bukan JWT melainkan tanda tangan HMAC di langkah
+berikutnya — dan tanpa secret terpasang, fungsinya menolak semua
+permintaan dengan 503.
+
+## 6. Daftarkan webhook di Scalev
+
+URL:
+
+```
+https://zedamoledhrxsmgtpbvv.supabase.co/functions/v1/webhook-scalev
+```
+
+Event: **`payment.received`** — inilah yang menyala saat status
+pembayaran menjadi `paid` atau `settled`. Jangan pakai `order.created`:
+pesanan yang dibuat belum tentu dibayar.
+
+Scalev memberi *signing secret*. Salin, lalu pasang sebagai
+`SCALEV_WEBHOOK_SIGNING_SECRET` (langkah 4) dan deploy ulang.
+
+## 7. Uji
+
+Pastikan stok ada:
+
+```sql
+select count(*) from public.kode_lisensi where dipesan_untuk is null and terpakai < maks_pakai;
+```
+
+Lalu beli produkmu sendiri dengan nominal terkecil, pakai email lain.
+Dalam hitungan detik email kode harus masuk. Periksa jejaknya:
+
+```sql
+select order_id, email, kode, status, catatan, dibuat
+from public.pesanan_scalev order by dibuat desc limit 10;
+```
+
+Arti statusnya:
+
+| status | artinya |
+|---|---|
+| `terkirim` | beres, email berangkat |
+| `stok_habis` | pesanan masuk saat tidak ada kode siap — cetak kode lalu kirim manual |
+| `gagal_kirim` | kode sudah dipesan atas nama pembeli tetapi Resend menolak; `catatan` berisi sebabnya |
+
+`gagal_kirim` akan sembuh sendiri kalau Scalev mengirim ulang — kode
+yang sama dipakai lagi, tidak membakar kode kedua.
