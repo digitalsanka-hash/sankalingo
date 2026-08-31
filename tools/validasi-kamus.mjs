@@ -38,6 +38,12 @@ const KELAS = new Set(['n', 'v', 'adj', 'adv', 'pron', 'prep', 'conj',
 
 /* Bahasa yang lemanya tidak beraksara Latin wajib punya romanisasi. */
 const PERLU_ROM = new Set(['ko', 'ja', 'zh', 'ar', 'ru']);
+/* Aksara asli tiap bahasa - dipakai memeriksa bahwa romanisasi bentuk
+   benar-benar sudah dialihaksarakan, bukan disalin mentah. */
+const AKSARA = {
+  ko: /[가-힣]/, ja: /[぀-ヿ一-鿿]/,
+  zh: /[一-鿿]/, ru: /[Ѐ-ӿ]/, ar: /[؀-ۿ]/,
+};
 
 const WAJIB = ['k', 'p', 'a', 'c', 'ca', 'f', 'fa'];
 
@@ -189,6 +195,26 @@ for (const f of berkas) {
           masalah.push(`${di}: bentuk ada ${e.b.length}, bentukLabel.${e.p} minta ${harap.length}`);
         if (e.b.some(x => !String(x ?? '').trim()))
           masalah.push(`${di}: ada bentuk kosong`);
+
+        /* Tiap bentuk harus bisa dibunyikan. Untuk bahasa beraksara
+           sendiri itu berarti punya romanisasi 'br' sebagai cadangan:
+           tanpa itu tombol suaranya diam di perangkat yang tak punya
+           suara TTS bahasa tersebut. Isinya boleh kosong hanya untuk
+           kolom yang memang bukan kata (label jenis pada kata benda
+           Rusia). */
+        if (perluRom && kode !== 'ar') {
+          if (!Array.isArray(e.br))
+            masalah.push(`${di}: 'b' ada tapi 'br' (romanisasi bentuk) tidak`);
+          else if (e.br.length !== e.b.length)
+            masalah.push(`${di}: 'br' ada ${e.br.length}, 'b' ada ${e.b.length}`);
+          else e.b.forEach((v, i) => {
+            const beraksara = AKSARA[kode]?.test(v);
+            if (beraksara && !String(e.br[i] ?? '').trim())
+              masalah.push(`${di}: bentuk '${v}' tanpa romanisasi`);
+            if (beraksara && AKSARA[kode].test(String(e.br[i] ?? '')))
+              masalah.push(`${di}: romanisasi bentuk '${v}' masih beraksara asli`);
+          });
+        }
       }
     }
 

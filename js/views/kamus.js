@@ -77,12 +77,35 @@ export async function renderKamus(code) {
 
   const label = K.bentukLabel || {};
 
+  /* Romanisasi satu bentuk kata. Sumbernya tiga lapis, dari yang paling
+     tepat: `br` yang ditulis khusus per bentuk, lalu `r` lema bila
+     bentuknya memang sama dengan lemanya, lalu kosong — dan yang kosong
+     ditalangi keLatin() di lapisan suara. Bentuk pertama TIDAK selalu
+     sama dengan lema: di Mandarin kolom bentuk berisi kata bantu
+     bilangan, bukan kata itu sendiri. Karena itu dicocokkan, bukan
+     diasumsikan dari nomor urutnya. */
+  const romBentuk = (e, v, i) => e.br?.[i] || (v === e.k ? e.r || '' : '');
+
+  /* Tidak semua isi kolom bentuk adalah kata. Kata benda Rusia memakai
+     kolom ketiga untuk LABEL jenisnya ('netral'), dan label bukan
+     sesuatu yang bisa dilafalkan - tombolnya hanya akan membacakan kata
+     Indonesia dengan suara Rusia. Jadi untuk bahasa beraksara sendiri,
+     tombol dipasang hanya bila bentuknya memang ditulis dengan aksara
+     itu. */
+  const AKSARA = {
+    ko: /[가-힣]/, ja: /[぀-ヿ一-鿿]/,
+    zh: /[一-鿿]/, ru: /[Ѐ-ӿ]/, ar: /[؀-ۿ]/,
+  };
+  const bisaDiucap = v => !AKSARA[code] || AKSARA[code].test(v);
+
   const kartu = e => {
     const bentuk = Array.isArray(e.b) && e.b.length
       ? `<div class="kamus-bentuk">
            ${e.b.map((v, i) => `<span class="kamus-bentuk__i">
              <span class="xs muted">${esc(label[e.p]?.[i] || `bentuk ${i + 1}`)}</span>
-             <b>${esc(v)}</b></span>`).join('')}
+             <span class="kamus-bentuk__v"><b>${esc(v)}</b>${bisaDiucap(v) ? suara(v, romBentuk(e, v, i)) : ''}</span>
+             ${e.br?.[i] ? `<span class="mono xs kamus-bentuk__r">${esc(e.br[i])}</span>` : ''}
+           </span>`).join('')}
          </div>`
       : '';
     return `<article class="kamus-item">

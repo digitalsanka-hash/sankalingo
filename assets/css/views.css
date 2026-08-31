@@ -837,6 +837,11 @@
 }
 .kamus-bentuk__i { display: grid; gap: 1px; min-width: 0; }
 .kamus-bentuk__i b { font-family: var(--font-mono); font-size: var(--fs-sm); }
+/* Tombol suara duduk sebaris dengan bentuknya, bukan di bawahnya:
+   satu kartu memuat sampai empat bentuk, dan menumpuknya membuat
+   kolomnya setinggi kartu contoh. */
+.kamus-bentuk__v { display: flex; align-items: center; gap: var(--s-1); }
+.kamus-bentuk__r { color: var(--info); opacity: .85; }
 
 .kamus-contoh, .kamus-frasa { display: grid; gap: 2px; }
 .kamus-contoh {
