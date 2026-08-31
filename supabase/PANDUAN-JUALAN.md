@@ -52,6 +52,27 @@ update public.profil set admin = true where email = 'email-kamu@contoh.com';
 Tidak ada cara lain menjadi admin. Kolom `admin` tidak bisa ditulis dari
 peramban — kebijakan RLS-nya hanya mengizinkan `select`.
 
+## 2b. Pasang fungsi pendaftaran
+
+Pendaftaran memakai Edge Function ketiga. Tanpa ini, tab **Daftar**
+akan menjawab "layanan pendaftaran sedang tidak menjawab".
+
+```bash
+supabase functions deploy daftar-lisensi --no-verify-jwt
+```
+
+`--no-verify-jwt` wajib: fungsi inilah satu-satunya yang dipanggil oleh
+orang yang belum punya akun, jadi ia tidak mungkin membawa JWT. Urutan
+kerjanya menjaga diri sendiri — kode diperiksa dulu, akun dibuat
+belakangan, dan kalau penukaran kode gagal akun yang baru dibuat
+dihapus lagi.
+
+Sekalian matikan konfirmasi email di dasbor (Authentication →
+Providers → Email → Confirm email = off) supaya pembeli tidak disuruh
+membuka email hanya untuk masuk. Fungsi pendaftaran sudah menandai
+email terkonfirmasi, tetapi orang yang mengganti kata sandi lewat
+pemulihan tetap melewati jalur email biasa.
+
 ## 3b. Nyalakan kotak saran
 
 Sekali jalan, di SQL Editor yang sama:

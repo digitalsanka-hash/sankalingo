@@ -3,6 +3,16 @@
    Aplikasi tidak terbuka sebelum pemakainya masuk DAN punya akses.
    Layar ini yang berdiri di depannya.
 
+   Alurnya sengaja tidak simetris, karena dua peristiwa ini memang
+   berbeda beratnya:
+
+     DAFTAR  sekali seumur akun: email + kata sandi + KODE AKSES.
+             Ketiganya sekaligus, dikerjakan Edge Function
+             daftar-lisensi supaya kode diperiksa sebelum akun dibuat
+             dan emailnya langsung dianggap terkonfirmasi.
+     MASUK   berkali-kali: cukup email + kata sandi. Tidak ada kode
+             yang perlu dibuka di email tiap kali mau belajar.
+
    Yang perlu diketahui sebelum mengubah apa pun di sini:
 
    1. GERBANG INI SETINGKAT TAMPILAN, BUKAN KUNCI SEBENARNYA. Isi
@@ -17,15 +27,15 @@
       mati catatan itulah yang dipercaya. Kalau tidak, orang yang sudah
       membayar akan terkunci justru saat paling ingin belajar.
 
-   3. MASUK DAN DAFTAR BERTEMU DI UJUNG YANG SAMA. Supabase membuat
-      akun begitu kode OTP dikirim, jadi tidak ada "pendaftaran"
-      terpisah secara teknis. Bedanya cuma satu: pendaftar wajib
-      menempel kode akses, sedangkan yang sudah pernah menebus
-      langsung masuk. Dua tab hanya membedakan kalimat yang dibaca
-      orang, bukan jalur yang dijalani mesin.                         */
+   3. KATA SANDI TIDAK PERNAH DISIMPAN. Ia hanya lewat: dari kotak isian
+      langsung ke Supabase lewat HTTPS. Yang tersimpan di perangkat
+      cuma token sesi, sama seperti sebelumnya.                        */
 
 import { esc, toast } from './ui.js';
-import { awanSiap, kirimKode, verifikasiKode, sesi, keluar } from './awan.js';
+import {
+  awanSiap, sesi, keluar,
+  masukSandi, daftarDenganKode, kirimResetSandi, gantiSandi,
+} from './awan.js';
 import { profil, aksesAktif, adalahAdmin, tebus, lupakanProfil } from './lisensi.js';
 import { tautanBeli, tautanWa } from './jual-config.js';
 
@@ -96,7 +106,7 @@ async function periksaAkses() {
   return { boleh: false, alasan: 'belum-akses', profil: p };
 }
 
-/* ── Layar ────────────────────────────────────────────────────── */
+/* ── Potongan layar ───────────────────────────────────────────── */
 
 const tautanBantuan = () => {
   const beli = tautanBeli(), wa = tautanWa();
@@ -109,11 +119,70 @@ const tautanBantuan = () => {
     : `<p class="xs muted gerbang__beli">Kode akses diperoleh dari penjual.</p>`;
 };
 
-function gambar(mode, { pesanAwal = '' } = {}) {
-  const lama = document.getElementById('gerbang');
-  if (lama) lama.remove();
+/* Kotak sandi selalu berpasangan dengan tombol "lihat". Mengetik sandi
+   panjang di papan ketik ponsel tanpa bisa memeriksanya adalah sebab
+   paling sering orang gagal masuk padahal sandinya benar. */
+const kotakSandi = (id, label, petunjuk = '') => `
+  <label class="xs muted" for="${id}" style="display:block;margin-top:var(--s-3)">${esc(label)}</label>
+  <div class="gerbang__sandi">
+    <input id="${id}" class="input" type="password" autocomplete="current-password"
+           placeholder="••••••••" style="width:100%">
+    <button type="button" class="gerbang__lihat" data-lihat="${id}" aria-label="Tampilkan kata sandi">👁</button>
+  </div>
+  ${petunjuk ? `<p class="xs muted" style="margin:.35rem 0 0">${esc(petunjuk)}</p>` : ''}`;
 
-  const daftar = mode === 'daftar';
+const ISI = {
+  masuk: {
+    ajak: 'Masuk dengan email dan kata sandi yang kamu buat saat mendaftar.',
+    tombol: 'Masuk',
+    badan: `
+      <label class="xs muted" for="grbEmail">Email</label>
+      <input id="grbEmail" class="input" type="email" inputmode="email" autocomplete="email"
+             placeholder="nama@email.com" style="width:100%">
+      ${kotakSandi('grbSandi', 'Kata sandi')}
+      <button type="button" class="gerbang__tautan" data-ke="lupa">Lupa kata sandi?</button>`,
+  },
+  daftar: {
+    ajak: 'Daftar butuh <b>kode akses</b> yang kamu terima setelah membeli. Sesudah ini, masuk cukup pakai email dan kata sandi.',
+    tombol: 'Daftar & aktifkan',
+    badan: `
+      <label class="xs muted" for="grbEmail">Email</label>
+      <input id="grbEmail" class="input" type="email" inputmode="email" autocomplete="email"
+             placeholder="nama@email.com" style="width:100%">
+      ${kotakSandi('grbSandi', 'Buat kata sandi', 'Minimal 8 huruf. Catat baik-baik — ini yang dipakai tiap kali masuk.')}
+      <label class="xs muted" for="grbKode" style="display:block;margin-top:var(--s-3)">Kode akses</label>
+      <input id="grbKode" class="input" placeholder="SL-XXXX-XXXX" autocomplete="off"
+             spellcheck="false" style="width:100%;text-transform:uppercase">`,
+  },
+  lupa: {
+    ajak: 'Masukkan emailmu. Kami kirim tautan untuk membuat kata sandi baru.',
+    tombol: 'Kirim tautan pemulihan',
+    badan: `
+      <label class="xs muted" for="grbEmail">Email</label>
+      <input id="grbEmail" class="input" type="email" inputmode="email" autocomplete="email"
+             placeholder="nama@email.com" style="width:100%">
+      <button type="button" class="gerbang__tautan" data-ke="masuk">← Kembali ke halaman masuk</button>`,
+  },
+  sandiBaru: {
+    ajak: 'Tautannya sah. Sekarang buat kata sandi baru.',
+    tombol: 'Simpan kata sandi baru',
+    badan: kotakSandi('grbSandi', 'Kata sandi baru', 'Minimal 8 huruf.'),
+  },
+  akses: {
+    ajak: 'Akun ini belum punya akses. Tempel kode akses untuk mengaktifkannya.',
+    tombol: 'Aktifkan akses',
+    badan: `
+      <label class="xs muted" for="grbKode">Kode akses</label>
+      <input id="grbKode" class="input" placeholder="SL-XXXX-XXXX" autocomplete="off"
+             spellcheck="false" style="width:100%;text-transform:uppercase">`,
+  },
+};
+
+function gambar(mode, pesanAwal = '') {
+  document.getElementById('gerbang')?.remove();
+
+  const t = ISI[mode];
+  const berTab = mode === 'masuk' || mode === 'daftar';
   const wadah = document.createElement('div');
   wadah.id = 'gerbang';
   wadah.className = 'gerbang';
@@ -127,39 +196,17 @@ function gambar(mode, { pesanAwal = '' } = {}) {
         </div>
       </div>
 
-      <div class="gerbang__tab" role="tablist">
-        <button class="gerbang__tabbtn${daftar ? '' : ' is-on'}" data-mode="masuk" role="tab">Masuk</button>
-        <button class="gerbang__tabbtn${daftar ? ' is-on' : ''}" data-mode="daftar" role="tab">Daftar</button>
-      </div>
+      ${berTab ? `<div class="gerbang__tab" role="tablist">
+        <button class="gerbang__tabbtn${mode === 'masuk' ? ' is-on' : ''}" data-ke="masuk" role="tab">Masuk</button>
+        <button class="gerbang__tabbtn${mode === 'daftar' ? ' is-on' : ''}" data-ke="daftar" role="tab">Daftar</button>
+      </div>` : ''}
 
-      <p class="small soft gerbang__ajak">${daftar
-        ? 'Daftar butuh <b>kode akses</b> yang kamu terima setelah membeli. Emailmu dipakai supaya kemajuan belajar bisa dibuka lagi di ponsel lain.'
-        : 'Sudah pernah menebus kode? Masukkan email yang sama, kodenya dikirim ke sana.'}</p>
-
-      <label class="xs muted" for="grbEmail">Email</label>
-      <input id="grbEmail" class="input" type="email" inputmode="email" autocomplete="email"
-             placeholder="nama@email.com" style="width:100%">
-
-      <div id="grbLangkahKode" hidden>
-        <label class="xs muted" for="grbOtp" style="display:block;margin-top:var(--s-3)">
-          Kode 6 angka dari email</label>
-        <input id="grbOtp" class="input" inputmode="numeric" autocomplete="one-time-code"
-               maxlength="6" placeholder="123456" style="width:100%;letter-spacing:.3em">
-      </div>
-
-      <div id="grbLangkahAkses" hidden>
-        <label class="xs muted" for="grbKode" style="display:block;margin-top:var(--s-3)">
-          Kode akses</label>
-        <input id="grbKode" class="input" placeholder="SL-XXXX-XXXX" autocomplete="off"
-               spellcheck="false" style="width:100%;text-transform:uppercase">
-      </div>
-
+      <p class="small soft gerbang__ajak">${t.ajak}</p>
+      ${t.badan}
       <p id="grbPesan" class="small gerbang__pesan">${esc(pesanAwal)}</p>
+      <button class="btn btn--primary btn--blok" id="grbLanjut">${esc(t.tombol)}</button>
 
-      <button class="btn btn--primary btn--blok" id="grbLanjut">
-        ${daftar ? 'Kirim kode ke email' : 'Kirim kode ke email'}</button>
-
-      ${tautanBantuan()}
+      ${mode === 'daftar' || mode === 'akses' ? tautanBantuan() : ''}
 
       <div class="gerbang__kaki">
         <button class="btn btn--ghost btn--sm" data-act="buka-saran">💬 Ada kendala? Kirim pesan</button>
@@ -169,80 +216,93 @@ function gambar(mode, { pesanAwal = '' } = {}) {
   return wadah;
 }
 
+/* ── Alur ─────────────────────────────────────────────────────── */
+
 /** Tampilkan gerbang dan tahan sampai aksesnya beres. */
-function tunggu(mode, pesanAwal) {
+function tunggu(modeAwal, pesanAwal = '') {
   return new Promise(selesai => {
-    let sekarang = mode;
-    let langkah = 'email';          // email → otp → akses
-    let box = gambar(sekarang, { pesanAwal });
+    let mode = modeAwal;
+    let box;
 
-    const q = sel => box.querySelector(sel);
-    const pesan = (teks, jenis = '') => {
-      const n = q('#grbPesan');
-      n.innerHTML = teks;
-      n.style.color = jenis === 'bad' ? 'var(--bad)' : jenis === 'ok' ? 'var(--ok)' : '';
-    };
+    const pasang = (m, pesan = '') => {
+      mode = m;
+      box = gambar(m, pesan);
 
-    const pasang = () => {
-      box.querySelectorAll('.gerbang__tabbtn').forEach(b =>
-        b.addEventListener('click', () => {
-          if (b.dataset.mode === sekarang) return;
-          sekarang = b.dataset.mode;
-          langkah = 'email';
-          box = gambar(sekarang);
-          pasang();
-        }));
-
-      const lanjut = q('#grbLanjut');
-
-      const keLangkah = (baru, label) => {
-        langkah = baru;
-        q('#grbLangkahKode').hidden = baru === 'email';
-        q('#grbLangkahAkses').hidden = baru !== 'akses';
-        lanjut.textContent = label;
-        lanjut.disabled = false;
-        (baru === 'otp' ? q('#grbOtp') : baru === 'akses' ? q('#grbKode') : q('#grbEmail')).focus();
+      const q = sel => box.querySelector(sel);
+      const kabar = (teks, jenis = '') => {
+        const n = q('#grbPesan');
+        n.innerHTML = teks;
+        n.style.color = jenis === 'bad' ? 'var(--bad)' : jenis === 'ok' ? 'var(--ok)' : '';
       };
 
+      box.querySelectorAll('[data-ke]').forEach(b =>
+        b.addEventListener('click', () => { if (b.dataset.ke !== mode) pasang(b.dataset.ke); }));
+
+      box.querySelectorAll('[data-lihat]').forEach(b =>
+        b.addEventListener('click', () => {
+          const isian = q('#' + b.dataset.lihat);
+          const tampak = isian.type === 'text';
+          isian.type = tampak ? 'password' : 'text';
+          b.textContent = tampak ? '👁' : '🙈';
+          b.setAttribute('aria-label', tampak ? 'Tampilkan kata sandi' : 'Sembunyikan kata sandi');
+          isian.focus();
+        }));
+
+      /* Sesudah masuk, aksesnya masih harus diperiksa: akun bisa saja
+         ada tetapi kodenya belum pernah ditebus (misalnya dibuat lewat
+         panel admin). */
+      const lanjutkanSesudahMasuk = async () => {
+        lupakanProfil();
+        const p = await profil({ segarkan: true });
+        if (p && (aksesAktif(p) || adalahAdmin(p))) {
+          tulisCap(p);
+          box.remove();
+          selesai(p);
+          return true;
+        }
+        pasang('akses');
+        return false;
+      };
+
+      const lanjut = q('#grbLanjut');
       const jalan = async () => {
         lanjut.disabled = true;
         try {
-          if (langkah === 'email') {
-            const email = q('#grbEmail').value.trim();
-            if (!email.includes('@')) throw new Error('Tulis alamat emailmu dulu.');
-            pesan('Mengirim kode…');
-            await kirimKode(email);
-            pesan('Kode dikirim ke <b>' + esc(email) + '</b>. Periksa juga folder spam.', 'ok');
-            keLangkah('otp', 'Masuk');
+          if (mode === 'masuk') {
+            kabar('Memeriksa…');
+            await masukSandi(q('#grbEmail').value, q('#grbSandi').value);
+            await lanjutkanSesudahMasuk();
             return;
           }
 
-          if (langkah === 'otp') {
-            pesan('Memeriksa kode…');
-            await verifikasiKode(q('#grbEmail').value.trim(), q('#grbOtp').value.trim());
-            lupakanProfil();
-            const p = await profil({ segarkan: true });
-
-            if (p && (aksesAktif(p) || adalahAdmin(p))) {
-              tulisCap(p);
-              box.remove();
-              selesai(p);
-              return;
-            }
-            /* Masuknya berhasil, aksesnya yang belum ada. Ini juga
-               jalur yang dilewati pendaftar baru. */
-            pesan(sekarang === 'daftar'
-              ? 'Email terverifikasi. Sekarang tempel kode akses yang kamu terima saat membeli.'
-              : 'Akun ini belum punya akses. Tempel kode aksesmu untuk mengaktifkannya.', 'ok');
-            keLangkah('akses', 'Aktifkan akses');
+          if (mode === 'daftar') {
+            kabar('Memeriksa kode dan membuat akun…');
+            await daftarDenganKode(q('#grbEmail').value, q('#grbSandi').value, q('#grbKode').value);
+            toast('Akun aktif. Selamat belajar!', 'ok');
+            await lanjutkanSesudahMasuk();
             return;
           }
 
-          /* langkah === 'akses' */
-          const kode = q('#grbKode').value.trim();
-          if (!kode) throw new Error('Kode aksesnya belum diisi.');
-          pesan('Memeriksa kode akses…');
-          const p = await tebus(kode);
+          if (mode === 'lupa') {
+            kabar('Mengirim…');
+            const surel = await kirimResetSandi(q('#grbEmail').value);
+            kabar(`Tautan dikirim ke <b>${esc(surel)}</b>. Periksa juga folder spam.`, 'ok');
+            lanjut.disabled = false;
+            return;
+          }
+
+          if (mode === 'sandiBaru') {
+            kabar('Menyimpan…');
+            await gantiSandi(q('#grbSandi').value);
+            try { sessionStorage.removeItem('fasih.pulihkan'); } catch {}
+            toast('Kata sandi diperbarui.', 'ok');
+            await lanjutkanSesudahMasuk();
+            return;
+          }
+
+          /* mode === 'akses' */
+          kabar('Memeriksa kode akses…');
+          const p = await tebus(q('#grbKode').value.trim());
           if (!(aksesAktif(p) || adalahAdmin(p)))
             throw new Error('Kode diterima tetapi aksesnya belum aktif. Hubungi penjual.');
           tulisCap(p);
@@ -250,21 +310,23 @@ function tunggu(mode, pesanAwal) {
           box.remove();
           selesai(p);
         } catch (e) {
-          /* Pesan server dipakai apa adanya: ia sudah membedakan "kode
-             salah" dari "kode sudah dipakai" dari "sesi kedaluwarsa",
-             dan menggantinya dengan satu kalimat umum justru
+          /* Pesan server dipakai apa adanya: ia sudah membedakan "email
+             sudah terdaftar" dari "kode sudah terpakai" dari "sandi
+             salah", dan menggantinya dengan satu kalimat umum justru
              menghilangkan petunjuk yang dibutuhkan orangnya. */
-          pesan(esc(e.message), 'bad');
+          kabar(esc(e.message), 'bad');
           lanjut.disabled = false;
         }
       };
 
       lanjut.addEventListener('click', jalan);
-      box.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); jalan(); } });
-      q('#grbEmail').focus();
+      box.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.target.closest('[data-ke],[data-lihat]')) { e.preventDefault(); jalan(); }
+      });
+      (q('#grbEmail') || q('#grbSandi') || q('#grbKode'))?.focus();
     };
 
-    pasang();
+    pasang(mode, pesanAwal);
   });
 }
 
@@ -272,6 +334,13 @@ function tunggu(mode, pesanAwal) {
 
 /** Tahan boot sampai pemakainya berhak masuk. */
 export async function pastikanAkses() {
+  /* Orang yang baru mengklik tautan pemulihan sudah punya sesi sah,
+     tetapi yang ia butuhkan bukan aplikasinya — melainkan kotak untuk
+     mengetik sandi barunya. */
+  let pulih = false;
+  try { pulih = sessionStorage.getItem('fasih.pulihkan') === '1'; } catch {}
+  if (pulih && sesi()?.access_token) return tunggu('sandiBaru');
+
   const hasil = await periksaAkses();
   if (hasil.boleh) return hasil;
 
@@ -279,10 +348,14 @@ export async function pastikanAkses() {
      supaya layarnya tidak menampilkan "sudah masuk" padahal tidak. */
   if (hasil.alasan === 'belum-akses' && !hasil.profil) { keluar(); lupakanProfil(); }
 
+  /* Sudah masuk tapi belum menebus: langsung ke kotak kode akses,
+     jangan suruh ia mengetik sandinya lagi. */
+  if (hasil.alasan === 'belum-akses' && hasil.profil) return tunggu('akses');
+
   const pesanAwal = hasil.alasan === 'luring'
     ? 'Perlu sekali tersambung internet untuk memeriksa aksesmu.'
     : '';
-  return tunggu(hasil.alasan === 'belum-akses' ? 'masuk' : 'masuk', pesanAwal);
+  return tunggu('masuk', pesanAwal);
 }
 
 /** Dipanggil tombol keluar. Membersihkan jejak akses lalu memuat ulang,

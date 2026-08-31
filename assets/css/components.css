@@ -159,6 +159,17 @@
 .gerbang__pesan{min-height:1.2em;margin:var(--s-3) 0}
 .gerbang__beli{margin-top:var(--s-4);display:flex;gap:var(--s-2);flex-wrap:wrap;justify-content:center}
 .gerbang__kaki{margin-top:var(--s-5);padding-top:var(--s-4);border-top:1px solid var(--line);text-align:center}
+/* Kotak sandi + tombol lihat. Mengetik sandi panjang di papan ketik
+   ponsel tanpa bisa memeriksanya adalah sebab paling sering orang
+   gagal masuk padahal sandinya benar. */
+.gerbang__sandi{position:relative;display:flex;align-items:center}
+.gerbang__sandi .input{padding-right:2.6rem}
+.gerbang__lihat{position:absolute;right:.4rem;border:0;background:transparent;cursor:pointer;
+  font-size:1rem;line-height:1;padding:.35rem;border-radius:var(--r-sm);opacity:.75}
+.gerbang__lihat:hover{opacity:1}
+.gerbang__tautan{display:block;margin-top:var(--s-3);border:0;background:transparent;cursor:pointer;
+  color:var(--brand-text);font-size:var(--fs-xs);padding:0;text-align:left}
+.gerbang__tautan:hover{text-decoration:underline}
 .textarea{min-height:150px;resize:vertical;line-height:1.7}
 .select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--text-mute) 50%),
   linear-gradient(135deg,var(--text-mute) 50%,transparent 50%);

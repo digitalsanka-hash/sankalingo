@@ -117,6 +117,94 @@ export async function kirimKode(email) {
 }
 
 /** Tukar kode enam angka menjadi sesi. */
+/* ── Masuk dengan kata sandi ──────────────────────────────────
+   Cara utama sejak pendaftaran memakai kode akses. OTP di bawah tetap
+   ada sebagai jalan cadangan (dan dipakai pemulihan sandi), tetapi
+   pemakai sehari-hari tidak lagi menyentuhnya: membuka email tiap kali
+   mau belajar adalah pajak yang tidak perlu. */
+
+const EMAIL_SAH = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+/** Masuk dengan email + kata sandi. */
+export async function masukSandi(email, sandi) {
+  const surel = String(email || '').trim().toLowerCase();
+  if (!EMAIL_SAH.test(surel)) throw new Error('Alamat email tidak sah.');
+  if (!sandi) throw new Error('Kata sandinya belum diisi.');
+
+  let hasil;
+  try {
+    hasil = await panggil('/auth/v1/token?grant_type=password', {
+      metode: 'POST', pakaiToken: false, badan: { email: surel, password: String(sandi) }
+    });
+  } catch (e) {
+    /* Supabase menjawab "Invalid login credentials" untuk email yang
+       tidak ada MAUPUN sandi yang salah - disengaja, supaya orang luar
+       tidak bisa memetakan siapa saja yang punya akun. Pesannya
+       diterjemahkan tanpa membocorkan bedanya. */
+    if (/invalid login/i.test(e.message)) throw new Error('Email atau kata sandi salah.');
+    if (/not confirmed/i.test(e.message)) throw new Error('Akun ini belum diaktifkan. Hubungi penjual.');
+    throw e;
+  }
+  if (!hasil?.access_token) throw new Error('Masuk gagal.');
+  simpanSesi({ ...hasil, expires_at: Math.floor(Date.now() / 1000) + (hasil.expires_in || 3600) });
+  return hasil;
+}
+
+/** Daftar: email + sandi + kode akses ditukar jadi akun aktif, lalu
+ *  langsung masuk. Pembuatan akunnya di Edge Function daftar-lisensi
+ *  karena hanya service role yang boleh menyentuh tabel kode. */
+export async function daftarDenganKode(email, sandi, kode) {
+  const surel = String(email || '').trim().toLowerCase();
+  if (!EMAIL_SAH.test(surel)) throw new Error('Alamat email tidak sah.');
+  if (String(sandi || '').length < 8) throw new Error('Kata sandi minimal 8 huruf.');
+  if (!String(kode || '').trim()) throw new Error('Kode akses wajib diisi.');
+
+  const r = await fetch(`${AWAN.url.replace(/\/+$/, '')}/functions/v1/daftar-lisensi`, {
+    method: 'POST',
+    headers: { apikey: AWAN.anon, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: surel, sandi: String(sandi), kode: String(kode).trim() })
+  }).catch(e => {
+    /* fetch melempar untuk dua sebab yang berbeda jauh: internet mati,
+       atau Edge Function-nya belum dipasang sehingga jawabannya datang
+       tanpa header CORS. Pembeli tidak bisa membedakannya dan tidak
+       perlu tahu; yang memasang aplikasi ini perlu, jadi detailnya
+       ditulis ke console. */
+    console.error('daftar-lisensi tidak menjawab:', e);
+    throw new Error(navigator.onLine
+      ? 'Layanan pendaftaran sedang tidak menjawab. Coba lagi sebentar lagi, atau hubungi penjual.'
+      : 'Tidak ada koneksi internet.');
+  });
+
+  const teks = await r.text();
+  let isi = null;
+  try { isi = teks ? JSON.parse(teks) : null; } catch { isi = null; }
+  if (!r.ok) throw new Error(isi?.error || `Pendaftaran gagal (${r.status})`);
+
+  /* Akunnya sudah jadi dan emailnya sudah dianggap terkonfirmasi, jadi
+     masuknya bisa langsung - pembeli tidak perlu mengetik apa pun lagi. */
+  await masukSandi(surel, sandi);
+  return isi;
+}
+
+/** Kirim email pemulihan kata sandi. */
+export async function kirimResetSandi(email) {
+  const surel = String(email || '').trim().toLowerCase();
+  if (!EMAIL_SAH.test(surel)) throw new Error('Alamat email tidak sah.');
+  await panggil('/auth/v1/recover', {
+    metode: 'POST', pakaiToken: false,
+    badan: { email: surel, redirect_to: location.origin + location.pathname }
+  });
+  return surel;
+}
+
+/** Pasang kata sandi baru untuk sesi yang sedang berjalan. Dipakai
+ *  sesudah pemakai kembali lewat tautan pemulihan. */
+export async function gantiSandi(sandiBaru) {
+  if (String(sandiBaru || '').length < 8) throw new Error('Kata sandi minimal 8 huruf.');
+  await panggil('/auth/v1/user', { metode: 'PUT', badan: { password: String(sandiBaru) } });
+  return true;
+}
+
 export async function verifikasiKode(email, kode) {
   const hasil = await panggil('/auth/v1/verify', {
     metode: 'POST', pakaiToken: false,
@@ -171,6 +259,14 @@ export function tangkapTautanMasuk() {
                 Math.floor(Date.now() / 1000) + (Number(p.get('expires_in')) || 3600),
     user
   });
+
+  /* Tautan pemulihan sandi memakai jalan masuk yang sama, hanya
+     tipenya berbeda. Tandanya dititipkan di sessionStorage karena
+     hash-nya harus segera dihapus (ia berisi token) sementara yang
+     membaca tanda ini - layar gerbang - baru berjalan sesudahnya. */
+  if (p.get('type') === 'recovery') {
+    try { sessionStorage.setItem('fasih.pulihkan', '1'); } catch {}
+  }
 
   history.replaceState(null, '', location.pathname + location.search + '#/');
   return true;

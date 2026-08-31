@@ -145,23 +145,16 @@ function kartuAwan() {
   const kapan = Awan.terakhirSinkron();
   const jarak = kapan ? waktuLalu(kapan) : null;
 
+  /* Sejak ada gerbang, halaman ini hanya bisa dibuka oleh yang sudah
+     masuk. Satu-satunya cara sampai ke sini tanpa email adalah sesi
+     luring yang belum sempat diperiksa — jadi yang perlu ditawarkan
+     bukan formulir masuk, melainkan penjelasan singkat. */
   if (!email) return `
   <div class="card" style="margin-top:var(--s-4)">
     <div class="card__title">Selaraskan antar perangkat</div>
-    <p class="small soft" style="margin:.4rem 0 1rem">
-      Masuk dengan email untuk memindahkan kemajuan ke ponsel atau komputer lain.
-      Kami mengirim kode enam angka — tidak ada kata sandi yang perlu dibuat atau diingat.</p>
-    <div class="row" id="awanForm">
-      <input type="email" id="awanEmail" class="inp" placeholder="nama@email.com"
-             autocomplete="email" style="flex:1;min-width:12rem" />
-      <button class="btn btn--primary" id="awanKirim">Kirim kode</button>
-    </div>
-    <div class="row" id="awanKodeBaris" style="display:none;margin-top:.6rem">
-      <input type="text" id="awanKode" class="inp" placeholder="6 angka" inputmode="numeric"
-             maxlength="8" style="flex:1;min-width:8rem" />
-      <button class="btn btn--primary" id="awanMasuk">Masuk</button>
-    </div>
-    <div id="awanPesan" class="small" style="margin-top:.6rem"></div>
+    <p class="small soft" style="margin:.4rem 0 0">
+      Sesi ini belum terhubung ke server. Sambungkan internet lalu muat ulang
+      halaman untuk menyelaraskan kemajuanmu.</p>
   </div>`;
 
   return `
@@ -172,7 +165,8 @@ function kartuAwan() {
       Buka aplikasi ini di perangkat lain dan masuk dengan email yang sama.</p>
     <div class="row">
       <button class="btn btn--primary" id="awanSinkron">Selaraskan sekarang</button>
-      <button class="btn btn--soft" id="awanKeluar">Keluar</button>
+      <button class="btn btn--soft" id="awanSandi">Ganti kata sandi</button>
+      <button class="btn btn--ghost" id="awanKeluar">Keluar</button>
     </div>
     <div id="awanPesan" class="small" style="margin-top:.6rem"></div>
   </div>`;
@@ -524,28 +518,35 @@ export function renderSettings() {
     if (n) { n.textContent = teks; n.className = 'small ' + (jenis === 'bad' ? 'is-bad' : jenis === 'ok' ? 'is-ok' : 'soft'); }
   };
 
-  on('awanKirim', 'click', async () => {
-    const btn = $('#awanKirim'), email = $('#awanEmail')?.value;
-    btn.disabled = true; pesanAwan('Mengirim kode…');
-    try {
-      await Awan.kirimKode(email);
-      $('#awanKodeBaris').style.display = '';
-      $('#awanKode').focus();
-      pesanAwan('Kode dikirim. Periksa email — termasuk folder spam.', 'ok');
-    } catch (e) { pesanAwan(e.message, 'bad'); }
-    btn.disabled = false;
-  });
-
-  on('awanMasuk', 'click', async () => {
-    const btn = $('#awanMasuk');
-    btn.disabled = true; pesanAwan('Memeriksa kode…');
-    try {
-      await Awan.verifikasiKode($('#awanEmail').value, $('#awanKode').value);
-      pesanAwan('Berhasil masuk. Menyelaraskan…', 'ok');
-      const r = await Awan.sinkron();
-      toast(r.status === 'sinkron' ? 'Kemajuan tersambung ke awan.' : 'Masuk berhasil, penyelarasan menyusul.', 'ok');
-      renderSettings();
-    } catch (e) { pesanAwan(e.message, 'bad'); btn.disabled = false; }
+  on('awanSandi', 'click', async () => {
+    const { modal } = await import('../ui.js');
+    modal(`
+      <div class="modal__head">
+        <h3>Ganti kata sandi</h3>
+        <button class="icon-btn" data-close aria-label="Tutup">✕</button>
+      </div>
+      <div class="modal__body">
+        <label class="xs muted" for="sandiBaru">Kata sandi baru</label>
+        <input id="sandiBaru" class="input" type="password" autocomplete="new-password"
+               placeholder="minimal 8 huruf" style="width:100%">
+        <p id="sandiPesan" class="small" style="margin:.6rem 0 0"></p>
+      </div>
+      <div class="modal__foot">
+        <button class="btn btn--ghost" data-close>Batal</button>
+        <button class="btn btn--primary" id="sandiSimpan">Simpan</button>
+      </div>`, {
+      onMount(box, close) {
+        const pesan = box.querySelector('#sandiPesan');
+        box.querySelector('#sandiSimpan').addEventListener('click', async () => {
+          try {
+            await Awan.gantiSandi(box.querySelector('#sandiBaru').value);
+            toast('Kata sandi diperbarui.', 'ok');
+            close();
+          } catch (e) { pesan.textContent = e.message; pesan.style.color = 'var(--bad)'; }
+        });
+        box.querySelector('#sandiBaru').focus();
+      }
+    });
   });
 
   on('awanSinkron', 'click', async () => {
