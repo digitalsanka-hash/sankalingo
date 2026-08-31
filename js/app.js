@@ -4,7 +4,7 @@
    seluruh menu, rute, judul, serta warna aksen mengikuti bahasa itu.
    Bentuk rute:  #/<kode-bahasa>/<bagian>   contoh: #/ko/aksara  ·  #/en/grammar */
 
-import { $, $$, el, html, raw, esc, toast, bump } from './ui.js';
+import { $, $$, el, html, raw, esc, toast, bump, confirmDialog } from './ui.js';
 import { state, mutate, onChange, liveStreak, xpLevel, recordVisit, lastVisit,
          onGagalSimpan, perluCadangan, exportData } from './state.js';
 import { comfort, setComfort, terapkan as terapkanComfort,
@@ -12,7 +12,7 @@ import { comfort, setComfort, terapkan as terapkanComfort,
 import { pasangPanelCepat, pasangSpandukLuring, pasangAjakanInstal,
          pasangPenutupTip, gambarTabbar, setTabbarDue } from './comfortui.js';
 import { daftarkan as daftarkanLuring } from './luring.js';
-import { pasangOtomatis as pasangSinkronAwan, tangkapTautanMasuk } from './awan.js';
+import { pasangOtomatis as pasangSinkronAwan, tangkapTautanMasuk, masukSebagai } from './awan.js';
 import { dueIds } from './srs.js';
 import { loadVoices, stopSpeaking, say, ttsReady, englishVoices } from './speech.js';
 import { ucap as ucapLang, stop as stopUcap, ready as suaraSiap } from './voice.js';
@@ -36,7 +36,7 @@ import * as LP from './views/langpages.js';
 import * as LC from './views/langcourse.js';
 import * as Pandu from './views/panduan.js';
 import { bukaSaran, pasangSaranOtomatis } from './saran.js';
-import { pastikanAkses } from './gerbang.js';
+import { pastikanAkses, keluarPenuh } from './gerbang.js';
 import * as Audit from './views/auditsuara.js';
 import * as Adm from './views/admin.js';
 import * as Kam from './views/kamus.js';
@@ -458,6 +458,20 @@ function applyTheme(t) {
 }
 
 /* ── Mulai ────────────────────────────────────────────────────── */
+/* Menampilkan siapa yang sedang masuk di kaki menu, berikut tombol
+   keluarnya. Barisnya tetap tersembunyi kalau penyelarasan awan belum
+   dikonfigurasi - di pemasangan seperti itu tidak ada akun untuk
+   ditinggalkan. */
+function pasangBarisAkun() {
+  const baris = $('#sidebarAkun');
+  if (!baris) return;
+  const email = masukSebagai();
+  if (!email) return;
+  $('#sidebarEmail').textContent = email;
+  $('#sidebarEmail').title = email;
+  baris.hidden = false;
+}
+
 function boot() {
   /* Pilihan tema lama (sebelum ada modul kenyamanan) tetap dihormati. */
   if (!localStorage.getItem('fasih.comfort') && state().settings.theme) {
@@ -547,6 +561,15 @@ function boot() {
     if (act === 'goto-review') location.hash = `#/${currentLang()}/kartu`;
     if (act === 'ekspor-sekarang') { exportData(); toast('Berkas cadangan diunduh.', 'ok'); }
     if (act === 'buka-saran') bukaSaran();
+    if (act === 'keluar') {
+      /* Ditanya dulu: keluar berarti mengetik ulang email dan kata
+         sandi, dan tombolnya duduk bersebelahan dengan Tema dan
+         Panduan yang tidak berbahaya sama sekali. */
+      confirmDialog('Keluar dari akun?',
+        '<p>Kamu perlu memasukkan email dan kata sandi lagi untuk masuk.</p>' +
+        '<p class="small muted">Kemajuan belajar di perangkat ini tetap utuh.</p>',
+        'Ya, keluar').then(ya => { if (ya) keluarPenuh(); });
+    }
   });
 
   /* Salin alamat halaman — dipakai spanduk yang menyarankan membuka di Edge. */
@@ -611,6 +634,7 @@ function boot() {
       $('#boot')?.classList.add('is-out');
       setTimeout(() => $('#boot')?.remove(), 500);
       await pastikanAkses();
+      pasangBarisAkun();
     } catch (e) {
       /* Gerbang yang rusak tidak boleh menjadi pintu yang macet
          selamanya — lebih baik aplikasinya terbuka daripada pembeli

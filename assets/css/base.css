@@ -89,6 +89,13 @@ hr{border:0;border-top:1px solid var(--line);margin:var(--s-6) 0}
   background:var(--brand);color:#fff}
 .sidebar__foot{display:flex;gap:var(--s-2)}
 .sidebar__foot .btn{flex:1;justify-content:center}
+/* Baris akun berdiri sendiri di bawah tombol-tombol kaki: email bisa
+   panjang, dan kalau ia ikut dalam baris yang sama tombol Tema dan
+   Panduan tergencet sampai tinggal ikon. */
+.sidebar__akun{display:flex;align-items:center;gap:var(--s-2);margin-top:var(--s-3);
+  padding-top:var(--s-3);border-top:1px solid var(--line)}
+.sidebar__akun .xs{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sidebar__akun .btn{flex:0 0 auto}
 .sidebar__scrim{display:none}
 
 .topbar{position:sticky;top:0;z-index:50;height:var(--topbar-h);display:flex;align-items:center;

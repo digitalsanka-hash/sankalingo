@@ -162,8 +162,12 @@ function pilihan(host, items, aktif, onPilih, { kolom } = {}) {
 /* ── Layar 1 · salam ──────────────────────────────────────────── */
 function layarSalam(host, d, ulang) {
   judul(host, 1, 'Selamat datang di SankaLingo GO',
+    /* Kalimat lama berbunyi "tidak perlu daftar" - benar sebelum ada
+       gerbang, dan langsung terbantah oleh layar masuk yang baru saja
+       dilewati orangnya. Yang tetap benar dan tetap layak dijanjikan
+       adalah bagian luringnya. */
     'Sembilan bahasa, satu metode. Semua materi tersimpan di perangkatmu sendiri — ' +
-    'tidak perlu daftar, tidak perlu internet setelah dibuka sekali. ' +
+    'sesudah dibuka sekali, belajar tetap jalan tanpa internet. ' +
     'Lima pertanyaan singkat dulu, ya.');
   host.insertAdjacentHTML('beforeend', `
     <div class="onb-preview">
