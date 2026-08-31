@@ -87,15 +87,23 @@ hr{border:0;border-top:1px solid var(--line);margin:var(--s-6) 0}
 .nav a .ico{width:19px;text-align:center;opacity:.9;font-size:1rem}
 .nav a .tail{margin-left:auto;font-size:var(--fs-2xs);font-weight:700;padding:1px 7px;border-radius:99px;
   background:var(--brand);color:#fff}
-.sidebar__foot{display:flex;gap:var(--s-2)}
-.sidebar__foot .btn{flex:1;justify-content:center}
+/* Dua kolom, bukan satu baris. Kakinya berisi empat tombol berlabel
+   dan sidebar cuma selebar 260px: dipaksa sebaris, tiap tombol dapat
+   ~55px sementara kata "Panduan" saja butuh lebih dari itu - labelnya
+   lalu meluber menembus batas sidebar ke area pelajaran. */
+.sidebar__foot{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-2)}
+.sidebar__foot .btn{width:100%;min-width:0;justify-content:center;
+  padding-inline:.5rem;white-space:nowrap;overflow:hidden}
 /* Baris akun berdiri sendiri di bawah tombol-tombol kaki: email bisa
    panjang, dan kalau ia ikut dalam baris yang sama tombol Tema dan
    Panduan tergencet sampai tinggal ikon. */
 .sidebar__akun{display:flex;align-items:center;gap:var(--s-2);margin-top:var(--s-3);
   padding-top:var(--s-3);border-top:1px solid var(--line)}
-.sidebar__akun .xs{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sidebar__akun .btn{flex:0 0 auto}
+/* Email dipotong dengan elipsis, bukan dibungkus: alamat panjang yang
+   turun ke baris kedua menggeser tombol keluar keluar dari layar pada
+   sidebar yang pendek. */
+.sidebar__akun .xs{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sidebar__akun .btn{flex:0 0 auto;padding-inline:.7rem}
 .sidebar__scrim{display:none}
 
 .topbar{position:sticky;top:0;z-index:50;height:var(--topbar-h);display:flex;align-items:center;
