@@ -30,6 +30,7 @@
    Jalankan:  node tools/isi-bentuk-rom.mjs [ja|ko|ru|semua]           */
 
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { AR_VERBA, AR_BENDA, AR_SIFAT } from './ar-bentuk-rom.js';
 
 /* ── Jepang ─────────────────────────────────────────────────────── */
 
@@ -183,6 +184,17 @@ const romRu = teks => [...String(teks || '').toLowerCase()]
 const PEMBUAT = {
   ja: romBentukJa,
   ko: (e, v) => (v === e.k ? e.r : romKo(v)),
+  /* Arab dibaca dari tabel tulisan tangan: tanpa harakat, vokalnya
+     tidak ada di teks sehingga tidak bisa dihitung. Kata sifat jadi
+     pengecualian - femininnya hanya menambah ة, jadi romnya = rom
+     maskulin + 'a', kecuali dua belas yang menyimpang. */
+  ar: (e, v, i) => {
+    if (v === e.k) return e.r;
+    if (e.p === 'v') return AR_VERBA[e.k]?.[i - 1] ?? null;
+    if (e.p === 'n') return AR_BENDA[e.k]?.[0] ?? null;
+    if (e.p === 'adj') return AR_SIFAT[e.k]?.[0] ?? (e.r ? e.r + 'a' : null);
+    return null;
+  },
   /* Kolom ketiga kata benda Rusia berisi LABEL jenis ('netral'),
      bukan bentuk kata - dikosongkan supaya tak dibacakan. */
   ru: (e, v) => (v === e.k ? e.r : (/[Ѐ-ӿ]/.test(v) ? romRu(v) : '')),
@@ -206,8 +218,9 @@ function isi(kode) {
       if (!mb) return blok;
       const k = blok.match(/\bk: '([^']*)'/)?.[1] || '';
       const r = blok.match(/\br: '([^']*)'/)?.[1] || '';
+      const kelas = blok.match(/\bp: '([^']*)'/)?.[1] || '';
       const bentuk = [...mb[1].matchAll(/'([^']*)'/g)].map(m => m[1]);
-      const rom = bentuk.map((v, i) => pembuat({ k, r }, v, i));
+      const rom = bentuk.map((v, i) => pembuat({ k, r, p: kelas }, v, i));
       if (rom.some(x => x == null)) { gagal.push(`${k} → ${bentuk.join(' / ')}`); return blok; }
       diisi++;
       return blok.replace(mb[0], `${mb[0]}, br: [${rom.map(x => `'${x}'`).join(', ')}]`);
@@ -220,4 +233,4 @@ function isi(kode) {
 }
 
 const minta = process.argv[2] || 'semua';
-(minta === 'semua' ? ['ja', 'ko', 'ru'] : [minta]).forEach(isi);
+(minta === 'semua' ? ['ja', 'ko', 'ru', 'ar'] : [minta]).forEach(isi);

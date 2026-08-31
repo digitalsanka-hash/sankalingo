@@ -202,7 +202,7 @@ for (const f of berkas) {
            suara TTS bahasa tersebut. Isinya boleh kosong hanya untuk
            kolom yang memang bukan kata (label jenis pada kata benda
            Rusia). */
-        if (perluRom && kode !== 'ar') {
+        if (perluRom) {
           if (!Array.isArray(e.br))
             masalah.push(`${di}: 'b' ada tapi 'br' (romanisasi bentuk) tidak`);
           else if (e.br.length !== e.b.length)
