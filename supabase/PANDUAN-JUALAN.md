@@ -52,6 +52,25 @@ update public.profil set admin = true where email = 'email-kamu@contoh.com';
 Tidak ada cara lain menjadi admin. Kolom `admin` tidak bisa ditulis dari
 peramban — kebijakan RLS-nya hanya mengizinkan `select`.
 
+## 3b. Nyalakan kotak saran
+
+Sekali jalan, di SQL Editor yang sama:
+
+```sql
+-- tempel seluruh isi supabase/saran.sql
+```
+
+Lalu pasang ulang panel-admin supaya bisa membacanya:
+
+```bash
+supabase functions deploy panel-admin
+```
+
+Sebelum ini dikerjakan, tombol "Saran" di aplikasi tetap muncul dan
+tetap menerima tulisan pemakai — isinya diantre di perangkat mereka dan
+terkirim sendiri begitu tabelnya ada. Yang belum jalan hanya
+pembacaannya di panel admin, dan panel akan mengatakannya sendiri.
+
 ## 4. Buka panelnya
 
 Pengaturan → **Panel admin**, atau langsung ke `#/admin`.
