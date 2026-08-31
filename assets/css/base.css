@@ -126,6 +126,7 @@ hr{border:0;border-top:1px solid var(--line);margin:var(--s-6) 0}
   .topbar{padding:0 var(--s-4);gap:var(--s-1)}
   h1{font-size:var(--fs-2xl)}
   .chip--xp,.chip--due{display:none}
+  .chip--saran .chip__teks{display:none}   /* ikonnya tetap, labelnya mengalah */
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;

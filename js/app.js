@@ -35,6 +35,7 @@ import * as Lang from './views/lang.js';
 import * as LP from './views/langpages.js';
 import * as LC from './views/langcourse.js';
 import * as Pandu from './views/panduan.js';
+import { bukaSaran, pasangSaranOtomatis } from './saran.js';
 import * as Audit from './views/auditsuara.js';
 import * as Adm from './views/admin.js';
 import * as Kam from './views/kamus.js';
@@ -470,6 +471,7 @@ function boot() {
   daftarkanLuring();
   /* Penyelarasan awan hanya menyala kalau js/awan-config.js diisi. */
   pasangSinkronAwan();
+  pasangSaranOtomatis();
   buildLangSwitch();
 
   /* Kalau penyimpanan penuh, katakan terus terang — jangan gagal diam-diam. */
@@ -543,6 +545,7 @@ function boot() {
     if (act === 'goto-stats') location.hash = `#/${currentLang()}/kemajuan`;
     if (act === 'goto-review') location.hash = `#/${currentLang()}/kartu`;
     if (act === 'ekspor-sekarang') { exportData(); toast('Berkas cadangan diunduh.', 'ok'); }
+    if (act === 'buka-saran') bukaSaran();
   });
 
   /* Salin alamat halaman — dipakai spanduk yang menyarankan membuka di Edge. */

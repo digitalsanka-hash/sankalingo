@@ -62,7 +62,7 @@ serve(async (req) => {
     if (!prof?.admin) return jawab({ error: 'Khusus admin.' }, 403);
 
     const badan = await req.json().catch(() => ({ tindakan: 'ringkasan' }));
-    const { tindakan, jumlah, bulan, kode, label, userId } = badan;
+    const { tindakan, jumlah, bulan, kode, label, userId, saranId, status } = badan;
 
     switch (tindakan) {
       /* ── Ringkasan: stok kode + daftar pengguna ─────────────── */
@@ -83,6 +83,35 @@ serve(async (req) => {
           },
           pengguna: profil ?? [],
         });
+      }
+
+      /* ── Saran masuk ─────────────────────────────────────────
+         Tabel saran boleh ditulis siapa pun tetapi tidak boleh DIBACA
+         siapa pun lewat kunci publishable - tidak ada policy select di
+         sana sama sekali. Jalannya hanya lewat sini, dengan service
+         role, sesudah profil.admin diperiksa di atas. */
+      case 'saran': {
+        const { data, error } = await db
+          .from('saran').select('*')
+          .order('dibuat_pada', { ascending: false })
+          .limit(300);
+        if (error) return jawab({ error: error.message }, 500);
+        const semua = data ?? [];
+        return jawab({
+          baru: semua.filter((s) => s.status === 'baru').length,
+          total: semua.length,
+          daftar: semua,
+        });
+      }
+
+      /* ── Tandai saran sudah dibaca / selesai ──────────────────── */
+      case 'saran_status': {
+        if (!['baru', 'dibaca', 'selesai'].includes(status))
+          return jawab({ error: 'Status tidak dikenal.' }, 400);
+        const { error } = await db
+          .from('saran').update({ status }).eq('id', saranId);
+        if (error) return jawab({ error: error.message }, 500);
+        return jawab({ ok: true });
       }
 
       /* ── Cetak kode baru ─────────────────────────────────────── */

@@ -19,9 +19,15 @@ const nf = n => new Intl.NumberFormat('id-ID').format(n || 0);
 /* Satu-satunya sumber kebenaran di layar ini, supaya angka ringkasan
    dan isi tabel tidak mungkin bercerita berbeda. */
 let data = null;
+/* Dipisah dari `data` karena bisa gagal sendiri: tabelnya baru ada
+   sesudah supabase/saran.sql dijalankan, dan panel pembeli tidak boleh
+   ikut kosong hanya karena itu belum dikerjakan. */
+let saran = null;
 
 async function muat() {
   data = await fungsi('panel-admin', { tindakan: 'ringkasan' });
+  try { saran = await fungsi('panel-admin', { tindakan: 'saran' }); }
+  catch (e) { saran = { galat: e.message }; }
   gambar();
 }
 
@@ -69,6 +75,60 @@ function barisPengguna(p) {
   </tr>`;
 }
 
+const LENCANA = {
+  baru:    '<span class="badge badge--warn">baru</span>',
+  dibaca:  '<span class="badge">dibaca</span>',
+  selesai: '<span class="badge badge--ok">selesai</span>',
+};
+const JENIS_SARAN = { saran: 'Saran', masalah: 'Masalah', kata: 'Isi keliru' };
+
+function barisSaran(s) {
+  return `<tr>
+    <td class="nowrap">${esc(tanggal(s.dibuat_pada))}</td>
+    <td>${esc(JENIS_SARAN[s.jenis] || s.jenis)}</td>
+    <td>${LENCANA[s.status] || esc(s.status)}</td>
+    <td style="min-width:260px">${esc(s.isi)}</td>
+    <td class="xs muted nowrap">${esc(s.bahasa || '—')} · <span class="mono">${esc(s.halaman || '—')}</span></td>
+    <td class="xs muted">${esc(s.email || '—')}</td>
+    <td class="nowrap">
+      ${s.status === 'selesai'
+        ? `<button class="btn btn--ghost btn--sm" data-saran="${s.id}" data-status="baru">Buka lagi</button>`
+        : `<button class="btn btn--soft btn--sm" data-saran="${s.id}" data-status="selesai">Selesai</button>` +
+          (s.status === 'baru'
+            ? ` <button class="btn btn--ghost btn--sm" data-saran="${s.id}" data-status="dibaca">Dibaca</button>`
+            : '')}
+    </td>
+  </tr>`;
+}
+
+function kartuSaran() {
+  if (saran?.galat) return `
+    <div class="card" style="margin-bottom:var(--s-5)">
+      <div class="card__title">${ico('quote')} Kotak saran</div>
+      <div class="note note--warn small" style="margin-top:var(--s-4)">
+        Belum bisa dibaca: ${esc(saran.galat)}<br>
+        Jalankan <b>supabase/saran.sql</b> di SQL Editor, lalu pasang ulang
+        Edge Function panel-admin.
+      </div>
+    </div>`;
+
+  const daftar = saran?.daftar ?? [];
+  return `
+  <div class="card" style="margin-bottom:var(--s-5)">
+    <div class="row row--between">
+      <div class="card__title">${ico('quote')} Kotak saran
+        ${saran?.baru ? `<span class="badge badge--warn">${nf(saran.baru)} baru</span>` : ''}</div>
+      <input class="input" id="admCariSaran" type="search" placeholder="Cari isi saran…" style="max-width:230px">
+    </div>
+    ${daftar.length ? `<div class="table-wrap" style="margin-top:var(--s-4)">
+      <table class="tbl"><thead><tr>
+        <th>Masuk</th><th>Jenis</th><th>Status</th><th>Isi</th><th>Dari halaman</th><th>Email</th><th></th>
+      </tr></thead><tbody id="admTSaran">${daftar.map(barisSaran).join('')}</tbody></table>
+    </div>`
+    : '<p class="small muted" style="margin-top:var(--s-4)">Belum ada saran masuk.</p>'}
+  </div>`;
+}
+
 function gambar() {
   const k = data.kode, p = data.pengguna;
   const bayar = p.filter(x => x.kode).length;
@@ -94,6 +154,8 @@ function gambar() {
         Stok kode siap tinggal ${nf(k.siap)}. Cetak lagi sebelum ada yang membeli.</div>` : ''}
     </div>
   </div>
+
+  ${kartuSaran()}
 
   <div class="card" style="margin-bottom:var(--s-5)">
     <div class="card__title">${ico('pen')} Cetak kode baru</div>
@@ -170,6 +232,10 @@ function pasang() {
     if (t.dataset.batal)
       return jalankan({ tindakan: 'batal_pesan', kode: t.dataset.batal }, 'Tanda dibatalkan.');
 
+    if (t.dataset.saran)
+      return jalankan({ tindakan: 'saran_status', saranId: Number(t.dataset.saran), status: t.dataset.status },
+        'Status saran diperbarui.');
+
     if (t.dataset.selamanya)
       return jalankan({ tindakan: 'akses', userId: t.dataset.selamanya, bulan: null },
         'Akses diberikan selamanya.');
@@ -224,6 +290,9 @@ function pasang() {
   saring('#admCariUser', '#admTUser', q => data.pengguna
     .filter(p => !q || (p.email || '').toLowerCase().includes(q))
     .map(barisPengguna).join(''));
+  saring('#admCariSaran', '#admTSaran', q => (saran?.daftar ?? [])
+    .filter(s => !q || (s.isi + ' ' + (s.email || '') + ' ' + (s.halaman || '')).toLowerCase().includes(q))
+    .map(barisSaran).join(''));
 }
 
 export async function renderAdmin() {
