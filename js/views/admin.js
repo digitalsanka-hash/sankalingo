@@ -51,7 +51,9 @@ function barisKode(k) {
     <td class="nowrap">
       ${habis ? '' : k.dipesan_untuk
         ? `<button class="btn btn--ghost btn--sm" data-batal="${esc(k.kode)}">Batal tanda</button>`
-        : `<button class="btn btn--soft btn--sm" data-salin="${esc(k.kode)}">Salin</button>
+        : `<button class="btn btn--primary btn--sm" data-kirim="${esc(k.kode)}"
+                    data-bulan="${esc(String(k.bulan_aktif ?? ''))}">Kirim</button>
+           <button class="btn btn--soft btn--sm" data-salin="${esc(k.kode)}">Salin</button>
            <button class="btn btn--ghost btn--sm" data-pesan="${esc(k.kode)}">Tandai terkirim</button>`}
     </td>
   </tr>`;
@@ -99,6 +101,108 @@ function barisSaran(s) {
             : '')}
     </td>
   </tr>`;
+}
+
+/* Pesan yang dikirim ke pembeli. Ditulis sekali di sini supaya tiga
+   salurannya - email, WhatsApp, salin-tempel - tidak pelan-pelan
+   berbeda isi. Alamat aplikasinya diambil dari halaman yang sedang
+   dibuka, bukan ditulis tetap: panel ini SELALU dibuka dari aplikasi
+   yang dimaksud, jadi itu satu-satunya alamat yang pasti benar. */
+function pesanKode(kode, bulan) {
+  const alamat = location.origin + location.pathname;
+  const masa = bulan ? `berlaku ${bulan} bulan` : 'berlaku selamanya';
+  return `Halo! Ini kode akses SankaLingo GO milikmu:
+
+${kode}
+
+Cara memakainya:
+1. Buka ${alamat}
+2. Pilih tab "Daftar"
+3. Isi emailmu, buat kata sandi, lalu tempel kode di atas
+4. Selesai. Masuk berikutnya cukup email + kata sandi
+
+Kode ini sekali pakai dan ${masa}.
+Ada kendala? Balas pesan ini.`;
+}
+
+/* Mengirimnya lewat draf, bukan lewat server. Kirim otomatis butuh
+   layanan email berbayar dengan domain terverifikasi; sampai itu ada,
+   membuka draf yang sudah terisi jauh lebih cepat daripada mengetik
+   ulang tiap kali - dan yang menekan "kirim" tetap manusia, sehingga
+   pesannya benar-benar berangkat dari alamatmu sendiri. */
+async function layarKirim(kode, bulan) {
+  const { modal } = await import('../ui.js');
+  const isi = pesanKode(kode, bulan);
+  const subjek = 'Kode akses SankaLingo GO';
+
+  modal(`
+    <div class="modal__head">
+      <h3>${ico('quote', { size: 18 })} Kirim ${esc(kode)}</h3>
+      <button class="icon-btn" data-close aria-label="Tutup">✕</button>
+    </div>
+    <div class="modal__body">
+      <label class="xs muted" for="kirimEmail">Email pembeli</label>
+      <input id="kirimEmail" class="input" type="email" inputmode="email"
+             placeholder="pembeli@email.com" style="width:100%">
+
+      <label class="xs muted" for="kirimWa" style="display:block;margin-top:var(--s-3)">
+        Nomor WhatsApp (opsional, format 62…)</label>
+      <input id="kirimWa" class="input" inputmode="numeric" placeholder="6281234567890" style="width:100%">
+
+      <label class="xs muted" for="kirimIsi" style="display:block;margin-top:var(--s-3)">Isi pesan</label>
+      <textarea id="kirimIsi" class="input" rows="10" style="width:100%;resize:vertical">${esc(isi)}</textarea>
+      <p class="xs muted" style="margin:.4rem 0 0">
+        Sesudah dikirim, kodenya ditandai "sudah dikirim" ke alamat itu.</p>
+    </div>
+    <div class="modal__foot">
+      <button class="btn btn--ghost" data-close>Batal</button>
+      <button class="btn btn--soft" id="kirimSalin">Salin pesan</button>
+      <button class="btn btn--soft" id="kirimWaBtn">WhatsApp</button>
+      <button class="btn btn--primary" id="kirimEmailBtn">Buka email</button>
+    </div>`, {
+    wide: true,
+    onMount(box, close) {
+      const surel = () => box.querySelector('#kirimEmail').value.trim();
+      const teks  = () => box.querySelector('#kirimIsi').value;
+
+      /* Penandaan dilakukan sesudah salurannya benar-benar dibuka,
+         bukan sebelumnya: kode yang ditandai terkirim padahal
+         drafnya batal ditulis akan hilang dari daftar "siap" tanpa
+         pernah sampai ke siapa pun. */
+      const tandai = async (kepada) => {
+        try {
+          await fungsi('panel-admin', { tindakan: 'pesan', kode, label: kepada });
+          await muat();
+        } catch (e) { toast(e.message, 'bad', 4200); }
+      };
+
+      box.querySelector('#kirimEmailBtn').addEventListener('click', async () => {
+        if (!surel().includes('@')) { toast('Isi dulu email pembelinya.', 'warn'); return; }
+        location.href = `mailto:${encodeURIComponent(surel())}`
+          + `?subject=${encodeURIComponent(subjek)}&body=${encodeURIComponent(teks())}`;
+        await tandai(surel());
+        close();
+      });
+
+      box.querySelector('#kirimWaBtn').addEventListener('click', async () => {
+        const no = box.querySelector('#kirimWa').value.replace(/[^0-9]/g, '');
+        if (!no) { toast('Isi dulu nomor WhatsApp-nya.', 'warn'); return; }
+        window.open(`https://wa.me/${no}?text=${encodeURIComponent(teks())}`, '_blank', 'noopener');
+        await tandai(surel() || ('wa:' + no));
+        close();
+      });
+
+      box.querySelector('#kirimSalin').addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(teks());
+          toast('Pesan disalin. Tempel di mana pun kamu mengirimnya.');
+          if (surel()) await tandai(surel());
+        } catch { toast('Gagal menyalin. Salin manual dari kotak isian.', 'bad'); }
+      });
+
+      box.querySelector('#kirimEmail').focus();
+    }
+  });
 }
 
 function kartuSaran() {
@@ -223,6 +327,9 @@ function pasang() {
       } catch { toast('Gagal menyalin. Salin manual dari tabel.', 'bad'); }
       return;
     }
+    if (t.dataset.kirim)
+      return layarKirim(t.dataset.kirim, Number(t.dataset.bulan) || null);
+
     if (t.dataset.pesan) {
       const nama = prompt('Dikirim ke siapa? (nama atau nomor WA)');
       if (nama === null) return;
