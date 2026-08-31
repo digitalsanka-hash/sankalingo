@@ -556,10 +556,13 @@ export function renderSettings() {
     else { pesanAwan(r.pesan || 'Penyelarasan gagal.', 'bad'); btn.disabled = false; }
   });
 
-  on('awanKeluar', 'click', () => {
-    Awan.keluar();
-    toast('Keluar dari awan. Kemajuan di perangkat ini tetap utuh.');
-    renderSettings();
+  on('awanKeluar', 'click', async () => {
+    /* Sekarang keluar berarti benar-benar keluar: catatan akses ikut
+       dihapus dan halaman dimuat ulang, supaya gerbang berdiri lagi.
+       Kalau hanya sesinya yang dibuang, isi aplikasi tetap terpampang
+       sampai penyegaran berikutnya. */
+    toast('Keluar. Kemajuan di perangkat ini tetap utuh.');
+    (await import('../gerbang.js')).keluarPenuh();
   });
 
   on('expBtn', 'click', () => { exportData(); toast('Berkas kemajuan diunduh.', 'ok'); });

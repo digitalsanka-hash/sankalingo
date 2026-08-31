@@ -5,7 +5,7 @@
    · berkas sendiri → coba jaringan (batas 4 detik) → simpanan
    · huruf Google   → simpanan dulu (tidak pernah berubah)                */
 
-const VERSI = 'fasih-v38';
+const VERSI = 'fasih-v39';
 const SHELL = `${VERSI}-shell`;
 const ISI   = `${VERSI}-isi`;
 const LUAR  = `${VERSI}-luar`;
@@ -99,6 +99,8 @@ const KERANGKA = [
   './js/kamus.js',
   './js/langctx.js',
   './js/lisensi.js',
+  './js/gerbang.js',
+  './js/jual-config.js',
   './js/saran.js',
   './js/luring.js',
   './js/mockgen.js',

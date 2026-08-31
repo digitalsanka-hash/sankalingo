@@ -36,6 +36,7 @@ import * as LP from './views/langpages.js';
 import * as LC from './views/langcourse.js';
 import * as Pandu from './views/panduan.js';
 import { bukaSaran, pasangSaranOtomatis } from './saran.js';
+import { pastikanAkses } from './gerbang.js';
 import * as Audit from './views/auditsuara.js';
 import * as Adm from './views/admin.js';
 import * as Kam from './views/kamus.js';
@@ -599,7 +600,25 @@ function boot() {
     $('#shell').hidden = false;
     setTimeout(() => $('#boot')?.remove(), 500);
   };
-  setTimeout(tampilkanShell, comfort().gerak === 'kurangi' ? 0 : 380);
+
+  /* Gerbang berdiri SEBELUM shell terlihat, bukan sesudahnya: kalau
+     dibalik, isi aplikasi sempat berkedip di layar orang yang belum
+     berhak melihatnya. Splash boot ikut dilepas lebih dulu supaya
+     layar masuk tidak muncul di balik animasi pemuatan. */
+  (async () => {
+    try {
+      dispatchEvent(new Event('sankalingo:siap'));
+      $('#boot')?.classList.add('is-out');
+      setTimeout(() => $('#boot')?.remove(), 500);
+      await pastikanAkses();
+    } catch (e) {
+      /* Gerbang yang rusak tidak boleh menjadi pintu yang macet
+         selamanya — lebih baik aplikasinya terbuka daripada pembeli
+         terkunci di luar oleh galat tak terduga. */
+      console.error('Gerbang gagal:', e);
+    }
+    tampilkanShell();
+  })();
 
   /* Pengingat menyalin kemajuan — sekali sehari, dan hanya kalau sudah ada isinya. */
   setTimeout(() => {
