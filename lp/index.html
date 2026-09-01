@@ -88,6 +88,12 @@ section + section { border-top: 1px solid var(--garis); }
 .hero__grid { position: relative; z-index: 1; display: grid; gap: 2.2rem; grid-template-columns: 1fr; }
 @media (min-width: 940px) { .hero__grid { grid-template-columns: 1.02fr .98fr; align-items: center; } }
 .hero p.besar { font-size: 1.1rem; color: var(--tinta-2); }
+/* Tiga alasan yang menopang kata "wajib". Tanpa ini, hooknya cuma
+   teriakan; dengan ini, ia jadi pernyataan yang bisa diperiksa. */
+.alasan { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .45rem; }
+.alasan li { display: flex; gap: .6rem; align-items: baseline; font-size: .97rem; color: var(--tinta-2); }
+.alasan li::before { content: "→"; color: var(--coral); font-family: "JetBrains Mono", monospace; flex: 0 0 auto; }
+.alasan b { color: var(--tinta); }
 
 /* ── Kuis ───────────────────────────────────────────────────────── */
 .coba { background: var(--kertas); border: 1px solid var(--garis); border-radius: 18px; padding: 1.4rem; }
@@ -244,13 +250,24 @@ footer { padding-block: 2.2rem; color: var(--tinta-2); font-size: .84rem; }
   <div class="bungkus hero__grid">
     <div class="tumpuk">
       <span class="label">9 bahasa · bayar sekali · selamanya</span>
-      <h1>Kamu salah bukan karena bodoh. Karena tak ada yang bilang <span class="sorot">kenapa</span>.</h1>
-      <p class="besar">Tiga soal di sebelah. Tanpa daftar, tanpa bayar — dan kamu akan tahu persis
-        apa bedanya belajar di sini.</p>
+      <h1>Kamu <span class="sorot">wajib</span> kuasai bahasa Inggris.</h1>
+      <p class="besar">Bukan karena keren. Karena syaratnya sudah dipasang di pintu masuk —
+        dan yang tidak bisa tersaring sebelum bertemu siapa pun.</p>
+
+      <ul class="alasan">
+        <li><b>Lowongan</b> menulis syarat bahasa di iklannya, bukan di wawancara.</li>
+        <li><b>Beasiswa</b> menutup pendaftaran setahun sekali, tanpa menunggumu siap.</li>
+        <li><b>Klien asing</b> membayar dengan mata uang mereka. Pintunya bahasa.</li>
+      </ul>
+
+      <p class="besar">Di sini kamu tidak berhenti di Inggris. Delapan bahasa lain ikut —
+        sekali bayar, dipakai selamanya.</p>
+
       <div class="cta-baris">
         <a class="btn btn--utama" href="#paket">Mulai Rp199.000 <small>5 bahasa</small></a>
         <a class="btn btn--kedua" href="#aksara">Baca aksaranya sekarang</a>
       </div>
+      <p class="catatan">Belum yakin? Jawab tiga soal di sebelah dulu — tanpa daftar, tanpa bayar.</p>
     </div>
 
     <div class="coba" id="coba">
