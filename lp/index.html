@@ -2,352 +2,337 @@
 <meta name="description" content="Sembilan bahasa yang diajarkan untuk otak berbahasa Indonesia. Bayar sekali, akses selamanya.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;700&display=swap">
 
 <style>
 /* ── Token ────────────────────────────────────────────────────────
-   Dunia halaman ini adalah buku catatan bahasa: tinta biru, stabilo
-   kuning, dan pena merah guru. Warnanya diambil dari sana, bukan dari
-   palet SaaS. Semua warna hidup di :root supaya keadaan "system"
+   Dunia halaman ini buku catatan bahasa: tinta biru, stabilo kuning,
+   pena merah guru. Semua warna hidup di :root supaya keadaan "system"
    (tanpa stempel data-theme) tetap terbaca. */
 :root {
-  --tinta:      #14142b;
-  --tinta-2:    #4a4a68;
-  --kertas:     #fbfaf7;
-  --kertas-2:   #f2f0ea;
-  --garis:      #e0ddd3;
-  --biru:       #1b3a8c;   /* tinta pena */
-  --biru-lembut:#e8edfa;
-  --stabilo:    #ffe45c;   /* penanda */
-  --merah:      #c4362c;   /* koreksi guru */
-  --hijau:      #1f6d4a;
-
-  --lebar: 1080px;
-  --teks: 64ch;
-  --r: 14px;
+  --tinta: #14142b; --tinta-2: #4a4a68;
+  --kertas: #fbfaf7; --kertas-2: #f2f0ea; --garis: #ddd9cd;
+  --biru: #1b3a8c; --biru-lembut: #e6ecfb;
+  --stabilo: #ffe45c; --merah: #c4362c; --hijau: #1f6d4a;
+  --lebar: 1120px; --r: 14px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --tinta:      #eceaf5;
-    --tinta-2:    #a5a2bb;
-    --kertas:     #0f0f1a;
-    --kertas-2:   #17172a;
-    --garis:      #2b2b45;
-    --biru:       #8fa8ff;
-    --biru-lembut:#1a2145;
-    --stabilo:    #f0d449;
-    --merah:      #ff8478;
-    --hijau:      #5fd39b;
+    --tinta: #eceaf5; --tinta-2: #a5a2bb;
+    --kertas: #0e0e1a; --kertas-2: #17172b; --garis: #2c2c48;
+    --biru: #8fa8ff; --biru-lembut: #191f42;
+    --stabilo: #f5d84f; --merah: #ff8478; --hijau: #5fd39b;
   }
 }
 :root[data-theme="dark"] {
-  --tinta:      #eceaf5;
-  --tinta-2:    #a5a2bb;
-  --kertas:     #0f0f1a;
-  --kertas-2:   #17172a;
-  --garis:      #2b2b45;
-  --biru:       #8fa8ff;
-  --biru-lembut:#1a2145;
-  --stabilo:    #f0d449;
-  --merah:      #ff8478;
-  --hijau:      #5fd39b;
+  --tinta: #eceaf5; --tinta-2: #a5a2bb;
+  --kertas: #0e0e1a; --kertas-2: #17172b; --garis: #2c2c48;
+  --biru: #8fa8ff; --biru-lembut: #191f42;
+  --stabilo: #f5d84f; --merah: #ff8478; --hijau: #5fd39b;
 }
 
 * { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: var(--kertas);
-  color: var(--tinta);
-  font-family: "Source Serif 4", Georgia, serif;
-  font-size: 18px;
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
-}
-h1, h2, h3, .display {
-  font-family: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-  margin: 0;
-}
-h1 { font-size: clamp(2.3rem, 6vw, 4.1rem); }
-h2 { font-size: clamp(1.8rem, 3.6vw, 2.7rem); }
-h3 { font-size: 1.16rem; letter-spacing: -0.01em; }
-p  { margin: 0; max-width: var(--teks); }
-a  { color: inherit; }
-
+body { margin: 0; background: var(--kertas); color: var(--tinta);
+  font-family: "Source Serif 4", Georgia, serif; font-size: 17px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+h1, h2, h3, .disp { font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-weight: 800; line-height: 1.02; letter-spacing: -.025em; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.6rem, 7.5vw, 5.2rem); }
+h2 { font-size: clamp(1.9rem, 4.4vw, 3.1rem); }
+h3 { font-size: 1.1rem; letter-spacing: -.01em; }
+p { margin: 0; max-width: 58ch; }
 .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
-.label {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: .72rem; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--tinta-2);
-}
-/* Penanda stabilo: dimiringkan sedikit supaya terbaca sebagai coretan
-   tangan, bukan sebagai kotak berwarna. */
-.sorot {
-  background: linear-gradient(102deg, transparent 2%, var(--stabilo) 2%, var(--stabilo) 98%, transparent 98%);
-  padding: 0 .18em; color: #14142b; box-decoration-break: clone;
-}
+.label { font-family: "JetBrains Mono", monospace; font-size: .7rem;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--tinta-2); }
+.sorot { background: linear-gradient(101deg, transparent 2%, var(--stabilo) 2%, var(--stabilo) 98%, transparent 98%);
+  padding: 0 .2em; color: #14142b; box-decoration-break: clone; }
 
-.bungkus { width: min(100% - 2.5rem, var(--lebar)); margin-inline: auto; }
-section { padding-block: clamp(3.5rem, 8vw, 6.5rem); }
+.bungkus { width: min(100% - 2.4rem, var(--lebar)); margin-inline: auto; }
+section { padding-block: clamp(3rem, 7vw, 5.5rem); }
 section + section { border-top: 1px solid var(--garis); }
-.tumpuk { display: flex; flex-direction: column; gap: 1.1rem; }
-.tumpuk-lebar { display: flex; flex-direction: column; gap: 2.5rem; }
+.tumpuk { display: flex; flex-direction: column; gap: 1rem; }
+.tumpuk-l { display: flex; flex-direction: column; gap: 2.2rem; }
 
-/* ── Tombol ─────────────────────────────────────────────────────── */
-.cta-baris { display: flex; flex-wrap: wrap; gap: .9rem; align-items: center; }
-.btn {
-  display: inline-flex; align-items: baseline; gap: .6rem;
-  font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 700;
-  font-size: 1.02rem; text-decoration: none; cursor: pointer;
-  padding: .95rem 1.5rem; border-radius: var(--r); border: 2px solid var(--biru);
-  transition: transform .15s ease, box-shadow .15s ease;
-}
+.btn { display: inline-flex; align-items: baseline; gap: .55rem; cursor: pointer;
+  font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 700; font-size: 1rem;
+  text-decoration: none; padding: .9rem 1.45rem; border-radius: var(--r);
+  border: 2px solid var(--biru); transition: transform .14s ease, box-shadow .14s ease; }
 .btn--utama { background: var(--biru); color: var(--kertas); box-shadow: 0 3px 0 var(--tinta); }
 .btn--kedua { background: transparent; color: var(--biru); }
 .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 0 var(--tinta); }
 .btn:focus-visible { outline: 3px solid var(--stabilo); outline-offset: 3px; }
-.btn small { font-family: "JetBrains Mono", monospace; font-size: .78rem; font-weight: 400; opacity: .85; }
+.btn small { font-family: "JetBrains Mono", monospace; font-size: .75rem; font-weight: 400; opacity: .85; }
+.cta-baris { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
 
-/* ── Hero ───────────────────────────────────────────────────────── */
-.hero { padding-top: clamp(2.5rem, 6vw, 4.5rem); }
-.hero__grid { display: grid; gap: 3rem; grid-template-columns: 1fr; }
-@media (min-width: 900px) { .hero__grid { grid-template-columns: 1.15fr .85fr; align-items: start; } }
-.hero p.besar { font-size: 1.22rem; color: var(--tinta-2); }
+/* ── Hero: aksara raksasa sebagai lapisan grafis, bukan hiasan ──── */
+.hero { position: relative; padding-top: clamp(2rem, 5vw, 3.5rem); overflow: hidden; }
+.hero__aksara { position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 800;
+  color: var(--biru); opacity: .07; overflow: hidden; }
+.hero__aksara span { position: absolute; font-size: clamp(7rem, 18vw, 15rem); line-height: 1; user-select: none; }
+.hero__grid { position: relative; z-index: 1; display: grid; gap: 2.5rem; grid-template-columns: 1fr; }
+@media (min-width: 940px) { .hero__grid { grid-template-columns: 1.05fr .95fr; align-items: center; } }
 
-/* Sapaan sembilan bahasa: aksara asli tiap bahasa, berjalan pelan.
-   Ini isi produknya sendiri, bukan hiasan. */
+/* ── Coba dulu: kuis dua pilihan ────────────────────────────────── */
+.coba { background: var(--kertas-2); border: 2px solid var(--tinta); border-radius: 18px;
+  padding: 1.5rem; box-shadow: 6px 6px 0 var(--biru); }
+.coba__soal { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 600;
+  font-size: 1.25rem; margin: .5rem 0 1rem; min-height: 2.6em; }
+.pilih { display: grid; gap: .6rem; }
+.pilih button { font-family: "JetBrains Mono", monospace; font-size: 1rem; text-align: left;
+  padding: .85rem 1rem; border-radius: 10px; border: 2px solid var(--garis);
+  background: var(--kertas); color: var(--tinta); cursor: pointer; transition: border-color .12s, background .12s; }
+.pilih button:hover:not(:disabled) { border-color: var(--biru); }
+.pilih button:focus-visible { outline: 3px solid var(--stabilo); outline-offset: 2px; }
+.pilih button.benar { border-color: var(--hijau); background: color-mix(in srgb, var(--hijau) 12%, transparent); }
+.pilih button.salah { border-color: var(--merah); background: color-mix(in srgb, var(--merah) 12%, transparent);
+  text-decoration: line-through; text-decoration-thickness: 2px; }
+.coba__jelas { margin-top: 1rem; font-size: .95rem; color: var(--tinta-2); min-height: 4.5em; }
+.coba__jelas b { color: var(--tinta); }
+.coba__kaki { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: .9rem; }
+.coba__lanjut { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: .92rem;
+  background: none; border: 0; color: var(--biru); cursor: pointer; padding: .4rem 0; }
+.coba__lanjut:disabled { opacity: .35; cursor: default; }
+.coba__hitung { font-family: "JetBrains Mono", monospace; font-size: .78rem; color: var(--tinta-2); }
+
+/* ── Pita sapaan ────────────────────────────────────────────────── */
 .pita { overflow: hidden; border-block: 1px solid var(--garis); background: var(--kertas-2); }
-.pita__isi { display: flex; gap: 2.4rem; width: max-content; padding: .85rem 0; animation: geser 34s linear infinite; }
-.pita span { font-size: 1.15rem; white-space: nowrap; color: var(--tinta-2); }
+.pita__isi { display: flex; gap: 2.2rem; width: max-content; padding: .8rem 0; animation: geser 38s linear infinite; }
+.pita span { white-space: nowrap; color: var(--tinta-2); font-size: 1.05rem; }
 .pita b { color: var(--tinta); font-weight: 600; }
 @keyframes geser { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .pita__isi { animation: none; } }
 
-/* Kartu contoh: meniru kartu kamus di dalam aplikasi. */
-.kartu {
-  background: var(--kertas-2); border: 1px solid var(--garis);
-  border-radius: var(--r); padding: 1.4rem 1.5rem;
-}
-.kartu__kepala { display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap; }
-.kartu__lema { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 800; font-size: 1.9rem; }
-.kartu__rom { font-family: "JetBrains Mono", monospace; font-size: .85rem; color: var(--biru); }
-.kartu__baris { display: flex; justify-content: space-between; gap: 1rem; padding: .55rem 0; border-top: 1px dashed var(--garis); }
-.kartu__baris:first-of-type { border-top: 0; }
-.kartu__baris small { color: var(--tinta-2); font-size: .8rem; }
+/* ── Sembilan bahasa: petak aksara ──────────────────────────────── */
+.petak { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+@media (min-width: 780px) { .petak { grid-template-columns: repeat(5, 1fr); } }
+.petak button { position: relative; aspect-ratio: 1; border: 2px solid var(--garis); border-radius: var(--r);
+  background: var(--kertas-2); color: var(--tinta); cursor: pointer; display: grid; place-items: center;
+  gap: .2rem; padding: .4rem; transition: border-color .12s, transform .12s; }
+.petak button:hover { border-color: var(--biru); transform: translateY(-3px); }
+.petak button[aria-pressed="true"] { border-color: var(--biru); background: var(--biru-lembut); }
+.petak button:focus-visible { outline: 3px solid var(--stabilo); outline-offset: 2px; }
+.petak .glif { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 800;
+  font-size: clamp(1.6rem, 4.5vw, 2.3rem); line-height: 1; }
+.petak .nm { font-family: "JetBrains Mono", monospace; font-size: .62rem; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--tinta-2); }
+
+/* ── Kartu kamus hidup ──────────────────────────────────────────── */
+.kamus { border: 2px solid var(--tinta); border-radius: 18px; background: var(--kertas-2);
+  padding: 1.4rem 1.5rem; box-shadow: 6px 6px 0 var(--stabilo); }
+.kamus__kepala { display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap; margin-bottom: .3rem; }
+.kamus__lema { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: clamp(2rem, 5vw, 2.6rem); line-height: 1.1; }
+.kamus__rom { font-family: "JetBrains Mono", monospace; font-size: .85rem; color: var(--biru); }
+.kamus__arti { color: var(--tinta-2); }
+.kamus__baris { display: flex; align-items: center; justify-content: space-between; gap: .8rem;
+  padding: .5rem 0; border-top: 1px dashed var(--garis); }
+.kamus__baris:first-of-type { border-top: 0; }
+.kamus__kiri { display: flex; align-items: baseline; gap: .6rem; min-width: 0; }
+.kamus__bentuk { font-weight: 600; }
+.suara { border: 2px solid var(--garis); background: var(--kertas); color: var(--tinta);
+  width: 34px; height: 34px; border-radius: 9px; cursor: pointer; flex: 0 0 auto;
+  display: grid; place-items: center; font-size: .9rem; transition: border-color .12s; }
+.suara:hover { border-color: var(--biru); }
+.suara:focus-visible { outline: 3px solid var(--stabilo); outline-offset: 2px; }
+.suara.bunyi { border-color: var(--biru); background: var(--biru-lembut); }
+.kamus__catatan { font-size: .85rem; color: var(--tinta-2); margin-top: .8rem; }
+
+/* ── Angka ──────────────────────────────────────────────────────── */
+.angka-baris { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--garis);
+  border: 1px solid var(--garis); border-radius: var(--r); overflow: hidden; }
+@media (min-width: 720px) { .angka-baris { grid-template-columns: repeat(4, 1fr); } }
+.angka-baris div { background: var(--kertas); padding: 1.3rem 1.1rem; }
+.angka-baris b { display: block; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800;
+  font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--biru); font-variant-numeric: tabular-nums; line-height: 1; }
+.angka-baris span { font-size: .87rem; color: var(--tinta-2); display: block; margin-top: .35rem; }
 
 /* ── Koreksi ────────────────────────────────────────────────────── */
-.koreksi { display: grid; gap: 1.4rem; grid-template-columns: 1fr; }
-@media (min-width: 780px) { .koreksi { grid-template-columns: repeat(3, 1fr); } }
-.koreksi article { background: var(--kertas-2); border: 1px solid var(--garis); border-radius: var(--r); padding: 1.3rem; }
+.koreksi { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+@media (min-width: 820px) { .koreksi { grid-template-columns: repeat(3, 1fr); } }
+.koreksi article { border: 1px solid var(--garis); border-radius: var(--r); padding: 1.15rem;
+  background: var(--kertas-2); }
 .salah { color: var(--merah); text-decoration: line-through; text-decoration-thickness: 2px; font-weight: 600; }
 .benar { color: var(--hijau); font-weight: 600; }
-.koreksi p { font-size: .95rem; color: var(--tinta-2); margin-top: .7rem; }
-.koreksi .label { display: block; margin-bottom: .6rem; }
+.koreksi .mono { font-size: .95rem; }
+.koreksi p { font-size: .9rem; color: var(--tinta-2); margin-top: .6rem; }
 
-/* ── Daftar isi produk ──────────────────────────────────────────── */
-.isi { display: grid; gap: 1.2rem; grid-template-columns: 1fr; }
-@media (min-width: 700px) { .isi { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1000px) { .isi { grid-template-columns: repeat(3, 1fr); } }
-.isi article { border: 1px solid var(--garis); border-radius: var(--r); padding: 1.3rem; background: var(--kertas-2); }
-.isi h3 { margin-bottom: .45rem; }
-.isi p { font-size: .95rem; color: var(--tinta-2); }
-.angka { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 800;
-  font-size: 2rem; color: var(--biru); font-variant-numeric: tabular-nums; display: block; line-height: 1.1; }
+/* ── Biaya: sekali vs bulanan ───────────────────────────────────── */
+.biaya { display: grid; gap: 1.5rem; grid-template-columns: 1fr; align-items: end; }
+@media (min-width: 700px) { .biaya { grid-template-columns: 1fr 1fr; } }
+.batang { display: flex; align-items: flex-end; gap: 4px; height: 190px; }
+.batang i { flex: 1; background: var(--garis); border-radius: 4px 4px 0 0; display: block; }
+.batang.tumbuh i { background: var(--merah); opacity: .55; }
+.batang.datar i { background: var(--biru); }
+.biaya figcaption { margin-top: .7rem; font-size: .9rem; color: var(--tinta-2); }
+.biaya b { font-family: "Bricolage Grotesque", sans-serif; font-size: 1.05rem; color: var(--tinta); display: block; }
 
 /* ── Harga ──────────────────────────────────────────────────────── */
-.harga { display: grid; gap: 1.5rem; grid-template-columns: 1fr; align-items: start; }
-@media (min-width: 820px) { .harga { grid-template-columns: 1fr 1fr; } }
-.paket { border: 2px solid var(--garis); border-radius: 18px; padding: 1.8rem; background: var(--kertas-2); display: flex; flex-direction: column; gap: 1.1rem; }
-.paket--sorot { border-color: var(--biru); background: var(--biru-lembut); position: relative; }
-.paket--sorot::after {
-  content: "Paling lengkap"; position: absolute; top: -.85rem; left: 1.6rem;
+.harga { display: grid; gap: 1.4rem; grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 840px) { .harga { grid-template-columns: 1fr 1fr; } }
+.paket { border: 2px solid var(--garis); border-radius: 18px; padding: 1.7rem; background: var(--kertas-2);
+  display: flex; flex-direction: column; gap: 1rem; }
+.paket--sorot { border-color: var(--biru); background: var(--biru-lembut); position: relative;
+  box-shadow: 6px 6px 0 var(--tinta); }
+.paket--sorot::after { content: "Paling lengkap"; position: absolute; top: -.8rem; left: 1.5rem;
   background: var(--biru); color: var(--kertas); font-family: "JetBrains Mono", monospace;
-  font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; padding: .3rem .7rem; border-radius: 99px;
-}
-.rupiah { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 800; font-size: 2.6rem; line-height: 1; font-variant-numeric: tabular-nums; }
-.paket ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; font-size: .97rem; }
-.paket li { display: flex; gap: .6rem; align-items: baseline; }
+  font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; padding: .3rem .7rem; border-radius: 99px; }
+.rupiah { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 2.5rem;
+  line-height: 1; font-variant-numeric: tabular-nums; }
+.paket ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .45rem; font-size: .95rem; }
+.paket li { display: flex; gap: .55rem; align-items: baseline; }
 .paket li::before { content: "→"; color: var(--biru); font-family: "JetBrains Mono", monospace; }
 .paket .btn { justify-content: center; }
 
 /* ── Langkah & FAQ ──────────────────────────────────────────────── */
-.langkah { display: grid; gap: 1.2rem; grid-template-columns: 1fr; counter-reset: n; }
+.langkah { display: grid; gap: 1rem; grid-template-columns: 1fr; counter-reset: n; }
 @media (min-width: 780px) { .langkah { grid-template-columns: repeat(3, 1fr); } }
-.langkah article { padding-top: 1rem; border-top: 3px solid var(--biru); counter-increment: n; }
-.langkah article::before {
-  content: counter(n); font-family: "JetBrains Mono", monospace; font-size: .8rem;
-  color: var(--biru); display: block; margin-bottom: .4rem;
-}
-.langkah p { font-size: .95rem; color: var(--tinta-2); }
-details { border-bottom: 1px solid var(--garis); padding: 1.05rem 0; }
-summary { cursor: pointer; font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 600; font-size: 1.05rem; list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
+.langkah article { padding-top: .9rem; border-top: 3px solid var(--biru); counter-increment: n; }
+.langkah article::before { content: counter(n); font-family: "JetBrains Mono", monospace;
+  font-size: .75rem; color: var(--biru); display: block; margin-bottom: .3rem; }
+.langkah p { font-size: .92rem; color: var(--tinta-2); }
+details { border-bottom: 1px solid var(--garis); padding: .95rem 0; }
+summary { cursor: pointer; font-family: "Bricolage Grotesque", sans-serif; font-weight: 600;
+  font-size: 1.02rem; list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
 summary::-webkit-details-marker { display: none; }
 summary::after { content: "+"; color: var(--biru); font-family: "JetBrains Mono", monospace; }
 details[open] summary::after { content: "–"; }
-details p { margin-top: .7rem; color: var(--tinta-2); font-size: .97rem; }
+details p { margin-top: .55rem; color: var(--tinta-2); font-size: .93rem; }
 summary:focus-visible { outline: 3px solid var(--stabilo); outline-offset: 3px; }
 
-footer { padding-block: 3rem; color: var(--tinta-2); font-size: .87rem; }
-.catatan { font-size: .87rem; color: var(--tinta-2); }
+footer { padding-block: 2.5rem; color: var(--tinta-2); font-size: .85rem; }
+.catatan { font-size: .85rem; color: var(--tinta-2); }
 </style>
 
 <section class="hero">
+  <div class="hero__aksara" aria-hidden="true">
+    <span style="top:-2%;left:-1%">あ</span>
+    <span style="top:34%;right:-2%">한</span>
+    <span style="bottom:-6%;left:24%">中</span>
+    <span style="top:6%;left:56%">ع</span>
+    <span style="bottom:2%;right:22%">Я</span>
+  </div>
+
   <div class="bungkus hero__grid">
     <div class="tumpuk">
-      <span class="label">Sembilan bahasa · bayar sekali · akses selamanya</span>
-      <h1>Bahasa asing terasa susah karena diajarkan seolah kamu bukan orang&nbsp;Indonesia.</h1>
-      <p class="besar">SankaLingo GO menjelaskan justru bagian yang selalu membuat kita tergelincir —
-        lalu melatihnya sampai otomatis. <span class="sorot">Sekali bayar, dipakai selamanya.</span></p>
-
+      <span class="label">9 bahasa · bayar sekali · selamanya</span>
+      <h1>Kamu salah bukan karena bodoh. Karena tidak ada yang bilang <span class="sorot">kenapa</span>.</h1>
+      <p style="font-size:1.15rem;color:var(--tinta-2)">Coba sendiri sekarang — tiga soal di sebelah,
+        tanpa daftar, tanpa bayar.</p>
       <div class="cta-baris">
-        <a class="btn btn--utama" href="#paket">Mulai dari Rp199.000 <small>5 bahasa</small></a>
-        <a class="btn btn--kedua" href="#isi">Lihat isinya dulu</a>
+        <a class="btn btn--utama" href="#paket">Mulai Rp199.000 <small>5 bahasa</small></a>
+        <a class="btn btn--kedua" href="#kamus">Lihat isinya</a>
       </div>
-      <p class="catatan">Kode akses dikirim ke emailmu segera setelah pembayaran diterima.</p>
     </div>
 
-    <div class="kartu">
-      <span class="label">Contoh kartu kamus</span>
-      <div class="kartu__kepala" style="margin:.6rem 0 .3rem">
-        <span class="kartu__lema" lang="ja">行く</span>
-        <span class="kartu__rom">iku</span>
-        <span style="color:var(--tinta-2)">pergi</span>
+    <div class="coba" id="coba">
+      <span class="label" id="cobaLabel">Coba dulu · Inggris</span>
+      <p class="coba__soal" id="cobaSoal"></p>
+      <div class="pilih" id="cobaPilih"></div>
+      <p class="coba__jelas" id="cobaJelas"></p>
+      <div class="coba__kaki">
+        <span class="coba__hitung" id="cobaHitung"></span>
+        <button class="coba__lanjut" id="cobaLanjut" disabled>Soal berikutnya →</button>
       </div>
-      <div class="kartu__baris"><span lang="ja">行きます</span><span class="mono kartu__rom">ikimasu</span></div>
-      <div class="kartu__baris"><span lang="ja">行って</span><span class="mono kartu__rom">itte</span></div>
-      <div class="kartu__baris"><span lang="ja">行った</span><span class="mono kartu__rom">itta</span></div>
-      <p style="margin-top:.9rem"><small>Tiap bentuk kata punya tombol suaranya sendiri — termasuk bentuk
-        yang tidak beraturan, yang justru paling sering dipakai.</small></p>
     </div>
   </div>
 </section>
 
 <div class="pita" aria-hidden="true">
-  <div class="pita__isi">
-    <span><b>Hello</b> · Inggris</span><span><b lang="ja">こんにちは</b> · Jepang</span>
-    <span><b lang="ko">안녕하세요</b> · Korea</span><span><b lang="zh">你好</b> · Mandarin</span>
-    <span><b lang="ar">مرحبا</b> · Arab</span><span><b>Hallo</b> · Jerman</span>
-    <span><b>Bonjour</b> · Prancis</span><span><b>Hola</b> · Spanyol</span>
-    <span><b lang="ru">Привет</b> · Rusia</span>
-    <span><b>Hello</b> · Inggris</span><span><b lang="ja">こんにちは</b> · Jepang</span>
-    <span><b lang="ko">안녕하세요</b> · Korea</span><span><b lang="zh">你好</b> · Mandarin</span>
-    <span><b lang="ar">مرحبا</b> · Arab</span><span><b>Hallo</b> · Jerman</span>
-    <span><b>Bonjour</b> · Prancis</span><span><b>Hola</b> · Spanyol</span>
-    <span><b lang="ru">Привет</b> · Rusia</span>
-  </div>
+  <div class="pita__isi" id="pita"></div>
 </div>
 
 <section>
-  <div class="bungkus tumpuk-lebar">
+  <div class="bungkus tumpuk-l">
     <div class="tumpuk">
-      <span class="label">Yang sebenarnya terjadi</span>
-      <h2>Kamu tidak berhenti karena malas. Kamu berhenti karena tidak pernah diberi tahu <em>kenapa</em> salah.</h2>
-      <p>Aplikasi bahasa umumnya menyodorkan kalimat, lalu menandai jawabanmu benar atau salah.
-        Ketika salah, kamu mengulang sampai hafal — tanpa pernah tahu kebiasaan berbahasa Indonesia mana
-        yang sedang menyeretmu. Kesalahan yang sama muncul lagi enam bulan kemudian, di kalimat berbeda.</p>
+      <span class="label">Bedanya di sini</span>
+      <h2>Aplikasi lain menandai benar–salah. Ini menyebut kebiasaan mana yang menyeretmu.</h2>
     </div>
-
     <div class="koreksi">
       <article>
         <span class="label">Inggris</span>
-        <div><span class="salah">two book</span> → <span class="benar">two books</span></div>
-        <p>Bahasa Indonesia mengulang kata (buku-buku); Inggris menambah <span class="mono">-s</span>.
-          Ekor kecil yang wajib, dan kelalaian tersering penutur Indonesia.</p>
+        <div class="mono"><span class="salah">two book</span> → <span class="benar">two books</span></div>
+        <p>Indonesia mengulang kata: buku-buku. Inggris menambah <b>-s</b>. Ekor kecil yang wajib.</p>
       </article>
       <article>
         <span class="label">Jerman</span>
-        <div><span class="salah">Heute ich gehe</span> → <span class="benar">Heute gehe ich</span></div>
-        <p>Kita terbiasa “Hari ini saya pergi”. Dalam bahasa Jerman, posisi kedua sudah
-          milik kata kerja, jadi subjeknya pindah ke belakang.</p>
+        <div class="mono"><span class="salah">Heute ich gehe</span> → <span class="benar">Heute gehe ich</span></div>
+        <p>“Hari ini saya pergi” diterjemahkan urut. Di Jerman posisi kedua milik kata kerja.</p>
       </article>
       <article>
-        <span class="label">Inggris</span>
-        <div><span class="salah">when it will rain</span> → <span class="benar">when it rains</span></div>
-        <p>Sesudah <em>when, after, before</em>, bahasa Inggris memakai bentuk sekarang untuk peristiwa
-          masa depan. Salah paling awet, karena logikanya justru terasa benar.</p>
+        <span class="label">Arab</span>
+        <div class="mono"><span class="salah">ثلاثة بنات</span> → <span class="benar">ثلاث بنات</span></div>
+        <p>Bilangan 3–10 membalik jenis kelaminnya. Tidak ada padanannya di bahasa kita.</p>
       </article>
     </div>
-
-    <p><span class="sorot">Setiap topik di sini ditulis dari sisi itu:</span> apa yang berbeda dari kebiasaan
-      berbahasa Indonesia kita, kenapa perbedaan itu tidak terlihat, dan latihan yang memaksanya jadi refleks.</p>
   </div>
 </section>
 
-<section id="isi">
-  <div class="bungkus tumpuk-lebar">
+<section id="kamus">
+  <div class="bungkus tumpuk-l">
     <div class="tumpuk">
-      <span class="label">Yang kamu dapat</span>
-      <h2>Isi yang bisa dihitung, bukan janji.</h2>
+      <span class="label">Isi kamusnya</span>
+      <h2>Pilih bahasa. Dengarkan sendiri.</h2>
+      <p class="catatan">Suara memakai mesin baca perangkatmu — persis seperti di dalam aplikasi.</p>
     </div>
 
-    <div class="isi">
-      <article>
-        <span class="angka">9.052</span>
-        <h3>Entri kamus sembilan bahasa</h3>
-        <p>Tiap entri memuat arti, contoh kalimat, frasa pemakaian, dan bentuk kata yang tidak bisa ditebak —
-          lengkap dengan pelafalan tiap bentuknya.</p>
-      </article>
-      <article>
-        <span class="angka">326</span>
-        <h3>Pelajaran terstruktur untuk bahasa Inggris</h3>
-        <p>Tersusun dalam 44 unit mengikuti tingkatan CEFR A1 sampai C2, dengan 162 topik tata bahasa
-          dan 767 latihan.</p>
-      </article>
-      <article>
-        <span class="angka">10</span>
-        <h3>Simulasi ujian resmi</h3>
-        <p>IELTS, TOEFL, TOEIC, JLPT, TOPIK, HSK, Goethe, DELF, DELE, dan TORFL — meniru format dan
-          ambang kelulusannya, termasuk aturan nilai minimum per bagian.</p>
-      </article>
-      <article>
-        <span class="angka">0</span>
-        <h3>Kuota internet setelah terpasang</h3>
-        <p>Sekali dibuka, seluruh materi tersimpan di perangkatmu. Bisa dipakai di kereta, di kelas,
-          di daerah tanpa sinyal.</p>
-      </article>
-      <article>
-        <span class="angka">∞</span>
-        <h3>Perangkat yang bisa dipakai</h3>
-        <p>Masuk dengan email dan kata sandi yang sama di ponsel maupun laptop. Kemajuan belajarmu ikut pindah.</p>
-      </article>
-      <article>
-        <span class="angka">A1–C2</span>
-        <h3>Mulai dari benar-benar nol</h3>
-        <p>Bahasa beraksara lain dimulai dari aksaranya: Hangeul, kana, hanzi, huruf Arab, dan Kiril —
-          termasuk urutan goresan dan cara membacanya.</p>
-      </article>
-    </div>
+    <div class="petak" id="petak" role="group" aria-label="Pilih bahasa"></div>
+
+    <div class="kamus" id="kartu"></div>
   </div>
 </section>
 
 <section>
-  <div class="bungkus tumpuk-lebar">
+  <div class="bungkus tumpuk-l">
+    <div class="tumpuk"><span class="label">Yang dihitung, bukan dijanjikan</span></div>
+    <div class="angka-baris">
+      <div><b>9.052</b><span>entri kamus, sembilan bahasa</span></div>
+      <div><b>326</b><span>pelajaran Inggris dalam 44 unit</span></div>
+      <div><b>767</b><span>latihan tata bahasa</span></div>
+      <div><b>10</b><span>simulasi ujian resmi</span></div>
+    </div>
+    <p class="catatan">IELTS · TOEFL · TOEIC · JLPT · TOPIK · HSK · Goethe · DELF · DELE · TORFL —
+      meniru format dan ambang kelulusannya, termasuk nilai minimum tiap bagian.</p>
+  </div>
+</section>
+
+<section>
+  <div class="bungkus tumpuk-l">
     <div class="tumpuk">
       <span class="label">Kenapa sekarang</span>
-      <h2>Yang mahal bukan harganya. Yang mahal adalah tahun yang lewat.</h2>
-      <p>Syarat bahasa muncul persis di pintu-pintu yang paling menentukan: lowongan yang meminta
-        sertifikat, beasiswa yang kuotanya dibuka setahun sekali, promosi yang jatuh ke orang yang
-        bisa memimpin rapat dengan klien asing, pekerjaan jarak jauh yang membayar dalam mata uang lain.</p>
-      <p>Pintu-pintu itu tidak menunggu. Yang menunda tahun ini akan berhadapan dengan syarat yang sama
-        tahun depan — <span class="sorot">dengan kemampuan yang sama persis seperti hari ini.</span></p>
-      <p>Kemampuan bahasa juga tidak seperti keterampilan yang cepat basi. Ia menempel seumur hidup,
-        menumpuk, dan membuka pintu berikutnya tanpa perlu dibeli ulang.</p>
+      <h2>Yang mahal bukan harganya. Yang mahal tahun yang lewat.</h2>
+    </div>
+    <div class="koreksi">
+      <article><span class="label">Lowongan</span><p style="color:var(--tinta);font-size:1rem">
+        Syarat sertifikat bahasa muncul di iklan kerja, bukan di wawancara. Yang tidak punya tersaring sebelum bertemu siapa pun.</p></article>
+      <article><span class="label">Beasiswa</span><p style="color:var(--tinta);font-size:1rem">
+        Kuotanya dibuka setahun sekali. Melewatkannya berarti menunggu dua belas bulan penuh.</p></article>
+      <article><span class="label">Bayaran</span><p style="color:var(--tinta);font-size:1rem">
+        Kerja jarak jauh untuk klien asing dibayar dengan mata uang mereka — pintunya bahasa.</p></article>
+    </div>
+    <p><span class="sorot">Tahun depan syaratnya sama. Kemampuanmu juga — kalau hari ini tidak dimulai.</span></p>
+  </div>
+</section>
+
+<section>
+  <div class="bungkus tumpuk-l">
+    <div class="tumpuk"><span class="label">Bayar sekali</span>
+      <h2>Bukan Rp199.000 tiap bulan.</h2></div>
+    <div class="biaya">
+      <figure style="margin:0">
+        <div class="batang tumbuh" id="batangLangganan" aria-hidden="true"></div>
+        <figcaption><b>Langganan bulanan</b>Berhenti membayar, akses hilang — padahal bahasa butuh tahunan.</figcaption>
+      </figure>
+      <figure style="margin:0">
+        <div class="batang datar" id="batangSekali" aria-hidden="true"></div>
+        <figcaption><b>SankaLingo GO</b>Sekali tebus, menempel di akunmu tanpa tanggal kedaluwarsa.</figcaption>
+      </figure>
     </div>
   </div>
 </section>
 
 <section id="paket">
-  <div class="bungkus tumpuk-lebar">
-    <div class="tumpuk">
-      <span class="label">Harga</span>
-      <h2>Bayar sekali. Bukan tiap bulan.</h2>
-      <p>Langganan bulanan berhenti memberi akses begitu kamu berhenti membayar — padahal belajar bahasa
-        justru butuh tahunan. Di sini kodenya menempel pada akunmu dan tidak punya tanggal kedaluwarsa.</p>
-    </div>
-
+  <div class="bungkus tumpuk-l">
+    <div class="tumpuk"><span class="label">Harga</span><h2>Pilih paketmu.</h2></div>
     <div class="harga">
       <div class="paket">
         <div>
@@ -356,14 +341,13 @@ footer { padding-block: 3rem; color: var(--tinta-2); font-size: .87rem; }
           <span class="catatan">sekali bayar, selamanya</span>
         </div>
         <ul>
-          <li>Inggris — kurikulum lengkap A1–C2</li>
-          <li>Jepang, Korea, Mandarin, Arab</li>
-          <li>Kamus, latihan, dan simulasi ujian bahasa-bahasa itu</li>
+          <li>Inggris — kurikulum penuh A1–C2</li>
+          <li>Jepang · Korea · Mandarin · Arab</li>
+          <li>Kamus, latihan, simulasi ujian bahasa-bahasa itu</li>
           <li>Sinkron antar perangkat, jalan tanpa internet</li>
         </ul>
-        <a class="btn btn--kedua" href="#" data-checkout="5">Ambil paket Esensi</a>
+        <a class="btn btn--kedua" href="#" data-checkout="5">Ambil Esensi</a>
       </div>
-
       <div class="paket paket--sorot">
         <div>
           <span class="label">Lengkap · 9 bahasa</span>
@@ -371,90 +355,54 @@ footer { padding-block: 3rem; color: var(--tinta-2); font-size: .87rem; }
           <span class="catatan">sekali bayar, selamanya</span>
         </div>
         <ul>
-          <li>Semua yang ada di paket Esensi</li>
-          <li>Ditambah Jerman, Prancis, Spanyol, Rusia</li>
-          <li>Sepuluh simulasi ujian resmi, termasuk Goethe, DELF, DELE, TORFL</li>
-          <li>Seluruh bahasa yang ditambahkan kemudian</li>
+          <li>Semua isi paket Esensi</li>
+          <li>Ditambah Jerman · Prancis · Spanyol · Rusia</li>
+          <li>Sepuluh simulasi ujian, termasuk Goethe, DELF, DELE, TORFL</li>
+          <li>Bahasa yang ditambahkan kemudian, tanpa bayar lagi</li>
         </ul>
-        <a class="btn btn--utama" href="#" data-checkout="9">Ambil paket Lengkap</a>
+        <a class="btn btn--utama" href="#" data-checkout="9">Ambil Lengkap</a>
       </div>
     </div>
-
-    <p class="catatan">Mulai dari Esensi dan ingin menambah? Cukup bayar selisihnya, Rp100.000,
-      kapan pun kamu siap.</p>
+    <p class="catatan">Mulai dari Esensi lalu ingin menambah? Bayar selisihnya, Rp100.000, kapan pun.</p>
   </div>
 </section>
 
 <section>
-  <div class="bungkus tumpuk-lebar">
-    <div class="tumpuk">
-      <span class="label">Cara mulai</span>
-      <h2>Tiga langkah, selesai dalam dua menit.</h2>
-    </div>
+  <div class="bungkus tumpuk-l">
+    <div class="tumpuk"><span class="label">Cara mulai</span><h2>Dua menit sampai pelajaran pertama.</h2></div>
     <div class="langkah">
-      <article>
-        <h3>Bayar</h3>
-        <p>Pilih paketmu dan selesaikan pembayaran di halaman checkout.</p>
-      </article>
-      <article>
-        <h3>Terima kode</h3>
-        <p>Kode akses dikirim otomatis ke emailmu, biasanya dalam hitungan detik.</p>
-      </article>
-      <article>
-        <h3>Daftar dan belajar</h3>
-        <p>Buka aplikasinya, pilih Daftar, isi email, buat kata sandi, tempel kodenya.
-          Masuk berikutnya cukup email dan kata sandi.</p>
-      </article>
+      <article><h3>Bayar</h3><p>Pilih paket, selesaikan di halaman checkout.</p></article>
+      <article><h3>Terima kode</h3><p>Masuk ke emailmu otomatis, biasanya dalam hitungan detik.</p></article>
+      <article><h3>Daftar</h3><p>Email, kata sandi, tempel kode. Masuk berikutnya cukup email dan kata sandi.</p></article>
     </div>
   </div>
 </section>
 
 <section>
-  <div class="bungkus tumpuk-lebar">
-    <div class="tumpuk"><span class="label">Pertanyaan</span><h2>Yang biasanya ditanyakan.</h2></div>
+  <div class="bungkus tumpuk-l">
+    <div class="tumpuk"><span class="label">Pertanyaan</span></div>
     <div>
-      <details>
-        <summary>“Selamanya” itu benar-benar selamanya?</summary>
-        <p>Ya. Kode yang sudah ditebus menempel pada akunmu tanpa tanggal kedaluwarsa. Tidak ada tagihan
-          bulanan dan tidak ada perpanjangan.</p>
-      </details>
-      <details>
-        <summary>Saya benar-benar pemula. Bisa ikut?</summary>
-        <p>Bisa. Bahasa yang memakai aksara lain dimulai dari aksaranya dulu — Hangeul, kana, hanzi,
-          huruf Arab, Kiril — termasuk urutan goresan dan cara membacanya, sebelum masuk ke kata dan kalimat.</p>
-      </details>
-      <details>
-        <summary>Apakah ini kursus dengan guru?</summary>
-        <p>Bukan. Ini aplikasi belajar mandiri yang terstruktur: materi, penjelasan, latihan, dan simulasi
-          ujian. Tidak ada kelas langsung atau pengajar yang mengoreksi tugasmu.</p>
-      </details>
-      <details>
-        <summary>Harus online terus?</summary>
-        <p>Tidak. Perlu internet saat pertama membuka dan saat menyelaraskan kemajuan antar perangkat.
-          Selebihnya berjalan penuh tanpa koneksi.</p>
-      </details>
-      <details>
-        <summary>Bisa dipakai di HP dan laptop sekaligus?</summary>
-        <p>Bisa. Masuk dengan email dan kata sandi yang sama, kemajuan belajarmu ikut berpindah.</p>
-      </details>
-      <details>
-        <summary>Saya ambil Esensi dulu, nanti mau tambah bahasa?</summary>
-        <p>Bayar selisihnya, Rp100.000, kapan pun. Kemajuan belajar yang sudah ada tetap utuh.</p>
-      </details>
-      <details>
-        <summary>Kodenya belum masuk ke email saya.</summary>
-        <p>Periksa folder spam atau promosi lebih dulu. Kalau tetap tidak ada, balas pesan pembelianmu —
-          kode bisa dikirim ulang secara manual.</p>
-      </details>
+      <details><summary>“Selamanya” benar-benar selamanya?</summary>
+        <p>Ya. Kode yang ditebus menempel pada akunmu tanpa tanggal kedaluwarsa. Tidak ada tagihan bulanan.</p></details>
+      <details><summary>Saya pemula nol. Bisa?</summary>
+        <p>Bisa. Bahasa beraksara lain dimulai dari aksaranya — Hangeul, kana, hanzi, huruf Arab, Kiril — termasuk urutan goresan.</p></details>
+      <details><summary>Ini kursus dengan guru?</summary>
+        <p>Bukan. Aplikasi belajar mandiri terstruktur: materi, penjelasan, latihan, simulasi ujian. Tidak ada kelas langsung.</p></details>
+      <details><summary>Harus online terus?</summary>
+        <p>Tidak. Internet dibutuhkan saat pertama membuka dan saat menyelaraskan kemajuan. Selebihnya jalan penuh tanpa koneksi.</p></details>
+      <details><summary>HP dan laptop sekaligus?</summary>
+        <p>Bisa. Masuk dengan email dan kata sandi yang sama; kemajuan ikut berpindah.</p></details>
+      <details><summary>Kodenya belum masuk email.</summary>
+        <p>Periksa folder spam atau promosi dulu. Kalau tetap tidak ada, balas pesan pembelianmu — kode bisa dikirim ulang.</p></details>
     </div>
   </div>
 </section>
 
 <section>
   <div class="bungkus tumpuk">
-    <h2>Sembilan bahasa, satu kali bayar.</h2>
-    <p class="besar">Mulai malam ini dengan bahasa yang paling kamu butuhkan, dan simpan sisanya untuk
-      nanti — semuanya sudah menjadi milikmu.</p>
+    <h2>Sembilan bahasa. Satu kali bayar.</h2>
+    <p style="font-size:1.1rem;color:var(--tinta-2)">Mulai malam ini dengan yang paling kamu butuhkan.
+      Sisanya sudah jadi milikmu.</p>
     <div class="cta-baris">
       <a class="btn btn--utama" href="#" data-checkout="5">Esensi — Rp199.000 <small>5 bahasa</small></a>
       <a class="btn btn--kedua" href="#" data-checkout="9">Lengkap — Rp299.000 <small>9 bahasa</small></a>
@@ -462,32 +410,178 @@ footer { padding-block: 3rem; color: var(--tinta-2); font-size: .87rem; }
   </div>
 </section>
 
-<footer>
-  <div class="bungkus">
-    <p>SankaLingo GO — belajar sembilan bahasa untuk penutur bahasa Indonesia.</p>
-  </div>
-</footer>
+<footer><div class="bungkus"><p>SankaLingo GO — sembilan bahasa untuk penutur bahasa Indonesia.</p></div></footer>
 
 <script>
-/* Alamat checkout Scalev. Diisi di satu tempat ini saja; seluruh tombol
-   di halaman membacanya dari sini, jadi tidak ada tautan yang tertinggal
-   ketika alamatnya berubah. */
-const CHECKOUT = {
-  '5': '',   // contoh: https://sankalingo.scalev.id/esensi
-  '9': '',   // contoh: https://sankalingo.scalev.id/lengkap
-};
+/* Alamat checkout Scalev. Satu tempat untuk seluruh tombol di halaman,
+   supaya tidak ada tautan yang tertinggal saat alamatnya berubah. */
+const CHECKOUT = { '5': '', '9': '' };
 
-for (const tombol of document.querySelectorAll('[data-checkout]')) {
-  const alamat = CHECKOUT[tombol.dataset.checkout];
-  if (alamat) {
-    tombol.href = alamat;
-  } else {
-    /* Tanpa alamat, tombolnya jangan berpura-pura bisa diklik: yang
+for (const t of document.querySelectorAll('[data-checkout]')) {
+  const alamat = CHECKOUT[t.dataset.checkout];
+  if (alamat) t.href = alamat;
+  else {
+    /* Tombol tanpa alamat jangan berpura-pura bisa diklik: yang
        menekannya akan mengira pembayarannya gagal, bukan mengira
        halamannya belum selesai dipasang. */
-    tombol.setAttribute('aria-disabled', 'true');
-    tombol.style.opacity = '.55';
-    tombol.style.pointerEvents = 'none';
+    t.setAttribute('aria-disabled', 'true');
+    t.style.opacity = '.5'; t.style.pointerEvents = 'none';
   }
 }
+
+/* ── Kuis: memperlihatkan metodenya, bukan menceritakannya ────────
+   Ketiga soal diambil dari penjelasan yang benar-benar ada di dalam
+   aplikasi, jadi yang dicoba pengunjung memang barang yang dibelinya. */
+const SOAL = [
+  { bahasa: 'Inggris', tanya: 'Saya beli dua buku.',
+    pilihan: ['I buy two book.', 'I buy two books.'], kunci: 1,
+    jelas: '<b>Kebiasaan kita:</b> Indonesia mengulang kata — buku-buku. Inggris menambah <b>-s</b>, dan ekor kecil itu wajib. Ini kelalaian tersering penutur Indonesia.' },
+  { bahasa: 'Inggris', tanya: 'Saya akan menelepon saat dia sampai.',
+    pilihan: ['I will call when he will arrive.', 'I will call when he arrives.'], kunci: 1,
+    jelas: '<b>Jebakannya:</b> peristiwanya memang belum terjadi, jadi <i>will</i> terasa benar. Tapi sesudah <b>when, after, before</b>, Inggris memakai bentuk sekarang.' },
+  { bahasa: 'Jerman', tanya: 'Hari ini saya pergi ke sekolah.',
+    pilihan: ['Heute gehe ich zur Schule.', 'Heute ich gehe zur Schule.'], kunci: 0,
+    jelas: '<b>Kebiasaan kita:</b> menerjemahkan urut kata. Dalam bahasa Jerman posisi kedua sudah milik kata kerja, jadi subjeknya pindah ke belakangnya.' },
+];
+
+let ke = 0, benarTotal = 0;
+const $ = (id) => document.getElementById(id);
+
+function gambarSoal() {
+  const s = SOAL[ke];
+  $('cobaLabel').textContent = `Coba dulu · ${s.bahasa}`;
+  $('cobaSoal').textContent = `“${s.tanya}”`;
+  $('cobaJelas').innerHTML = '';
+  $('cobaLanjut').disabled = true;
+  $('cobaHitung').textContent = `${ke + 1} dari ${SOAL.length}`;
+
+  const wadah = $('cobaPilih');
+  wadah.innerHTML = '';
+  s.pilihan.forEach((teks, i) => {
+    const b = document.createElement('button');
+    b.textContent = teks;
+    b.addEventListener('click', () => {
+      /* Sesudah dijawab, semua tombol dikunci — kuis yang bisa diklik
+         berulang sampai hijau tidak mengajari apa pun. */
+      [...wadah.children].forEach((x, j) => {
+        x.disabled = true;
+        x.classList.add(j === s.kunci ? 'benar' : 'salah');
+      });
+      if (i === s.kunci) benarTotal++;
+      $('cobaJelas').innerHTML = s.jelas;
+      $('cobaLanjut').disabled = false;
+    });
+    wadah.append(b);
+  });
+}
+
+$('cobaLanjut').addEventListener('click', () => {
+  ke++;
+  if (ke < SOAL.length) return gambarSoal();
+  $('cobaLabel').textContent = 'Selesai';
+  $('cobaSoal').textContent = `Benar ${benarTotal} dari ${SOAL.length}.`;
+  $('cobaPilih').innerHTML = '';
+  $('cobaJelas').innerHTML = benarTotal === SOAL.length
+    ? 'Bagus. Di dalam aplikasinya ada <b>767 latihan</b> lain yang menjelaskan dengan cara yang sama.'
+    : 'Justru bagus — itu tepat bagian yang biasanya tidak pernah dijelaskan. Di dalam aplikasinya ada <b>767 latihan</b> yang membedahnya satu per satu.';
+  $('cobaHitung').textContent = '';
+  const lanjut = $('cobaLanjut');
+  lanjut.textContent = 'Ulangi';
+  lanjut.onclick = () => { ke = 0; benarTotal = 0; lanjut.textContent = 'Soal berikutnya →';
+    lanjut.onclick = null; lanjut.addEventListener('click', () => {}); location.hash = '#coba'; gambarSoal(); };
+});
+gambarSoal();
+
+/* ── Sembilan bahasa: petak + kartu kamus hidup ─────────────────── */
+const BAHASA = [
+  { kode: 'en', nama: 'Inggris', glif: 'Aa', sapa: 'Hello', tts: 'en-US',
+    lema: 'go', rom: '', arti: 'pergi', bentuk: [['go', ''], ['went', ''], ['gone', '']], labelBentuk: ['dasar', 'lampau', 'partisip'] },
+  { kode: 'ja', nama: 'Jepang', glif: 'あ', sapa: 'こんにちは', tts: 'ja-JP',
+    lema: '行く', rom: 'iku', arti: 'pergi', bentuk: [['行きます', 'ikimasu'], ['行って', 'itte'], ['行った', 'itta']], labelBentuk: ['sopan', 'bentuk て', 'lampau'] },
+  { kode: 'ko', nama: 'Korea', glif: '한', sapa: '안녕하세요', tts: 'ko-KR',
+    lema: '가다', rom: 'gada', arti: 'pergi', bentuk: [['가요', 'gayo'], ['갔어요', 'gasseoyo']], labelBentuk: ['sopan', 'lampau'] },
+  { kode: 'zh', nama: 'Mandarin', glif: '中', sapa: '你好', tts: 'zh-CN',
+    lema: '书', rom: 'shū', arti: 'buku', bentuk: [['本', 'běn']], labelBentuk: ['kata bantu bilangan'] },
+  { kode: 'ar', nama: 'Arab', glif: 'ع', sapa: 'مرحبا', tts: 'ar-SA',
+    lema: 'ذهب', rom: 'dhahaba', arti: 'pergi', bentuk: [['يذهب', 'yadhhabu'], ['ذهاب', 'dhahaab']], labelBentuk: ['mudhari', 'masdar'] },
+  { kode: 'de', nama: 'Jerman', glif: 'ß', sapa: 'Hallo', tts: 'de-DE',
+    lema: 'gehen', rom: '', arti: 'pergi', bentuk: [['geht', ''], ['ging', ''], ['gegangen', '']], labelBentuk: ['kini', 'lampau', 'partisip'] },
+  { kode: 'fr', nama: 'Prancis', glif: 'É', sapa: 'Bonjour', tts: 'fr-FR',
+    lema: 'aller', rom: '', arti: 'pergi', bentuk: [['va', ''], ['allé', '']], labelBentuk: ['kini', 'partisip'] },
+  { kode: 'es', nama: 'Spanyol', glif: 'ñ', sapa: 'Hola', tts: 'es-ES',
+    lema: 'ir', rom: '', arti: 'pergi', bentuk: [['va', ''], ['fue', '']], labelBentuk: ['kini', 'lampau'] },
+  { kode: 'ru', nama: 'Rusia', glif: 'Я', sapa: 'Привет', tts: 'ru-RU',
+    lema: 'идти', rom: 'idti', arti: 'pergi', bentuk: [['пойти', 'poyti'], ['шёл', 'shyol']], labelBentuk: ['sempurna', 'lampau'] },
+];
+
+/* Pita sapaan dibangun dari daftar yang sama, dua kali, supaya
+   perulangannya mulus tanpa menyalin teks di HTML. */
+$('pita').innerHTML = [...BAHASA, ...BAHASA]
+  .map(b => `<span><b lang="${b.kode}">${b.sapa}</b> · ${b.nama}</span>`).join('');
+
+const petak = document.getElementById('petak');
+BAHASA.forEach((b, i) => {
+  const t = document.createElement('button');
+  t.type = 'button';
+  t.setAttribute('aria-pressed', String(i === 1));
+  t.innerHTML = `<span class="glif" lang="${b.kode}">${b.glif}</span><span class="nm">${b.nama}</span>`;
+  t.addEventListener('click', () => {
+    [...petak.children].forEach(x => x.setAttribute('aria-pressed', 'false'));
+    t.setAttribute('aria-pressed', 'true');
+    gambarKartu(b);
+  });
+  petak.append(t);
+});
+
+function ucap(teks, kodeTts, rom, tombol) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const suara = speechSynthesis.getVoices();
+  const cocok = suara.find(v => v.lang?.toLowerCase().startsWith(kodeTts.slice(0, 2).toLowerCase()));
+  /* Kalau perangkat tidak punya suara bahasa itu, romanisasinya yang
+     dibacakan — persis cadangan yang dipakai di dalam aplikasi. Diam
+     tanpa penjelasan jauh lebih buruk daripada bunyi yang mendekati. */
+  const u = new SpeechSynthesisUtterance(cocok ? teks : (rom || teks));
+  if (cocok) u.voice = cocok; else u.lang = 'id-ID';
+  u.rate = .9;
+  tombol.classList.add('bunyi');
+  u.onend = u.onerror = () => tombol.classList.remove('bunyi');
+  speechSynthesis.speak(u);
+}
+
+function gambarKartu(b) {
+  const kartu = document.getElementById('kartu');
+  kartu.innerHTML = `
+    <div class="kamus__kepala">
+      <span class="kamus__lema" lang="${b.kode}">${b.lema}</span>
+      ${b.rom ? `<span class="kamus__rom">${b.rom}</span>` : ''}
+      <span class="kamus__arti">${b.arti}</span>
+    </div>
+    ${b.bentuk.map((f, i) => `
+      <div class="kamus__baris">
+        <span class="kamus__kiri">
+          <span class="kamus__bentuk" lang="${b.kode}">${f[0]}</span>
+          ${f[1] ? `<span class="kamus__rom">${f[1]}</span>` : ''}
+          <span class="label">${b.labelBentuk[i] || ''}</span>
+        </span>
+        <button class="suara" type="button" data-teks="${f[0]}" data-rom="${f[1]}"
+                aria-label="Dengarkan ${f[0]}">▶</button>
+      </div>`).join('')}
+    <p class="kamus__catatan">Setiap bentuk kata punya tombol suaranya sendiri —
+      termasuk yang tidak beraturan, yang justru paling sering dipakai.</p>`;
+
+  kartu.querySelectorAll('.suara').forEach(tb =>
+    tb.addEventListener('click', () => ucap(tb.dataset.teks, b.tts, tb.dataset.rom, tb)));
+}
+gambarKartu(BAHASA[1]);
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+
+/* ── Batang biaya ────────────────────────────────────────────────
+   Dua belas bulan: langganan menumpuk, sekali bayar tetap datar.
+   Digambar dari data supaya bentuknya tidak bisa berbohong. */
+const bln = 12;
+document.getElementById('batangLangganan').innerHTML =
+  Array.from({ length: bln }, (_, i) => `<i style="height:${((i + 1) / bln * 100).toFixed(1)}%"></i>`).join('');
+document.getElementById('batangSekali').innerHTML =
+  Array.from({ length: bln }, () => `<i style="height:26%"></i>`).join('');
 </script>
