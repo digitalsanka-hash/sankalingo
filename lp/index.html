@@ -1,226 +1,255 @@
 <title>SankaLingo GO</title>
-<meta name="description" content="Sembilan bahasa yang diajarkan untuk otak berbahasa Indonesia. Bayar sekali, akses selamanya.">
+<meta name="description" content="Sembilan bahasa untuk penutur bahasa Indonesia. Baca aksaranya hari ini juga. Bayar sekali, selamanya.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap">
 
 <style>
 /* ── Token ────────────────────────────────────────────────────────
-   Dunia halaman ini buku catatan bahasa: tinta biru, stabilo kuning,
-   pena merah guru. Semua warna hidup di :root supaya keadaan "system"
-   (tanpa stempel data-theme) tetap terbaca. */
+   Dunianya buku latihan menulis aksara: kertas berkotak biru es,
+   tinta teal, stempel coral. Terang dan ringan — bukan kertas tua.
+   Semua warna hidup di :root supaya keadaan "system" (tanpa stempel
+   data-theme) tetap terbaca. */
 :root {
-  --tinta: #14142b; --tinta-2: #4a4a68;
-  --kertas: #fbfaf7; --kertas-2: #f2f0ea; --garis: #ddd9cd;
-  --biru: #1b3a8c; --biru-lembut: #e6ecfb;
-  --stabilo: #ffe45c; --merah: #c4362c; --hijau: #1f6d4a;
-  --lebar: 1120px; --r: 14px;
+  --tinta:   #0f2233;
+  --tinta-2: #5b7183;
+  --kertas:  #ffffff;
+  --kertas-2:#eef5f9;
+  --garis:   #d5e4ee;
+  --teal:    #0d8f8c;
+  --teal-2:  #d6f1ef;
+  --coral:   #ff5a36;
+  --hijau:   #17805a;
+  --kotak:   #dcebf4;   /* garis kotak lembar latihan */
+  --lebar: 1140px; --r: 12px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --tinta: #eceaf5; --tinta-2: #a5a2bb;
-    --kertas: #0e0e1a; --kertas-2: #17172b; --garis: #2c2c48;
-    --biru: #8fa8ff; --biru-lembut: #191f42;
-    --stabilo: #f5d84f; --merah: #ff8478; --hijau: #5fd39b;
+    --tinta: #e6f1f7; --tinta-2: #91a8b8;
+    --kertas: #08131c; --kertas-2: #0f2029; --garis: #1e3444;
+    --teal: #2fd4cf; --teal-2: #0c3b3a; --coral: #ff7a5c; --hijau: #4cd39a;
+    --kotak: #162a37;
   }
 }
 :root[data-theme="dark"] {
-  --tinta: #eceaf5; --tinta-2: #a5a2bb;
-  --kertas: #0e0e1a; --kertas-2: #17172b; --garis: #2c2c48;
-  --biru: #8fa8ff; --biru-lembut: #191f42;
-  --stabilo: #f5d84f; --merah: #ff8478; --hijau: #5fd39b;
+  --tinta: #e6f1f7; --tinta-2: #91a8b8;
+  --kertas: #08131c; --kertas-2: #0f2029; --garis: #1e3444;
+  --teal: #2fd4cf; --teal-2: #0c3b3a; --coral: #ff7a5c; --hijau: #4cd39a;
+  --kotak: #162a37;
 }
 
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--kertas); color: var(--tinta);
-  font-family: "Source Serif 4", Georgia, serif; font-size: 17px; line-height: 1.6;
+  font-family: Inter, system-ui, sans-serif; font-size: 16.5px; line-height: 1.6;
   -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-h1, h2, h3, .disp { font-family: "Bricolage Grotesque", system-ui, sans-serif;
-  font-weight: 800; line-height: 1.02; letter-spacing: -.025em; text-wrap: balance; margin: 0; }
-h1 { font-size: clamp(2.6rem, 7.5vw, 5.2rem); }
-h2 { font-size: clamp(1.9rem, 4.4vw, 3.1rem); }
-h3 { font-size: 1.1rem; letter-spacing: -.01em; }
-p { margin: 0; max-width: 58ch; }
+h1, h2, h3, .disp { font-family: Outfit, system-ui, sans-serif; font-weight: 800;
+  line-height: 1.06; letter-spacing: -.03em; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.4rem, 6.4vw, 4.4rem); }
+h2 { font-size: clamp(1.7rem, 3.8vw, 2.6rem); }
+h3 { font-size: 1.05rem; font-weight: 700; letter-spacing: -.01em; }
+p { margin: 0; max-width: 56ch; }
 .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
-.label { font-family: "JetBrains Mono", monospace; font-size: .7rem;
-  letter-spacing: .18em; text-transform: uppercase; color: var(--tinta-2); }
-.sorot { background: linear-gradient(101deg, transparent 2%, var(--stabilo) 2%, var(--stabilo) 98%, transparent 98%);
-  padding: 0 .2em; color: #14142b; box-decoration-break: clone; }
+.label { font-family: "JetBrains Mono", monospace; font-size: .68rem;
+  letter-spacing: .17em; text-transform: uppercase; color: var(--teal); }
+.sorot { background: var(--teal-2); color: var(--tinta); padding: 0 .22em; border-radius: 4px;
+  box-decoration-break: clone; }
 
-.bungkus { width: min(100% - 2.4rem, var(--lebar)); margin-inline: auto; }
-section { padding-block: clamp(3rem, 7vw, 5.5rem); }
+.bungkus { width: min(100% - 2.2rem, var(--lebar)); margin-inline: auto; }
+section { padding-block: clamp(2.8rem, 6.5vw, 5rem); }
 section + section { border-top: 1px solid var(--garis); }
-.tumpuk { display: flex; flex-direction: column; gap: 1rem; }
-.tumpuk-l { display: flex; flex-direction: column; gap: 2.2rem; }
+.tumpuk { display: flex; flex-direction: column; gap: .9rem; }
+.tumpuk-l { display: flex; flex-direction: column; gap: 2rem; }
 
-.btn { display: inline-flex; align-items: baseline; gap: .55rem; cursor: pointer;
-  font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 700; font-size: 1rem;
-  text-decoration: none; padding: .9rem 1.45rem; border-radius: var(--r);
-  border: 2px solid var(--biru); transition: transform .14s ease, box-shadow .14s ease; }
-.btn--utama { background: var(--biru); color: var(--kertas); box-shadow: 0 3px 0 var(--tinta); }
-.btn--kedua { background: transparent; color: var(--biru); }
-.btn:hover { transform: translateY(-2px); box-shadow: 0 5px 0 var(--tinta); }
-.btn:focus-visible { outline: 3px solid var(--stabilo); outline-offset: 3px; }
-.btn small { font-family: "JetBrains Mono", monospace; font-size: .75rem; font-weight: 400; opacity: .85; }
-.cta-baris { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
+.btn { display: inline-flex; align-items: baseline; gap: .5rem; cursor: pointer;
+  font-family: Outfit, sans-serif; font-weight: 700; font-size: 1rem; text-decoration: none;
+  padding: .85rem 1.4rem; border-radius: 999px; border: 2px solid var(--teal);
+  transition: transform .14s ease, background .14s ease, color .14s ease; }
+.btn--utama { background: var(--teal); color: var(--kertas); }
+.btn--utama:hover { transform: translateY(-2px); }
+.btn--kedua { background: transparent; color: var(--teal); }
+.btn--kedua:hover { background: var(--teal-2); transform: translateY(-2px); }
+.btn:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; }
+.btn small { font-family: "JetBrains Mono", monospace; font-size: .74rem; font-weight: 400; opacity: .82; }
+.cta-baris { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; }
 
-/* ── Hero: aksara raksasa sebagai lapisan grafis, bukan hiasan ──── */
-.hero { position: relative; padding-top: clamp(2rem, 5vw, 3.5rem); overflow: hidden; }
-.hero__aksara { position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 800;
-  color: var(--biru); opacity: .07; overflow: hidden; }
-.hero__aksara span { position: absolute; font-size: clamp(7rem, 18vw, 15rem); line-height: 1; user-select: none; }
-.hero__grid { position: relative; z-index: 1; display: grid; gap: 2.5rem; grid-template-columns: 1fr; }
-@media (min-width: 940px) { .hero__grid { grid-template-columns: 1.05fr .95fr; align-items: center; } }
+/* ── Kertas berkotak: motifnya lembar latihan menulis aksara ────── */
+.berkotak {
+  background-image:
+    linear-gradient(var(--kotak) 1px, transparent 1px),
+    linear-gradient(90deg, var(--kotak) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
 
-/* ── Coba dulu: kuis dua pilihan ────────────────────────────────── */
-.coba { background: var(--kertas-2); border: 2px solid var(--tinta); border-radius: 18px;
-  padding: 1.5rem; box-shadow: 6px 6px 0 var(--biru); }
-.coba__soal { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 600;
-  font-size: 1.25rem; margin: .5rem 0 1rem; min-height: 2.6em; }
-.pilih { display: grid; gap: .6rem; }
-.pilih button { font-family: "JetBrains Mono", monospace; font-size: 1rem; text-align: left;
-  padding: .85rem 1rem; border-radius: 10px; border: 2px solid var(--garis);
-  background: var(--kertas); color: var(--tinta); cursor: pointer; transition: border-color .12s, background .12s; }
-.pilih button:hover:not(:disabled) { border-color: var(--biru); }
-.pilih button:focus-visible { outline: 3px solid var(--stabilo); outline-offset: 2px; }
-.pilih button.benar { border-color: var(--hijau); background: color-mix(in srgb, var(--hijau) 12%, transparent); }
-.pilih button.salah { border-color: var(--merah); background: color-mix(in srgb, var(--merah) 12%, transparent);
+/* ── Hero ───────────────────────────────────────────────────────── */
+.hero { position: relative; overflow: hidden; padding-top: clamp(2rem, 4.5vw, 3.2rem); }
+.hero__glif { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  font-family: Outfit, system-ui, sans-serif; font-weight: 800; color: var(--teal); opacity: .09; }
+.hero__glif span { position: absolute; font-size: clamp(5rem, 13vw, 11rem); line-height: 1; }
+.hero__grid { position: relative; z-index: 1; display: grid; gap: 2.2rem; grid-template-columns: 1fr; }
+@media (min-width: 940px) { .hero__grid { grid-template-columns: 1.02fr .98fr; align-items: center; } }
+.hero p.besar { font-size: 1.1rem; color: var(--tinta-2); }
+
+/* ── Kuis ───────────────────────────────────────────────────────── */
+.coba { background: var(--kertas); border: 1px solid var(--garis); border-radius: 18px; padding: 1.4rem; }
+.coba__soal { font-family: Outfit, sans-serif; font-weight: 700; font-size: 1.2rem;
+  margin: .45rem 0 .9rem; min-height: 2.5em; }
+.pilih { display: grid; gap: .55rem; }
+.pilih button { font-family: "JetBrains Mono", monospace; font-size: .95rem; text-align: left;
+  padding: .8rem .95rem; border-radius: 10px; border: 1.5px solid var(--garis);
+  background: var(--kertas-2); color: var(--tinta); cursor: pointer; transition: border-color .12s, background .12s; }
+.pilih button:hover:not(:disabled) { border-color: var(--teal); }
+.pilih button:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
+.pilih button.benar { border-color: var(--hijau); background: color-mix(in srgb, var(--hijau) 13%, transparent); }
+.pilih button.salah { border-color: var(--coral); background: color-mix(in srgb, var(--coral) 12%, transparent);
   text-decoration: line-through; text-decoration-thickness: 2px; }
-.coba__jelas { margin-top: 1rem; font-size: .95rem; color: var(--tinta-2); min-height: 4.5em; }
+.coba__jelas { margin-top: .9rem; font-size: .92rem; color: var(--tinta-2); min-height: 4.4em; }
 .coba__jelas b { color: var(--tinta); }
-.coba__kaki { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: .9rem; }
-.coba__lanjut { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: .92rem;
-  background: none; border: 0; color: var(--biru); cursor: pointer; padding: .4rem 0; }
-.coba__lanjut:disabled { opacity: .35; cursor: default; }
-.coba__hitung { font-family: "JetBrains Mono", monospace; font-size: .78rem; color: var(--tinta-2); }
+.coba__kaki { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: .8rem; }
+.coba__lanjut { font-family: Outfit, sans-serif; font-weight: 700; font-size: .9rem; background: none;
+  border: 0; color: var(--teal); cursor: pointer; padding: .35rem 0; }
+.coba__lanjut:disabled { opacity: .32; cursor: default; }
+.coba__hitung { font-family: "JetBrains Mono", monospace; font-size: .75rem; color: var(--tinta-2); }
 
-/* ── Pita sapaan ────────────────────────────────────────────────── */
-.pita { overflow: hidden; border-block: 1px solid var(--garis); background: var(--kertas-2); }
-.pita__isi { display: flex; gap: 2.2rem; width: max-content; padding: .8rem 0; animation: geser 38s linear infinite; }
-.pita span { white-space: nowrap; color: var(--tinta-2); font-size: 1.05rem; }
-.pita b { color: var(--tinta); font-weight: 600; }
-@keyframes geser { to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .pita__isi { animation: none; } }
+/* ── Papan aksara ───────────────────────────────────────────────── */
+.tab { display: flex; flex-wrap: wrap; gap: .45rem; }
+.tab button { font-family: Outfit, sans-serif; font-weight: 700; font-size: .87rem;
+  padding: .5rem 1rem; border-radius: 999px; border: 1.5px solid var(--garis);
+  background: var(--kertas); color: var(--tinta-2); cursor: pointer; }
+.tab button[aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: var(--kertas); }
+.tab button:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
 
-/* ── Sembilan bahasa: petak aksara ──────────────────────────────── */
-.petak { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
-@media (min-width: 780px) { .petak { grid-template-columns: repeat(5, 1fr); } }
-.petak button { position: relative; aspect-ratio: 1; border: 2px solid var(--garis); border-radius: var(--r);
-  background: var(--kertas-2); color: var(--tinta); cursor: pointer; display: grid; place-items: center;
-  gap: .2rem; padding: .4rem; transition: border-color .12s, transform .12s; }
-.petak button:hover { border-color: var(--biru); transform: translateY(-3px); }
-.petak button[aria-pressed="true"] { border-color: var(--biru); background: var(--biru-lembut); }
-.petak button:focus-visible { outline: 3px solid var(--stabilo); outline-offset: 2px; }
-.petak .glif { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 800;
-  font-size: clamp(1.6rem, 4.5vw, 2.3rem); line-height: 1; }
-.petak .nm { font-family: "JetBrains Mono", monospace; font-size: .62rem; letter-spacing: .06em;
+.papan { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px;
+  border: 1px solid var(--garis); border-radius: var(--r); padding: 8px; background: var(--kertas-2); }
+.papan button { aspect-ratio: 1; border: 1px solid var(--garis); border-radius: 8px; background: var(--kertas);
+  color: var(--tinta); cursor: pointer; display: grid; place-content: center; gap: 1px; padding: 2px;
+  transition: transform .1s, border-color .1s, background .1s; }
+.papan button:hover { border-color: var(--teal); transform: translateY(-2px); }
+.papan button.bunyi { background: var(--teal-2); border-color: var(--teal); }
+.papan button:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
+.papan .g { font-family: Outfit, system-ui, sans-serif; font-weight: 700; font-size: 1.5rem; line-height: 1; }
+.papan .r { font-family: "JetBrains Mono", monospace; font-size: .62rem; color: var(--tinta-2); }
+
+/* ── Manfaat ────────────────────────────────────────────────────── */
+.manfaat { display: grid; gap: .9rem; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .manfaat { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .manfaat { grid-template-columns: repeat(4, 1fr); } }
+.manfaat article { border: 1px solid var(--garis); border-radius: var(--r); padding: 1.1rem;
+  background: var(--kertas); display: flex; flex-direction: column; gap: .35rem; }
+.manfaat .ikon { font-family: Outfit, sans-serif; font-weight: 800; font-size: 1.35rem;
+  color: var(--teal); line-height: 1; }
+.manfaat p { font-size: .89rem; color: var(--tinta-2); }
+
+/* ── Kamus ──────────────────────────────────────────────────────── */
+.petak { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+@media (min-width: 760px) { .petak { grid-template-columns: repeat(9, 1fr); } }
+.petak button { aspect-ratio: 1; border: 1.5px solid var(--garis); border-radius: 10px;
+  background: var(--kertas); color: var(--tinta); cursor: pointer; display: grid; place-items: center;
+  gap: .1rem; transition: border-color .12s, transform .12s, background .12s; }
+.petak button:hover { border-color: var(--teal); transform: translateY(-2px); }
+.petak button[aria-pressed="true"] { border-color: var(--teal); background: var(--teal-2); }
+.petak button:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
+.petak .glif { font-family: Outfit, sans-serif; font-weight: 800; font-size: clamp(1.3rem, 3.4vw, 1.8rem); line-height: 1; }
+.petak .nm { font-family: "JetBrains Mono", monospace; font-size: .56rem; letter-spacing: .05em;
   text-transform: uppercase; color: var(--tinta-2); }
 
-/* ── Kartu kamus hidup ──────────────────────────────────────────── */
-.kamus { border: 2px solid var(--tinta); border-radius: 18px; background: var(--kertas-2);
-  padding: 1.4rem 1.5rem; box-shadow: 6px 6px 0 var(--stabilo); }
-.kamus__kepala { display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap; margin-bottom: .3rem; }
-.kamus__lema { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: clamp(2rem, 5vw, 2.6rem); line-height: 1.1; }
-.kamus__rom { font-family: "JetBrains Mono", monospace; font-size: .85rem; color: var(--biru); }
+.kamus { border: 1px solid var(--garis); border-radius: 18px; background: var(--kertas-2); padding: 1.3rem 1.4rem; }
+.kamus__kepala { display: flex; align-items: baseline; gap: .65rem; flex-wrap: wrap; margin-bottom: .4rem; }
+.kamus__lema { font-family: Outfit, sans-serif; font-weight: 800; font-size: clamp(1.8rem, 4.5vw, 2.4rem); line-height: 1.1; }
+.kamus__rom { font-family: "JetBrains Mono", monospace; font-size: .82rem; color: var(--teal); }
 .kamus__arti { color: var(--tinta-2); }
 .kamus__baris { display: flex; align-items: center; justify-content: space-between; gap: .8rem;
-  padding: .5rem 0; border-top: 1px dashed var(--garis); }
+  padding: .45rem 0; border-top: 1px solid var(--garis); }
 .kamus__baris:first-of-type { border-top: 0; }
-.kamus__kiri { display: flex; align-items: baseline; gap: .6rem; min-width: 0; }
+.kamus__kiri { display: flex; align-items: baseline; gap: .55rem; flex-wrap: wrap; min-width: 0; }
 .kamus__bentuk { font-weight: 600; }
-.suara { border: 2px solid var(--garis); background: var(--kertas); color: var(--tinta);
-  width: 34px; height: 34px; border-radius: 9px; cursor: pointer; flex: 0 0 auto;
-  display: grid; place-items: center; font-size: .9rem; transition: border-color .12s; }
-.suara:hover { border-color: var(--biru); }
-.suara:focus-visible { outline: 3px solid var(--stabilo); outline-offset: 2px; }
-.suara.bunyi { border-color: var(--biru); background: var(--biru-lembut); }
-.kamus__catatan { font-size: .85rem; color: var(--tinta-2); margin-top: .8rem; }
+.suara { border: 1.5px solid var(--garis); background: var(--kertas); color: var(--teal);
+  width: 32px; height: 32px; border-radius: 8px; cursor: pointer; flex: 0 0 auto;
+  display: grid; place-items: center; font-size: .8rem; }
+.suara:hover { border-color: var(--teal); }
+.suara.bunyi { background: var(--teal-2); border-color: var(--teal); }
+.suara:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
+
+/* ── Koreksi ────────────────────────────────────────────────────── */
+.tiga { display: grid; gap: .9rem; grid-template-columns: 1fr; }
+@media (min-width: 820px) { .tiga { grid-template-columns: repeat(3, 1fr); } }
+.tiga article { border: 1px solid var(--garis); border-radius: var(--r); padding: 1.05rem; background: var(--kertas); }
+.salah { color: var(--coral); text-decoration: line-through; text-decoration-thickness: 2px; font-weight: 700; }
+.benar { color: var(--hijau); font-weight: 700; }
+.tiga p { font-size: .88rem; color: var(--tinta-2); margin-top: .5rem; }
 
 /* ── Angka ──────────────────────────────────────────────────────── */
 .angka-baris { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--garis);
   border: 1px solid var(--garis); border-radius: var(--r); overflow: hidden; }
 @media (min-width: 720px) { .angka-baris { grid-template-columns: repeat(4, 1fr); } }
-.angka-baris div { background: var(--kertas); padding: 1.3rem 1.1rem; }
-.angka-baris b { display: block; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800;
-  font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--biru); font-variant-numeric: tabular-nums; line-height: 1; }
-.angka-baris span { font-size: .87rem; color: var(--tinta-2); display: block; margin-top: .35rem; }
+.angka-baris div { background: var(--kertas); padding: 1.15rem 1rem; }
+.angka-baris b { display: block; font-family: Outfit, sans-serif; font-weight: 800;
+  font-size: clamp(1.7rem, 3.6vw, 2.2rem); color: var(--teal); font-variant-numeric: tabular-nums; line-height: 1; }
+.angka-baris span { font-size: .84rem; color: var(--tinta-2); display: block; margin-top: .3rem; }
 
-/* ── Koreksi ────────────────────────────────────────────────────── */
-.koreksi { display: grid; gap: 1rem; grid-template-columns: 1fr; }
-@media (min-width: 820px) { .koreksi { grid-template-columns: repeat(3, 1fr); } }
-.koreksi article { border: 1px solid var(--garis); border-radius: var(--r); padding: 1.15rem;
-  background: var(--kertas-2); }
-.salah { color: var(--merah); text-decoration: line-through; text-decoration-thickness: 2px; font-weight: 600; }
-.benar { color: var(--hijau); font-weight: 600; }
-.koreksi .mono { font-size: .95rem; }
-.koreksi p { font-size: .9rem; color: var(--tinta-2); margin-top: .6rem; }
-
-/* ── Biaya: sekali vs bulanan ───────────────────────────────────── */
-.biaya { display: grid; gap: 1.5rem; grid-template-columns: 1fr; align-items: end; }
+/* ── Biaya ──────────────────────────────────────────────────────── */
+.biaya { display: grid; gap: 1.4rem; grid-template-columns: 1fr; align-items: end; }
 @media (min-width: 700px) { .biaya { grid-template-columns: 1fr 1fr; } }
-.batang { display: flex; align-items: flex-end; gap: 4px; height: 190px; }
-.batang i { flex: 1; background: var(--garis); border-radius: 4px 4px 0 0; display: block; }
-.batang.tumbuh i { background: var(--merah); opacity: .55; }
-.batang.datar i { background: var(--biru); }
-.biaya figcaption { margin-top: .7rem; font-size: .9rem; color: var(--tinta-2); }
-.biaya b { font-family: "Bricolage Grotesque", sans-serif; font-size: 1.05rem; color: var(--tinta); display: block; }
+.batang { display: flex; align-items: flex-end; gap: 3px; height: 150px; }
+.batang i { flex: 1; border-radius: 3px 3px 0 0; display: block; }
+.batang.tumbuh i { background: var(--coral); opacity: .5; }
+.batang.datar i { background: var(--teal); }
+.biaya figcaption { margin-top: .6rem; font-size: .87rem; color: var(--tinta-2); }
+.biaya b { font-family: Outfit, sans-serif; font-size: 1rem; color: var(--tinta); display: block; }
 
 /* ── Harga ──────────────────────────────────────────────────────── */
-.harga { display: grid; gap: 1.4rem; grid-template-columns: 1fr; align-items: start; }
+.harga { display: grid; gap: 1.2rem; grid-template-columns: 1fr; align-items: start; }
 @media (min-width: 840px) { .harga { grid-template-columns: 1fr 1fr; } }
-.paket { border: 2px solid var(--garis); border-radius: 18px; padding: 1.7rem; background: var(--kertas-2);
-  display: flex; flex-direction: column; gap: 1rem; }
-.paket--sorot { border-color: var(--biru); background: var(--biru-lembut); position: relative;
-  box-shadow: 6px 6px 0 var(--tinta); }
-.paket--sorot::after { content: "Paling lengkap"; position: absolute; top: -.8rem; left: 1.5rem;
-  background: var(--biru); color: var(--kertas); font-family: "JetBrains Mono", monospace;
-  font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; padding: .3rem .7rem; border-radius: 99px; }
-.rupiah { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 2.5rem;
-  line-height: 1; font-variant-numeric: tabular-nums; }
-.paket ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .45rem; font-size: .95rem; }
-.paket li { display: flex; gap: .55rem; align-items: baseline; }
-.paket li::before { content: "→"; color: var(--biru); font-family: "JetBrains Mono", monospace; }
+.paket { border: 1.5px solid var(--garis); border-radius: 18px; padding: 1.6rem; background: var(--kertas);
+  display: flex; flex-direction: column; gap: .9rem; }
+.paket--sorot { border-color: var(--teal); background: var(--kertas-2); position: relative; }
+.paket--sorot::after { content: "Paling lengkap"; position: absolute; top: -.75rem; left: 1.4rem;
+  background: var(--coral); color: #fff; font-family: "JetBrains Mono", monospace; font-size: .63rem;
+  letter-spacing: .1em; text-transform: uppercase; padding: .28rem .65rem; border-radius: 999px; }
+.rupiah { font-family: Outfit, sans-serif; font-weight: 800; font-size: 2.35rem; line-height: 1;
+  font-variant-numeric: tabular-nums; }
+.paket ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .4rem; font-size: .92rem; }
+.paket li { display: flex; gap: .5rem; align-items: baseline; }
+.paket li::before { content: "→"; color: var(--teal); font-family: "JetBrains Mono", monospace; }
 .paket .btn { justify-content: center; }
 
 /* ── Langkah & FAQ ──────────────────────────────────────────────── */
-.langkah { display: grid; gap: 1rem; grid-template-columns: 1fr; counter-reset: n; }
+.langkah { display: grid; gap: .9rem; grid-template-columns: 1fr; counter-reset: n; }
 @media (min-width: 780px) { .langkah { grid-template-columns: repeat(3, 1fr); } }
-.langkah article { padding-top: .9rem; border-top: 3px solid var(--biru); counter-increment: n; }
-.langkah article::before { content: counter(n); font-family: "JetBrains Mono", monospace;
-  font-size: .75rem; color: var(--biru); display: block; margin-bottom: .3rem; }
-.langkah p { font-size: .92rem; color: var(--tinta-2); }
-details { border-bottom: 1px solid var(--garis); padding: .95rem 0; }
-summary { cursor: pointer; font-family: "Bricolage Grotesque", sans-serif; font-weight: 600;
-  font-size: 1.02rem; list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
+.langkah article { padding-top: .8rem; border-top: 3px solid var(--teal); counter-increment: n; }
+.langkah article::before { content: counter(n); font-family: "JetBrains Mono", monospace; font-size: .72rem;
+  color: var(--teal); display: block; margin-bottom: .25rem; }
+.langkah p { font-size: .88rem; color: var(--tinta-2); }
+details { border-bottom: 1px solid var(--garis); padding: .85rem 0; }
+summary { cursor: pointer; font-family: Outfit, sans-serif; font-weight: 700; font-size: .99rem;
+  list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
 summary::-webkit-details-marker { display: none; }
-summary::after { content: "+"; color: var(--biru); font-family: "JetBrains Mono", monospace; }
+summary::after { content: "+"; color: var(--teal); font-family: "JetBrains Mono", monospace; }
 details[open] summary::after { content: "–"; }
-details p { margin-top: .55rem; color: var(--tinta-2); font-size: .93rem; }
-summary:focus-visible { outline: 3px solid var(--stabilo); outline-offset: 3px; }
+details p { margin-top: .5rem; color: var(--tinta-2); font-size: .9rem; }
+summary:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; }
 
-footer { padding-block: 2.5rem; color: var(--tinta-2); font-size: .85rem; }
-.catatan { font-size: .85rem; color: var(--tinta-2); }
+footer { padding-block: 2.2rem; color: var(--tinta-2); font-size: .84rem; }
+.catatan { font-size: .84rem; color: var(--tinta-2); }
 </style>
 
-<section class="hero">
-  <div class="hero__aksara" aria-hidden="true">
-    <span style="top:-2%;left:-1%">あ</span>
-    <span style="top:34%;right:-2%">한</span>
-    <span style="bottom:-6%;left:24%">中</span>
-    <span style="top:6%;left:56%">ع</span>
-    <span style="bottom:2%;right:22%">Я</span>
+<section class="hero berkotak">
+  <div class="hero__glif" aria-hidden="true">
+    <span style="top:2%;left:-1%">あ</span>
+    <span style="top:40%;right:-1%">한</span>
+    <span style="bottom:-4%;left:26%">中</span>
+    <span style="top:8%;left:58%">ع</span>
+    <span style="bottom:6%;right:24%">Я</span>
   </div>
 
   <div class="bungkus hero__grid">
     <div class="tumpuk">
       <span class="label">9 bahasa · bayar sekali · selamanya</span>
-      <h1>Kamu salah bukan karena bodoh. Karena tidak ada yang bilang <span class="sorot">kenapa</span>.</h1>
-      <p style="font-size:1.15rem;color:var(--tinta-2)">Coba sendiri sekarang — tiga soal di sebelah,
-        tanpa daftar, tanpa bayar.</p>
+      <h1>Kamu salah bukan karena bodoh. Karena tak ada yang bilang <span class="sorot">kenapa</span>.</h1>
+      <p class="besar">Tiga soal di sebelah. Tanpa daftar, tanpa bayar — dan kamu akan tahu persis
+        apa bedanya belajar di sini.</p>
       <div class="cta-baris">
         <a class="btn btn--utama" href="#paket">Mulai Rp199.000 <small>5 bahasa</small></a>
-        <a class="btn btn--kedua" href="#kamus">Lihat isinya</a>
+        <a class="btn btn--kedua" href="#aksara">Baca aksaranya sekarang</a>
       </div>
     </div>
 
@@ -237,9 +266,19 @@ footer { padding-block: 2.5rem; color: var(--tinta-2); font-size: .85rem; }
   </div>
 </section>
 
-<div class="pita" aria-hidden="true">
-  <div class="pita__isi" id="pita"></div>
-</div>
+<section id="aksara">
+  <div class="bungkus tumpuk-l">
+    <div class="tumpuk">
+      <span class="label">Papan aksara · bisa dibunyikan</span>
+      <h2>Aksara yang tadinya cuma coretan, malam ini sudah bisa kamu baca.</h2>
+      <p>Ketuk hurufnya untuk mendengar bunyinya. Inilah pintu pertama tiap bahasa di dalam aplikasi —
+        lengkap dengan urutan goresan dan latihan membacanya.</p>
+    </div>
+    <div class="tab" id="tabAksara" role="group" aria-label="Pilih sistem aksara"></div>
+    <div class="papan" id="papan"></div>
+    <p class="catatan" id="papanKet"></p>
+  </div>
+</section>
 
 <section>
   <div class="bungkus tumpuk-l">
@@ -247,11 +286,11 @@ footer { padding-block: 2.5rem; color: var(--tinta-2); font-size: .85rem; }
       <span class="label">Bedanya di sini</span>
       <h2>Aplikasi lain menandai benar–salah. Ini menyebut kebiasaan mana yang menyeretmu.</h2>
     </div>
-    <div class="koreksi">
+    <div class="tiga">
       <article>
         <span class="label">Inggris</span>
         <div class="mono"><span class="salah">two book</span> → <span class="benar">two books</span></div>
-        <p>Indonesia mengulang kata: buku-buku. Inggris menambah <b>-s</b>. Ekor kecil yang wajib.</p>
+        <p>Indonesia mengulang kata: buku-buku. Inggris menambah <b>-s</b>, dan ekor kecil itu wajib.</p>
       </article>
       <article>
         <span class="label">Jerman</span>
@@ -261,37 +300,58 @@ footer { padding-block: 2.5rem; color: var(--tinta-2); font-size: .85rem; }
       <article>
         <span class="label">Arab</span>
         <div class="mono"><span class="salah">ثلاثة بنات</span> → <span class="benar">ثلاث بنات</span></div>
-        <p>Bilangan 3–10 membalik jenis kelaminnya. Tidak ada padanannya di bahasa kita.</p>
+        <p>Bilangan 3–10 membalik jenis kelaminnya. Tak ada padanannya di bahasa kita.</p>
       </article>
     </div>
   </div>
 </section>
 
-<section id="kamus">
+<section class="berkotak">
   <div class="bungkus tumpuk-l">
     <div class="tumpuk">
-      <span class="label">Isi kamusnya</span>
-      <h2>Pilih bahasa. Dengarkan sendiri.</h2>
-      <p class="catatan">Suara memakai mesin baca perangkatmu — persis seperti di dalam aplikasi.</p>
+      <span class="label">Isi aplikasinya</span>
+      <h2>Delapan hal yang kamu pakai tiap hari.</h2>
     </div>
+    <div class="manfaat">
+      <article><span class="ikon">Aa</span><h3>Kurikulum CEFR A1–C2</h3>
+        <p>44 unit berurutan untuk bahasa Inggris — dari perkenalan sampai wacana akademik.</p></article>
+      <article><span class="ikon">辞</span><h3>Kamus sembilan bahasa</h3>
+        <p>9.052 entri: arti, contoh kalimat, frasa pemakaian, dan bentuk kata yang tak bisa ditebak.</p></article>
+      <article><span class="ikon">♪</span><h3>Suara di tiap bentuk kata</h3>
+        <p>Bukan cuma kata dasarnya. 行く, 行きます, 行って, 行った — semuanya punya tombolnya sendiri.</p></article>
+      <article><span class="ikon">✎</span><h3>Urutan goresan aksara</h3>
+        <p>Hangeul, kana, hanzi, huruf Arab, dan Kiril diajarkan dari cara menulisnya.</p></article>
+      <article><span class="ikon">?</span><h3>767 latihan tata bahasa</h3>
+        <p>Tiap topik menjelaskan kebiasaan berbahasa Indonesia mana yang membuatmu tergelincir.</p></article>
+      <article><span class="ikon">◷</span><h3>Kartu ulang terjadwal</h3>
+        <p>Kata yang hampir kamu lupakan muncul lagi tepat sebelum hilang dari ingatan.</p></article>
+      <article><span class="ikon">▤</span><h3>10 simulasi ujian resmi</h3>
+        <p>IELTS, TOEFL, TOEIC, JLPT, TOPIK, HSK, Goethe, DELF, DELE, TORFL — format dan ambang nilainya.</p></article>
+      <article><span class="ikon">⤓</span><h3>Jalan tanpa internet</h3>
+        <p>Sekali dibuka, materinya tersimpan di perangkat. Kemajuan ikut pindah antar HP dan laptop.</p></article>
+    </div>
+  </div>
+</section>
 
+<section>
+  <div class="bungkus tumpuk-l">
+    <div class="tumpuk">
+      <span class="label">Kamusnya</span>
+      <h2>Pilih bahasa. Dengarkan sendiri.</h2>
+    </div>
     <div class="petak" id="petak" role="group" aria-label="Pilih bahasa"></div>
-
     <div class="kamus" id="kartu"></div>
   </div>
 </section>
 
 <section>
   <div class="bungkus tumpuk-l">
-    <div class="tumpuk"><span class="label">Yang dihitung, bukan dijanjikan</span></div>
     <div class="angka-baris">
       <div><b>9.052</b><span>entri kamus, sembilan bahasa</span></div>
       <div><b>326</b><span>pelajaran Inggris dalam 44 unit</span></div>
       <div><b>767</b><span>latihan tata bahasa</span></div>
       <div><b>10</b><span>simulasi ujian resmi</span></div>
     </div>
-    <p class="catatan">IELTS · TOEFL · TOEIC · JLPT · TOPIK · HSK · Goethe · DELF · DELE · TORFL —
-      meniru format dan ambang kelulusannya, termasuk nilai minimum tiap bagian.</p>
   </div>
 </section>
 
@@ -301,26 +361,21 @@ footer { padding-block: 2.5rem; color: var(--tinta-2); font-size: .85rem; }
       <span class="label">Kenapa sekarang</span>
       <h2>Yang mahal bukan harganya. Yang mahal tahun yang lewat.</h2>
     </div>
-    <div class="koreksi">
-      <article><span class="label">Lowongan</span><p style="color:var(--tinta);font-size:1rem">
-        Syarat sertifikat bahasa muncul di iklan kerja, bukan di wawancara. Yang tidak punya tersaring sebelum bertemu siapa pun.</p></article>
-      <article><span class="label">Beasiswa</span><p style="color:var(--tinta);font-size:1rem">
-        Kuotanya dibuka setahun sekali. Melewatkannya berarti menunggu dua belas bulan penuh.</p></article>
-      <article><span class="label">Bayaran</span><p style="color:var(--tinta);font-size:1rem">
-        Kerja jarak jauh untuk klien asing dibayar dengan mata uang mereka — pintunya bahasa.</p></article>
+    <div class="tiga">
+      <article><span class="label">Lowongan</span>
+        <p style="color:var(--tinta);font-size:.97rem">Syarat sertifikat bahasa ada di iklan kerjanya,
+          bukan di wawancara. Yang tak punya tersaring sebelum bertemu siapa pun.</p></article>
+      <article><span class="label">Beasiswa</span>
+        <p style="color:var(--tinta);font-size:.97rem">Kuotanya dibuka setahun sekali. Melewatkannya
+          berarti menunggu dua belas bulan penuh.</p></article>
+      <article><span class="label">Bayaran</span>
+        <p style="color:var(--tinta);font-size:.97rem">Kerja jarak jauh untuk klien asing dibayar dengan
+          mata uang mereka. Pintunya bahasa.</p></article>
     </div>
-    <p><span class="sorot">Tahun depan syaratnya sama. Kemampuanmu juga — kalau hari ini tidak dimulai.</span></p>
-  </div>
-</section>
-
-<section>
-  <div class="bungkus tumpuk-l">
-    <div class="tumpuk"><span class="label">Bayar sekali</span>
-      <h2>Bukan Rp199.000 tiap bulan.</h2></div>
     <div class="biaya">
       <figure style="margin:0">
         <div class="batang tumbuh" id="batangLangganan" aria-hidden="true"></div>
-        <figcaption><b>Langganan bulanan</b>Berhenti membayar, akses hilang — padahal bahasa butuh tahunan.</figcaption>
+        <figcaption><b>Langganan bulanan</b>Berhenti bayar, akses hilang — padahal bahasa butuh tahunan.</figcaption>
       </figure>
       <figure style="margin:0">
         <div class="batang datar" id="batangSekali" aria-hidden="true"></div>
@@ -330,7 +385,7 @@ footer { padding-block: 2.5rem; color: var(--tinta-2); font-size: .85rem; }
   </div>
 </section>
 
-<section id="paket">
+<section id="paket" class="berkotak">
   <div class="bungkus tumpuk-l">
     <div class="tumpuk"><span class="label">Harga</span><h2>Pilih paketmu.</h2></div>
     <div class="harga">
@@ -373,7 +428,7 @@ footer { padding-block: 2.5rem; color: var(--tinta-2); font-size: .85rem; }
     <div class="langkah">
       <article><h3>Bayar</h3><p>Pilih paket, selesaikan di halaman checkout.</p></article>
       <article><h3>Terima kode</h3><p>Masuk ke emailmu otomatis, biasanya dalam hitungan detik.</p></article>
-      <article><h3>Daftar</h3><p>Email, kata sandi, tempel kode. Masuk berikutnya cukup email dan kata sandi.</p></article>
+      <article><h3>Daftar</h3><p>Email, kata sandi, tempel kode. Masuk berikutnya cukup email dan sandi.</p></article>
     </div>
   </div>
 </section>
@@ -385,7 +440,7 @@ footer { padding-block: 2.5rem; color: var(--tinta-2); font-size: .85rem; }
       <details><summary>“Selamanya” benar-benar selamanya?</summary>
         <p>Ya. Kode yang ditebus menempel pada akunmu tanpa tanggal kedaluwarsa. Tidak ada tagihan bulanan.</p></details>
       <details><summary>Saya pemula nol. Bisa?</summary>
-        <p>Bisa. Bahasa beraksara lain dimulai dari aksaranya — Hangeul, kana, hanzi, huruf Arab, Kiril — termasuk urutan goresan.</p></details>
+        <p>Bisa. Bahasa beraksara lain dimulai dari aksaranya — seperti papan di atas — termasuk urutan goresan.</p></details>
       <details><summary>Ini kursus dengan guru?</summary>
         <p>Bukan. Aplikasi belajar mandiri terstruktur: materi, penjelasan, latihan, simulasi ujian. Tidak ada kelas langsung.</p></details>
       <details><summary>Harus online terus?</summary>
@@ -398,10 +453,10 @@ footer { padding-block: 2.5rem; color: var(--tinta-2); font-size: .85rem; }
   </div>
 </section>
 
-<section>
+<section class="berkotak">
   <div class="bungkus tumpuk">
     <h2>Sembilan bahasa. Satu kali bayar.</h2>
-    <p style="font-size:1.1rem;color:var(--tinta-2)">Mulai malam ini dengan yang paling kamu butuhkan.
+    <p style="font-size:1.05rem;color:var(--tinta-2)">Mulai malam ini dengan yang paling kamu butuhkan.
       Sisanya sudah jadi milikmu.</p>
     <div class="cta-baris">
       <a class="btn btn--utama" href="#" data-checkout="5">Esensi — Rp199.000 <small>5 bahasa</small></a>
@@ -416,26 +471,49 @@ footer { padding-block: 2.5rem; color: var(--tinta-2); font-size: .85rem; }
 /* Alamat checkout Scalev. Satu tempat untuk seluruh tombol di halaman,
    supaya tidak ada tautan yang tertinggal saat alamatnya berubah. */
 const CHECKOUT = { '5': '', '9': '' };
-
 for (const t of document.querySelectorAll('[data-checkout]')) {
-  const alamat = CHECKOUT[t.dataset.checkout];
-  if (alamat) t.href = alamat;
+  const a = CHECKOUT[t.dataset.checkout];
+  if (a) t.href = a;
   else {
-    /* Tombol tanpa alamat jangan berpura-pura bisa diklik: yang
-       menekannya akan mengira pembayarannya gagal, bukan mengira
-       halamannya belum selesai dipasang. */
+    /* Tombol tanpa alamat jangan berpura-pura bisa diklik: yang menekannya
+       akan mengira pembayarannya gagal, bukan mengira halamannya belum
+       selesai dipasang. */
     t.setAttribute('aria-disabled', 'true');
     t.style.opacity = '.5'; t.style.pointerEvents = 'none';
   }
 }
+const $ = (id) => document.getElementById(id);
 
-/* ── Kuis: memperlihatkan metodenya, bukan menceritakannya ────────
-   Ketiga soal diambil dari penjelasan yang benar-benar ada di dalam
+/* ── Suara: satu jalur untuk papan aksara dan kartu kamus ─────────
+   Kalau perangkat tidak punya suara bahasa itu, romanisasinya yang
+   dibacakan — cadangan yang sama persis dengan yang dipakai aplikasi.
+   Diam tanpa penjelasan jauh lebih buruk daripada bunyi mendekati. */
+function ucap(teks, kodeBahasa, rom, tombol) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  /* cancel() tidak dijamin memicu onend, jadi lampu tombol yang sedang
+     menyala harus dipadamkan di sini — kalau tidak, menekan huruf kedua
+     meninggalkan huruf pertama menyala selamanya. */
+  document.querySelectorAll('.bunyi').forEach(x => x.classList.remove('bunyi'));
+  const suara = speechSynthesis.getVoices();
+  const cocok = suara.find(v => v.lang?.toLowerCase().startsWith(kodeBahasa.slice(0, 2)));
+  const u = new SpeechSynthesisUtterance(cocok ? teks : (rom || teks));
+  if (cocok) u.voice = cocok; else u.lang = 'id-ID';
+  u.rate = .85;
+  if (tombol) {
+    tombol.classList.add('bunyi');
+    u.onend = u.onerror = () => tombol.classList.remove('bunyi');
+  }
+  speechSynthesis.speak(u);
+}
+
+/* ── Kuis ────────────────────────────────────────────────────────
+   Soalnya diambil dari penjelasan yang benar-benar ada di dalam
    aplikasi, jadi yang dicoba pengunjung memang barang yang dibelinya. */
 const SOAL = [
   { bahasa: 'Inggris', tanya: 'Saya beli dua buku.',
     pilihan: ['I buy two book.', 'I buy two books.'], kunci: 1,
-    jelas: '<b>Kebiasaan kita:</b> Indonesia mengulang kata — buku-buku. Inggris menambah <b>-s</b>, dan ekor kecil itu wajib. Ini kelalaian tersering penutur Indonesia.' },
+    jelas: '<b>Kebiasaan kita:</b> Indonesia mengulang kata — buku-buku. Inggris menambah <b>-s</b>, dan ekor kecil itu wajib. Kelalaian tersering penutur Indonesia.' },
   { bahasa: 'Inggris', tanya: 'Saya akan menelepon saat dia sampai.',
     pilihan: ['I will call when he will arrive.', 'I will call when he arrives.'], kunci: 1,
     jelas: '<b>Jebakannya:</b> peristiwanya memang belum terjadi, jadi <i>will</i> terasa benar. Tapi sesudah <b>when, after, before</b>, Inggris memakai bentuk sekarang.' },
@@ -443,9 +521,7 @@ const SOAL = [
     pilihan: ['Heute gehe ich zur Schule.', 'Heute ich gehe zur Schule.'], kunci: 0,
     jelas: '<b>Kebiasaan kita:</b> menerjemahkan urut kata. Dalam bahasa Jerman posisi kedua sudah milik kata kerja, jadi subjeknya pindah ke belakangnya.' },
 ];
-
-let ke = 0, benarTotal = 0;
-const $ = (id) => document.getElementById(id);
+let ke = 0, betul = 0;
 
 function gambarSoal() {
   const s = SOAL[ke];
@@ -453,21 +529,21 @@ function gambarSoal() {
   $('cobaSoal').textContent = `“${s.tanya}”`;
   $('cobaJelas').innerHTML = '';
   $('cobaLanjut').disabled = true;
+  $('cobaLanjut').textContent = 'Soal berikutnya →';
   $('cobaHitung').textContent = `${ke + 1} dari ${SOAL.length}`;
-
   const wadah = $('cobaPilih');
   wadah.innerHTML = '';
   s.pilihan.forEach((teks, i) => {
     const b = document.createElement('button');
     b.textContent = teks;
     b.addEventListener('click', () => {
-      /* Sesudah dijawab, semua tombol dikunci — kuis yang bisa diklik
+      /* Sesudah dijawab semua tombol dikunci — kuis yang bisa diklik
          berulang sampai hijau tidak mengajari apa pun. */
       [...wadah.children].forEach((x, j) => {
         x.disabled = true;
         x.classList.add(j === s.kunci ? 'benar' : 'salah');
       });
-      if (i === s.kunci) benarTotal++;
+      if (i === s.kunci) betul++;
       $('cobaJelas').innerHTML = s.jelas;
       $('cobaLanjut').disabled = false;
     });
@@ -476,50 +552,94 @@ function gambarSoal() {
 }
 
 $('cobaLanjut').addEventListener('click', () => {
+  if (ke >= SOAL.length) { ke = 0; betul = 0; return gambarSoal(); }
   ke++;
   if (ke < SOAL.length) return gambarSoal();
   $('cobaLabel').textContent = 'Selesai';
-  $('cobaSoal').textContent = `Benar ${benarTotal} dari ${SOAL.length}.`;
+  $('cobaSoal').textContent = `Benar ${betul} dari ${SOAL.length}.`;
   $('cobaPilih').innerHTML = '';
-  $('cobaJelas').innerHTML = benarTotal === SOAL.length
-    ? 'Bagus. Di dalam aplikasinya ada <b>767 latihan</b> lain yang menjelaskan dengan cara yang sama.'
-    : 'Justru bagus — itu tepat bagian yang biasanya tidak pernah dijelaskan. Di dalam aplikasinya ada <b>767 latihan</b> yang membedahnya satu per satu.';
+  $('cobaJelas').innerHTML = betul === SOAL.length
+    ? 'Bagus. Di dalam aplikasinya ada <b>767 latihan</b> lain yang dijelaskan dengan cara yang sama.'
+    : 'Justru bagus — itu tepat bagian yang biasanya tak pernah dijelaskan. Di dalamnya ada <b>767 latihan</b> yang membedahnya satu per satu.';
   $('cobaHitung').textContent = '';
-  const lanjut = $('cobaLanjut');
-  lanjut.textContent = 'Ulangi';
-  lanjut.onclick = () => { ke = 0; benarTotal = 0; lanjut.textContent = 'Soal berikutnya →';
-    lanjut.onclick = null; lanjut.addEventListener('click', () => {}); location.hash = '#coba'; gambarSoal(); };
+  $('cobaLanjut').textContent = 'Ulangi';
+  $('cobaLanjut').disabled = false;
 });
 gambarSoal();
 
-/* ── Sembilan bahasa: petak + kartu kamus hidup ─────────────────── */
-const BAHASA = [
-  { kode: 'en', nama: 'Inggris', glif: 'Aa', sapa: 'Hello', tts: 'en-US',
-    lema: 'go', rom: '', arti: 'pergi', bentuk: [['go', ''], ['went', ''], ['gone', '']], labelBentuk: ['dasar', 'lampau', 'partisip'] },
-  { kode: 'ja', nama: 'Jepang', glif: 'あ', sapa: 'こんにちは', tts: 'ja-JP',
-    lema: '行く', rom: 'iku', arti: 'pergi', bentuk: [['行きます', 'ikimasu'], ['行って', 'itte'], ['行った', 'itta']], labelBentuk: ['sopan', 'bentuk て', 'lampau'] },
-  { kode: 'ko', nama: 'Korea', glif: '한', sapa: '안녕하세요', tts: 'ko-KR',
-    lema: '가다', rom: 'gada', arti: 'pergi', bentuk: [['가요', 'gayo'], ['갔어요', 'gasseoyo']], labelBentuk: ['sopan', 'lampau'] },
-  { kode: 'zh', nama: 'Mandarin', glif: '中', sapa: '你好', tts: 'zh-CN',
-    lema: '书', rom: 'shū', arti: 'buku', bentuk: [['本', 'běn']], labelBentuk: ['kata bantu bilangan'] },
-  { kode: 'ar', nama: 'Arab', glif: 'ع', sapa: 'مرحبا', tts: 'ar-SA',
-    lema: 'ذهب', rom: 'dhahaba', arti: 'pergi', bentuk: [['يذهب', 'yadhhabu'], ['ذهاب', 'dhahaab']], labelBentuk: ['mudhari', 'masdar'] },
-  { kode: 'de', nama: 'Jerman', glif: 'ß', sapa: 'Hallo', tts: 'de-DE',
-    lema: 'gehen', rom: '', arti: 'pergi', bentuk: [['geht', ''], ['ging', ''], ['gegangen', '']], labelBentuk: ['kini', 'lampau', 'partisip'] },
-  { kode: 'fr', nama: 'Prancis', glif: 'É', sapa: 'Bonjour', tts: 'fr-FR',
-    lema: 'aller', rom: '', arti: 'pergi', bentuk: [['va', ''], ['allé', '']], labelBentuk: ['kini', 'partisip'] },
-  { kode: 'es', nama: 'Spanyol', glif: 'ñ', sapa: 'Hola', tts: 'es-ES',
-    lema: 'ir', rom: '', arti: 'pergi', bentuk: [['va', ''], ['fue', '']], labelBentuk: ['kini', 'lampau'] },
-  { kode: 'ru', nama: 'Rusia', glif: 'Я', sapa: 'Привет', tts: 'ru-RU',
-    lema: 'идти', rom: 'idti', arti: 'pergi', bentuk: [['пойти', 'poyti'], ['шёл', 'shyol']], labelBentuk: ['sempurna', 'lampau'] },
+/* ── Papan aksara ────────────────────────────────────────────────
+   Ditulis sebagai deret pasangan "glif bacaan" lalu dipecah, bukan
+   sebagai larik objek: isinya ratusan huruf, dan bentuk ringkas ini
+   membuat halamannya tetap enteng. */
+const AKSARA = [
+  { nama: 'Hiragana', bahasa: 'ja', ket: 'Aksara dasar Jepang. Tiap huruf satu suku kata — dan bunyinya tidak pernah berubah.',
+    data: 'あ a い i う u え e お o か ka き ki く ku け ke こ ko さ sa し shi す su せ se そ so た ta ち chi つ tsu て te と to な na に ni ぬ nu ね ne の no は ha ひ hi ふ fu へ he ほ ho ま ma み mi む mu め me も mo や ya ゆ yu よ yo ら ra り ri る ru れ re ろ ro わ wa を o ん n' },
+  { nama: 'Katakana', bahasa: 'ja', ket: 'Dipakai untuk kata serapan. Bunyinya sama dengan hiragana, bentuknya saja yang beda.',
+    data: 'ア a イ i ウ u エ e オ o カ ka キ ki ク ku ケ ke コ ko サ sa シ shi ス su セ se ソ so タ ta チ chi ツ tsu テ te ト to ナ na ニ ni ヌ nu ネ ne ノ no ハ ha ヒ hi フ fu ヘ he ホ ho マ ma ミ mi ム mu メ me モ mo ヤ ya ユ yu ヨ yo ラ ra リ ri ル ru レ re ロ ro ワ wa ヲ o ン n' },
+  { nama: 'Hangeul', bahasa: 'ko', ket: 'Aksara Korea dirancang untuk dipelajari cepat: konsonan dan vokal disusun jadi satu suku kata.',
+    data: 'ㄱ g ㄴ n ㄷ d ㄹ r ㅁ m ㅂ b ㅅ s ㅇ ng ㅈ j ㅊ ch ㅋ k ㅌ t ㅍ p ㅎ h ㅏ a ㅑ ya ㅓ eo ㅕ yeo ㅗ o ㅛ yo ㅜ u ㅠ yu ㅡ eu ㅣ i' },
+  { nama: 'Kiril', bahasa: 'ru', ket: 'Sebagian huruf mirip Latin tapi berbunyi lain — В dibaca "v", Р dibaca "r", С dibaca "s".',
+    data: 'А a Б b В v Г g Д d Е ye Ё yo Ж zh З z И i Й y К k Л l М m Н n О o П p Р r С s Т t У u Ф f Х kh Ц ts Ч ch Ш sh Щ shch Ы y Э e Ю yu Я ya' },
+  { nama: 'Arab', bahasa: 'ar', ket: 'Ditulis dari kanan ke kiri, dan bentuk hurufnya berubah menurut posisinya dalam kata.',
+    data: 'ا a ب b ت t ث ts ج j ح h خ kh د d ذ dz ر r ز z س s ش sy ص sh ض dh ط th ظ zh ع a غ gh ف f ق q ك k ل l م m ن n ه h و w ي y' },
 ];
 
-/* Pita sapaan dibangun dari daftar yang sama, dua kali, supaya
-   perulangannya mulus tanpa menyalin teks di HTML. */
-$('pita').innerHTML = [...BAHASA, ...BAHASA]
-  .map(b => `<span><b lang="${b.kode}">${b.sapa}</b> · ${b.nama}</span>`).join('');
+const tabWadah = $('tabAksara');
+AKSARA.forEach((set, i) => {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.textContent = set.nama;
+  b.setAttribute('aria-pressed', String(i === 0));
+  b.addEventListener('click', () => {
+    [...tabWadah.children].forEach(x => x.setAttribute('aria-pressed', 'false'));
+    b.setAttribute('aria-pressed', 'true');
+    gambarPapan(set);
+  });
+  tabWadah.append(b);
+});
 
-const petak = document.getElementById('petak');
+function gambarPapan(set) {
+  const potong = set.data.split(' ');
+  const papan = $('papan');
+  papan.innerHTML = '';
+  for (let i = 0; i < potong.length; i += 2) {
+    const glif = potong[i], rom = potong[i + 1];
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', `${glif}, dibaca ${rom}`);
+    b.innerHTML = `<span class="g" lang="${set.bahasa}">${glif}</span><span class="r">${rom}</span>`;
+    b.addEventListener('click', () => ucap(glif, set.bahasa, rom, b));
+    papan.append(b);
+  }
+  $('papanKet').textContent = set.ket;
+}
+gambarPapan(AKSARA[0]);
+
+/* ── Kamus hidup ─────────────────────────────────────────────────
+   Isi kartunya diambil dari kamus aplikasi yang sebenarnya, termasuk
+   romanisasi tiap bentuk kata. */
+const BAHASA = [
+  { kode: 'en', nama: 'Inggris', glif: 'Aa', lema: 'go', rom: '', arti: 'pergi',
+    bentuk: [['go', ''], ['went', ''], ['gone', '']], label: ['dasar', 'lampau', 'partisip'] },
+  { kode: 'ja', nama: 'Jepang', glif: 'あ', lema: '行く', rom: 'iku', arti: 'pergi',
+    bentuk: [['行きます', 'ikimasu'], ['行って', 'itte'], ['行った', 'itta']], label: ['sopan', 'bentuk て', 'lampau'] },
+  { kode: 'ko', nama: 'Korea', glif: '한', lema: '가다', rom: 'gada', arti: 'pergi',
+    bentuk: [['가요', 'gayo'], ['갔어요', 'gasseoyo']], label: ['sopan', 'lampau'] },
+  { kode: 'zh', nama: 'Mandarin', glif: '中', lema: '书', rom: 'shū', arti: 'buku',
+    bentuk: [['本', 'běn']], label: ['kata bantu bilangan'] },
+  { kode: 'ar', nama: 'Arab', glif: 'ع', lema: 'ذهب', rom: 'dhahaba', arti: 'pergi',
+    bentuk: [['يذهب', 'yadhhabu'], ['ذهاب', 'dhahaab']], label: ['mudhari', 'masdar'] },
+  { kode: 'de', nama: 'Jerman', glif: 'ß', lema: 'gehen', rom: '', arti: 'pergi',
+    bentuk: [['geht', ''], ['ging', ''], ['gegangen', '']], label: ['kini', 'lampau', 'partisip'] },
+  { kode: 'fr', nama: 'Prancis', glif: 'É', lema: 'aller', rom: '', arti: 'pergi',
+    bentuk: [['va', ''], ['allé', '']], label: ['kini', 'partisip'] },
+  { kode: 'es', nama: 'Spanyol', glif: 'ñ', lema: 'ir', rom: '', arti: 'pergi',
+    bentuk: [['va', ''], ['fue', '']], label: ['kini', 'lampau'] },
+  { kode: 'ru', nama: 'Rusia', glif: 'Я', lema: 'идти', rom: 'idti', arti: 'pergi',
+    bentuk: [['пойти', 'poyti'], ['шёл', 'shyol']], label: ['sempurna', 'lampau'] },
+];
+
+const petak = $('petak');
 BAHASA.forEach((b, i) => {
   const t = document.createElement('button');
   t.type = 'button';
@@ -533,24 +653,8 @@ BAHASA.forEach((b, i) => {
   petak.append(t);
 });
 
-function ucap(teks, kodeTts, rom, tombol) {
-  if (!('speechSynthesis' in window)) return;
-  speechSynthesis.cancel();
-  const suara = speechSynthesis.getVoices();
-  const cocok = suara.find(v => v.lang?.toLowerCase().startsWith(kodeTts.slice(0, 2).toLowerCase()));
-  /* Kalau perangkat tidak punya suara bahasa itu, romanisasinya yang
-     dibacakan — persis cadangan yang dipakai di dalam aplikasi. Diam
-     tanpa penjelasan jauh lebih buruk daripada bunyi yang mendekati. */
-  const u = new SpeechSynthesisUtterance(cocok ? teks : (rom || teks));
-  if (cocok) u.voice = cocok; else u.lang = 'id-ID';
-  u.rate = .9;
-  tombol.classList.add('bunyi');
-  u.onend = u.onerror = () => tombol.classList.remove('bunyi');
-  speechSynthesis.speak(u);
-}
-
 function gambarKartu(b) {
-  const kartu = document.getElementById('kartu');
+  const kartu = $('kartu');
   kartu.innerHTML = `
     <div class="kamus__kepala">
       <span class="kamus__lema" lang="${b.kode}">${b.lema}</span>
@@ -562,26 +666,21 @@ function gambarKartu(b) {
         <span class="kamus__kiri">
           <span class="kamus__bentuk" lang="${b.kode}">${f[0]}</span>
           ${f[1] ? `<span class="kamus__rom">${f[1]}</span>` : ''}
-          <span class="label">${b.labelBentuk[i] || ''}</span>
+          <span class="label" style="color:var(--tinta-2)">${b.label[i] || ''}</span>
         </span>
         <button class="suara" type="button" data-teks="${f[0]}" data-rom="${f[1]}"
                 aria-label="Dengarkan ${f[0]}">▶</button>
-      </div>`).join('')}
-    <p class="kamus__catatan">Setiap bentuk kata punya tombol suaranya sendiri —
-      termasuk yang tidak beraturan, yang justru paling sering dipakai.</p>`;
-
+      </div>`).join('')}`;
   kartu.querySelectorAll('.suara').forEach(tb =>
-    tb.addEventListener('click', () => ucap(tb.dataset.teks, b.tts, tb.dataset.rom, tb)));
+    tb.addEventListener('click', () => ucap(tb.dataset.teks, b.kode, tb.dataset.rom, tb)));
 }
 gambarKartu(BAHASA[1]);
-if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 
 /* ── Batang biaya ────────────────────────────────────────────────
    Dua belas bulan: langganan menumpuk, sekali bayar tetap datar.
    Digambar dari data supaya bentuknya tidak bisa berbohong. */
 const bln = 12;
-document.getElementById('batangLangganan').innerHTML =
+$('batangLangganan').innerHTML =
   Array.from({ length: bln }, (_, i) => `<i style="height:${((i + 1) / bln * 100).toFixed(1)}%"></i>`).join('');
-document.getElementById('batangSekali').innerHTML =
-  Array.from({ length: bln }, () => `<i style="height:26%"></i>`).join('');
+$('batangSekali').innerHTML = Array.from({ length: bln }, () => '<i style="height:24%"></i>').join('');
 </script>
