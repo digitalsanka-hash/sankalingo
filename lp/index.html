@@ -109,6 +109,36 @@ section { padding-block: clamp(3rem, 7vw, 5.5rem); }
 .coba__lanjut:disabled { opacity: .3; cursor: default; }
 .coba__hitung { font-family: "JetBrains Mono", monospace; font-size: .75rem; color: var(--teks-2); }
 
+/* ── Kotak nama: bagian paling ringan untuk dicoba ───────────────
+   Tidak menuntut jawaban benar, tidak menghakimi, dan hasilnya milik
+   orangnya sendiri — itu sebabnya ia ditaruh di hero, bukan kuis. */
+.nama-kotak { background: var(--malam-2); border: 1px solid var(--garis); border-radius: 16px; padding: 1.5rem; }
+.nama-input { width: 100%; font-family: Inter, sans-serif; font-size: 1.1rem; font-weight: 600;
+  padding: .9rem 1rem; border-radius: 10px; border: 2px solid var(--garis);
+  background: var(--malam-3); color: var(--teks); }
+.nama-input::placeholder { color: var(--teks-2); font-weight: 400; }
+.nama-input:focus { outline: none; border-color: var(--api); }
+.nama-hasil { display: grid; gap: .5rem; margin: 1rem 0 .8rem; min-height: 12.5rem; }
+.nama-baris { display: flex; align-items: center; justify-content: space-between; gap: .8rem;
+  background: var(--malam-3); border: 1px solid var(--garis); border-radius: 12px; padding: .7rem .9rem; }
+.nama-baris .aks { font-size: 1.55rem; font-weight: 600; line-height: 1.25; word-break: break-word; }
+.nama-baris .nm { font-family: "JetBrains Mono", monospace; font-size: .62rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--teks-2); }
+.nama-kosong { display: grid; place-items: center; min-height: 12.5rem; color: var(--teks-2);
+  border: 1px dashed var(--garis); border-radius: 12px; text-align: center; padding: 1rem; font-size: .92rem; }
+
+/* ── Tes ────────────────────────────────────────────────────────── */
+.tes-kotak { background: var(--malam-3); border: 1px solid var(--garis); border-radius: 16px;
+  padding: 1.5rem; max-width: 720px; }
+.tes-bar { height: 6px; border-radius: 99px; background: var(--garis); overflow: hidden; margin-bottom: 1.2rem; }
+.tes-bar i { display: block; height: 100%; width: 0; background: var(--api); transition: width .3s ease; }
+.tes-skor { font-family: Anton, sans-serif; font-size: clamp(2.6rem, 7vw, 4rem); line-height: 1; color: var(--emas); }
+.tes-rincian { list-style: none; margin: 1rem 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
+.tes-rincian li { display: flex; gap: .6rem; align-items: baseline; font-size: .94rem; color: var(--teks-2); }
+.tes-rincian b { color: var(--teks); }
+.tes-rincian .ya::before { content: "✓"; color: var(--lumut); font-weight: 800; }
+.tes-rincian .tidak::before { content: "✕"; color: var(--api); font-weight: 800; }
+
 /* ── Pita bahasa ────────────────────────────────────────────────── */
 .pita { overflow: hidden; background: var(--api); color: #fff; border-block: 3px solid #0a0f1f; }
 .pita__isi { display: flex; gap: 2.2rem; width: max-content; padding: .7rem 0; animation: geser 40s linear infinite; }
@@ -280,15 +310,14 @@ footer { padding-block: 2.2rem; color: var(--teks-2); font-size: .84rem; }
       <p class="cta-catatan">Kode akses dikirim otomatis ke emailmu dalam hitungan detik.</p>
     </div>
 
-    <div class="coba" id="coba">
-      <span class="label" id="cobaLabel">Coba dulu · Inggris</span>
-      <p class="coba__soal" id="cobaSoal"></p>
-      <div class="pilih" id="cobaPilih"></div>
-      <p class="coba__jelas" id="cobaJelas"></p>
-      <div class="coba__kaki">
-        <span class="coba__hitung" id="cobaHitung"></span>
-        <button class="coba__lanjut" id="cobaLanjut" disabled>Soal berikutnya →</button>
-      </div>
+    <div class="nama-kotak">
+      <span class="label">Coba sekarang · gratis</span>
+      <h3 style="font-size:1.25rem;margin:.4rem 0 .8rem">Tulis namamu. Lihat wujudnya di empat aksara.</h3>
+      <input id="namaIsi" class="nama-input" type="text" maxlength="18" autocomplete="off"
+             placeholder="Ketik namamu…" aria-label="Namamu">
+      <div class="nama-hasil" id="namaHasil"></div>
+      <p class="cta-catatan" id="namaKet">Bunyinya didekati, bukan diterjemahkan — persis cara nama asing
+        ditulis dalam aksara-aksara itu.</p>
     </div>
   </div>
 </section>
@@ -320,6 +349,32 @@ footer { padding-block: 2.2rem; color: var(--teks-2); font-size: .84rem; }
     </div>
     <p>Tiap topik di dalam aplikasinya ditulis dari sisi itu: <b>kebiasaan berbahasa Indonesia mana</b>
       yang sedang menyeretmu, kenapa tidak terasa, dan latihan sampai jadi refleks.</p>
+  </div>
+</section>
+
+<section id="tes" class="blok-2">
+  <div class="bungkus tumpuk-l">
+    <div class="tumpuk">
+      <span class="label">Tes 60 detik · gratis</span>
+      <h2>Lima kalimat. Berapa yang kamu kira sudah benar?</h2>
+      <p>Bukan tebak-tebakan: tiap soal diambil dari kesalahan yang paling sering dibuat penutur
+        Indonesia, dan tiap jawaban dijelaskan sebabnya.</p>
+    </div>
+
+    <div class="tes-kotak">
+      <div class="tes-bar" aria-hidden="true"><i id="tesBar"></i></div>
+      <div id="tesIsi">
+        <span class="label" id="cobaLabel">Soal 1 · Inggris</span>
+        <p class="coba__soal" id="cobaSoal"></p>
+        <div class="pilih" id="cobaPilih"></div>
+        <p class="coba__jelas" id="cobaJelas"></p>
+        <div class="coba__kaki">
+          <span class="coba__hitung" id="cobaHitung"></span>
+          <button class="coba__lanjut" id="cobaLanjut" disabled>Soal berikutnya →</button>
+        </div>
+      </div>
+      <div id="tesHasil" hidden></div>
+    </div>
   </div>
 </section>
 
@@ -409,7 +464,8 @@ footer { padding-block: 2.2rem; color: var(--teks-2); font-size: .84rem; }
         <div>
           <span class="label">Esensi · 5 bahasa</span>
           <div class="rupiah">Rp199.000</div>
-          <span class="cta-catatan">sekali bayar, selamanya</span>
+          <span class="cta-catatan">sekali bayar, selamanya ·
+            <b class="emas" data-perbahasa="199000/5"></b></span>
         </div>
         <ul>
           <li>Inggris — kurikulum penuh A1–C2</li>
@@ -423,7 +479,8 @@ footer { padding-block: 2.2rem; color: var(--teks-2); font-size: .84rem; }
         <div>
           <span class="label">Lengkap · 9 bahasa</span>
           <div class="rupiah">Rp299.000</div>
-          <span class="cta-catatan">sekali bayar, selamanya</span>
+          <span class="cta-catatan">sekali bayar, selamanya ·
+            <b class="emas" data-perbahasa="299000/9"></b></span>
         </div>
         <ul>
           <li>Semua isi paket Esensi</li>
@@ -533,25 +590,35 @@ function ucap(teks, kodeBahasa, rom, tombol) {
    Soalnya diambil dari penjelasan yang benar-benar ada di dalam
    aplikasi, jadi yang dicoba pengunjung memang barang yang dibelinya. */
 const SOAL = [
-  { bahasa: 'Inggris', tanya: 'Saya beli dua buku.',
+  { bahasa: 'Inggris', topik: 'Jamak -s', tanya: 'Saya beli dua buku.',
     pilihan: ['I buy two book.', 'I buy two books.'], kunci: 1,
     jelas: '<b>Kebiasaan kita:</b> Indonesia mengulang kata — buku-buku. Inggris menambah <b>-s</b>, dan ekor kecil itu wajib. Kelalaian tersering penutur Indonesia.' },
-  { bahasa: 'Inggris', tanya: 'Saya akan menelepon saat dia sampai.',
+  { bahasa: 'Inggris', topik: 'Waktu sesudah "when"', tanya: 'Saya akan menelepon saat dia sampai.',
     pilihan: ['I will call when he will arrive.', 'I will call when he arrives.'], kunci: 1,
     jelas: '<b>Jebakannya:</b> peristiwanya memang belum terjadi, jadi <i>will</i> terasa benar. Tapi sesudah <b>when, after, before</b>, Inggris memakai bentuk sekarang.' },
-  { bahasa: 'Jerman', tanya: 'Hari ini saya pergi ke sekolah.',
+  { bahasa: 'Inggris', topik: 'Present perfect', tanya: 'Saya sudah tinggal di sini tiga tahun.',
+    pilihan: ['I have lived here for three years.', 'I live here since three years.'], kunci: 0,
+    jelas: '<b>Kebiasaan kita:</b> "sudah" diterjemahkan jadi bentuk sekarang. Inggris memakai <b>have + V3</b> untuk yang dimulai di masa lalu dan masih berlangsung — dan <i>for</i>, bukan <i>since</i>, untuk lama waktu.' },
+  { bahasa: 'Jerman', topik: 'Kata kerja posisi kedua', tanya: 'Hari ini saya pergi ke sekolah.',
     pilihan: ['Heute gehe ich zur Schule.', 'Heute ich gehe zur Schule.'], kunci: 0,
     jelas: '<b>Kebiasaan kita:</b> menerjemahkan urut kata. Dalam bahasa Jerman posisi kedua sudah milik kata kerja, jadi subjeknya pindah ke belakangnya.' },
+  { bahasa: 'Jepang', topik: 'Partikel arah に', tanya: 'Saya pergi ke sekolah.',
+    pilihan: ['gakkou ni ikimasu', 'gakkou o ikimasu'], kunci: 0,
+    jelas: '<b>Jebakannya:</b> "ke" dan "di" di bahasa kita cuma dua kata; di Jepang ada partikel yang menandai arah (<b>に</b>), tempat (<b>で</b>), dan objek (<b>を</b>). Pergi ke suatu tempat memakai <b>に</b>.' },
 ];
 let ke = 0, betul = 0;
+const jawaban = [];   // benar/salah per soal, untuk rincian hasil
+
+const majuBar = () => { $('tesBar').style.width = (ke / SOAL.length * 100) + '%'; };
 
 function gambarSoal() {
   const s = SOAL[ke];
-  $('cobaLabel').textContent = `Coba dulu · ${s.bahasa}`;
+  majuBar();
+  $('cobaLabel').textContent = `Soal ${ke + 1} · ${s.bahasa}`;
   $('cobaSoal').textContent = `“${s.tanya}”`;
   $('cobaJelas').innerHTML = '';
   $('cobaLanjut').disabled = true;
-  $('cobaLanjut').textContent = 'Soal berikutnya →';
+  $('cobaLanjut').textContent = ke === SOAL.length - 1 ? 'Lihat hasilku →' : 'Soal berikutnya →';
   $('cobaHitung').textContent = `${ke + 1} dari ${SOAL.length}`;
   const wadah = $('cobaPilih');
   wadah.innerHTML = '';
@@ -565,7 +632,9 @@ function gambarSoal() {
         x.disabled = true;
         x.classList.add(j === s.kunci ? 'benar' : 'salah');
       });
-      if (i === s.kunci) betul++;
+      const tepat = i === s.kunci;
+      if (tepat) betul++;
+      jawaban[ke] = tepat;
       $('cobaJelas').innerHTML = s.jelas;
       $('cobaLanjut').disabled = false;
     });
@@ -573,19 +642,55 @@ function gambarSoal() {
   });
 }
 
+function gambarHasil() {
+  $('tesIsi').hidden = true;
+  $('tesBar').style.width = '100%';
+  const hasil = $('tesHasil');
+  hasil.hidden = false;
+
+  const meleset = SOAL.filter((_, i) => !jawaban[i]);
+  /* Nadanya sengaja tidak menghakimi berapa pun skornya: yang meleset
+     memang bagian yang tidak pernah dijelaskan, dan itu justru
+     alasan produknya ada. Skor tinggi pun tetap punya langkah
+     berikutnya. */
+  const kepala = betul === SOAL.length
+    ? 'Bahasa Inggrismu di atas rata-rata. Sekarang bahasa keduamu.'
+    : meleset.length <= 2
+      ? 'Dekat. Yang meleset justru bagian yang paling jarang dijelaskan.'
+      : 'Wajar — ini persis bagian yang tidak pernah diajarkan di kelas.';
+
+  hasil.innerHTML = `
+    <span class="label">Hasilmu</span>
+    <div class="tes-skor">${betul}<span style="font-size:.4em;color:var(--teks-2)">/${SOAL.length}</span></div>
+    <h3 style="margin:.5rem 0 0;font-size:1.2rem">${kepala}</h3>
+    <ul class="tes-rincian">
+      ${SOAL.map((s, i) => `<li class="${jawaban[i] ? 'ya' : 'tidak'}">
+        <span><b>${s.topik}</b> · ${s.bahasa}</span></li>`).join('')}
+    </ul>
+    <p class="cta-catatan" style="margin-bottom:1rem">
+      ${meleset.length
+        ? `Di dalam aplikasinya, ${meleset.length === 1 ? 'topik itu' : `${meleset.length} topik itu`}
+           dibedah satu per satu — bagian dari <b>767 latihan</b> yang semuanya ditulis dari sisi
+           kebiasaan berbahasa Indonesia.`
+        : 'Di dalamnya ada <b>767 latihan</b> lain, plus delapan bahasa yang belum kamu sentuh.'}
+    </p>
+    <div class="cta-baris">
+      <a class="btn btn--api" href="#paket">Ambil sekarang — Rp199.000</a>
+      <button class="btn btn--garis" type="button" id="tesUlang">Ulangi tes</button>
+    </div>`;
+
+  $('tesUlang').addEventListener('click', () => {
+    ke = 0; betul = 0; jawaban.length = 0;
+    hasil.hidden = true;
+    $('tesIsi').hidden = false;
+    gambarSoal();
+  });
+}
+
 $('cobaLanjut').addEventListener('click', () => {
-  if (ke >= SOAL.length) { ke = 0; betul = 0; return gambarSoal(); }
   ke++;
   if (ke < SOAL.length) return gambarSoal();
-  $('cobaLabel').textContent = 'Selesai';
-  $('cobaSoal').textContent = `Benar ${betul} dari ${SOAL.length}.`;
-  $('cobaPilih').innerHTML = '';
-  $('cobaJelas').innerHTML = betul === SOAL.length
-    ? 'Bagus. Di dalam aplikasinya ada <b>767 latihan</b> lain yang dijelaskan dengan cara yang sama.'
-    : 'Justru bagus — itu tepat bagian yang biasanya tak pernah dijelaskan. Di dalamnya ada <b>767 latihan</b> yang membedahnya satu per satu.';
-  $('cobaHitung').textContent = '';
-  $('cobaLanjut').textContent = 'Ulangi';
-  $('cobaLanjut').disabled = false;
+  gambarHasil();
 });
 gambarSoal();
 
@@ -702,4 +807,173 @@ function gambarKartu(b) {
     tb.addEventListener('click', () => ucap(tb.dataset.teks, b.kode, tb.dataset.rom, tb)));
 }
 gambarKartu(BAHASA[1]);
+
+/* ── Namamu dalam empat aksara ───────────────────────────────────
+   Nama sendiri adalah satu-satunya kata yang pasti dipedulikan
+   pengunjung, dan melihatnya berubah wujud membuat aksara asing
+   berhenti terasa mustahil. Ini bukan terjemahan melainkan pendekatan
+   BUNYI — persis cara nama asing memang ditulis di aksara-aksara itu.
+
+   Nama dipecah jadi suku kata dulu (konsonan + vokal), karena tiga
+   dari empat aksara ini menulis suku, bukan huruf. */
+
+const KATA_KANA = {
+  a:'ア', i:'イ', u:'ウ', e:'エ', o:'オ',
+  ka:'カ', ki:'キ', ku:'ク', ke:'ケ', ko:'コ',
+  ga:'ガ', gi:'ギ', gu:'グ', ge:'ゲ', go:'ゴ',
+  sa:'サ', si:'シ', su:'ス', se:'セ', so:'ソ',
+  za:'ザ', zi:'ジ', zu:'ズ', ze:'ゼ', zo:'ゾ',
+  ta:'タ', ti:'ティ', tu:'トゥ', te:'テ', to:'ト',
+  da:'ダ', di:'ディ', du:'ドゥ', de:'デ', do:'ド',
+  na:'ナ', ni:'ニ', nu:'ヌ', ne:'ネ', no:'ノ',
+  ha:'ハ', hi:'ヒ', hu:'フ', he:'ヘ', ho:'ホ',
+  ba:'バ', bi:'ビ', bu:'ブ', be:'ベ', bo:'ボ',
+  pa:'パ', pi:'ピ', pu:'プ', pe:'ペ', po:'ポ',
+  ma:'マ', mi:'ミ', mu:'ム', me:'メ', mo:'モ',
+  ya:'ヤ', yu:'ユ', yo:'ヨ', yi:'イ', ye:'イェ',
+  ra:'ラ', ri:'リ', ru:'ル', re:'レ', ro:'ロ',
+  la:'ラ', li:'リ', lu:'ル', le:'レ', lo:'ロ',
+  wa:'ワ', wi:'ウィ', wu:'ウ', we:'ウェ', wo:'ヲ',
+  fa:'ファ', fi:'フィ', fu:'フ', fe:'フェ', fo:'フォ',
+  ja:'ジャ', ji:'ジ', ju:'ジュ', je:'ジェ', jo:'ジョ',
+  cha:'チャ', chi:'チ', chu:'チュ', che:'チェ', cho:'チョ',
+  sha:'シャ', shi:'シ', shu:'シュ', she:'シェ', sho:'ショ',
+  nya:'ニャ', nyi:'ニ', nyu:'ニュ', nye:'ニェ', nyo:'ニョ',
+  nga:'ンガ', ngi:'ンギ', ngu:'ング', nge:'ンゲ', ngo:'ンゴ',
+  tha:'タ', thi:'ティ', thu:'トゥ', the:'テ', tho:'ト',
+  va:'ヴァ', vi:'ヴィ', vu:'ヴ', ve:'ヴェ', vo:'ヴォ',
+};
+/* Konsonan yang berdiri sendiri di ujung suku tetap harus jadi kana
+   utuh — bahasa Jepang tidak punya konsonan telanjang selain ン. */
+const KANA_TUNGGAL = { n:'ン', ng:'ン', k:'ク', g:'グ', s:'ス', z:'ズ', t:'ト', d:'ド', h:'フ',
+  b:'ブ', p:'プ', m:'ム', r:'ル', l:'ル', f:'フ', v:'ヴ', j:'ジ', y:'イ', w:'ウ',
+  c:'ク', q:'ク', x:'クス', ch:'チ', sh:'シュ', ny:'ニ', th:'ト' };
+
+const HANGEUL_AWAL = { g:0, n:2, d:3, r:5, l:5, m:6, b:7, s:9,
+  '':11, j:12, ch:14, k:15, t:16, p:17, h:18, c:15, f:17, v:7, w:11, y:11, z:12, q:15, x:15,
+  ny:2, ng:11, sh:9, th:16 };
+const HANGEUL_VOKAL = { a:0, e:5, o:8, u:13, i:20 };
+const HANGEUL_AKHIR = { n:4, ng:21, l:8, r:8, m:16, b:17, p:17, k:1, g:1, t:7, d:7, s:19,
+  h:27, c:1, f:17, v:17, z:19, x:1, ny:4, ch:23, sh:19, th:7, j:22, y:0, w:0, q:1 };
+
+const KIRIL = { a:'а', b:'б', c:'к', d:'д', e:'е', f:'ф', g:'г', h:'х', i:'и', j:'дж', k:'к',
+  l:'л', m:'м', n:'н', o:'о', p:'п', q:'к', r:'р', s:'с', t:'т', u:'у', v:'в', w:'в',
+  x:'кс', y:'й', z:'з' };
+
+const ARAB = { a:'ا', b:'ب', c:'ك', d:'د', e:'ي', f:'ف', g:'غ', h:'ه', i:'ي', j:'ج', k:'ك',
+  l:'ل', m:'م', n:'ن', o:'و', p:'ب', q:'ق', r:'ر', s:'س', t:'ت', u:'و', v:'ف', w:'و',
+  x:'كس', y:'ي', z:'ز' };
+
+const VOKAL = 'aeiou';
+
+/** Pecah nama jadi suku: konsonan (boleh gugus dua huruf) + vokal. */
+function sukuKata(nama) {
+  const t = nama.toLowerCase().replace(/[^a-z]/g, '');
+  const suku = [];
+  let i = 0;
+  while (i < t.length) {
+    let kons = '';
+    /* Gugus dua huruf yang berbunyi satu bunyi. */
+    if (/^(ch|sh|ny|ng|th)/.test(t.slice(i))) { kons = t.slice(i, i + 2); i += 2; }
+    else if (!VOKAL.includes(t[i])) { kons = t[i]; i++; }
+    let vok = '';
+    if (i < t.length && VOKAL.includes(t[i])) { vok = t[i]; i++; }
+    suku.push([kons, vok]);
+  }
+  return suku;
+}
+
+const keKatakana = (nama) => sukuKata(nama).map(([k, v]) => {
+  if (!k) return KATA_KANA[v] || '';
+  if (!v) return KANA_TUNGGAL[k] || KANA_TUNGGAL[k[0]] || '';
+  return KATA_KANA[k + v] || KATA_KANA[k[0] + v] || ((KANA_TUNGGAL[k] || '') + (KATA_KANA[v] || ''));
+}).join('');
+
+/* Konsonan yang boleh berdiri sebagai akhiran suku. Di luar daftar
+   ini, konsonan telanjang justru harus jadi sukunya sendiri dengan
+   vokal 으 — kalau dipaksa jadi akhiran, "anugrah" keluar sebagai
+   아눅랗 alih-alih 아누그라. */
+const AKHIR_SAH = new Set(['n', 'ng', 'l', 'r', 'm']);
+/* Vokal ganda sesudah w: 와 워 위, bukan 아 오 이. */
+const HANGEUL_W = { a: 9, o: 14, i: 16, u: 13, e: 11 };
+const EU = 18;
+
+function keHangeul(nama) {
+  const suku = sukuKata(nama);
+  let out = '';
+  for (let i = 0; i < suku.length; i++) {
+    const [k, v] = suku[i];
+
+    if (!v) {
+      /* h, y, dan w di ujung kata tidak terdengar dalam bahasa Korea —
+         menuliskannya justru menambah bunyi yang tidak ada. */
+      if (i === suku.length - 1 && 'hyw'.includes(k)) continue;
+
+      const akhir = HANGEUL_AKHIR[k] ?? HANGEUL_AKHIR[k[0]];
+      const kode = out ? out.charCodeAt(out.length - 1) - 0xac00 : -1;
+      const bisaDitempel = out && akhir && kode >= 0 && kode % 28 === 0
+        && (AKHIR_SAH.has(k) || i === suku.length - 1);
+
+      if (bisaDitempel) {
+        out = out.slice(0, -1) + String.fromCharCode(0xac00 + kode + akhir);
+      } else {
+        /* Gugus di tengah kata dipecah jadi suku sendiri: g-r → 그라. */
+        const awal = HANGEUL_AWAL[k] ?? HANGEUL_AWAL[k[0]] ?? 11;
+        out += String.fromCharCode(0xac00 + (awal * 21 + EU) * 28);
+      }
+      continue;
+    }
+
+    const awal = k === 'w' ? 11 : (HANGEUL_AWAL[k] ?? HANGEUL_AWAL[k[0]] ?? 11);
+    const vokal = k === 'w' ? (HANGEUL_W[v] ?? 13) : (HANGEUL_VOKAL[v] ?? 0);
+    out += String.fromCharCode(0xac00 + (awal * 21 + vokal) * 28);
+  }
+  return out;
+}
+
+const keKiril = (nama) => nama.toLowerCase().replace(/[^a-z]/g, '')
+  .split('').map(c => KIRIL[c] || '').join('');
+
+/* Vokal di awal kata Arab selalu bersandar pada alif — "Irsan" ditulis
+   ايرسان, bukan يرسان yang membuka kata dengan ya. */
+const keArab = (nama) => {
+  const t = nama.toLowerCase().replace(/[^a-z]/g, '');
+  return t.split('').map((c, i) => {
+    if (i === 0 && VOKAL.includes(c) && c !== 'a') return 'ا' + (ARAB[c] || '');
+    return ARAB[c] || '';
+  }).join('');
+};
+
+const AKSARA_NAMA = [
+  { nama: 'Katakana · Jepang', kode: 'ja', ubah: keKatakana },
+  { nama: 'Hangeul · Korea', kode: 'ko', ubah: keHangeul },
+  { nama: 'Kiril · Rusia', kode: 'ru', ubah: keKiril },
+  { nama: 'Arab', kode: 'ar', ubah: keArab },
+];
+
+const namaIsi = $('namaIsi'), namaHasil = $('namaHasil');
+function gambarNama() {
+  const n = namaIsi.value.trim();
+  if (!n) {
+    namaHasil.innerHTML = '<div class="nama-kosong">Ketik namamu di atas — wujudnya muncul di sini:'
+      + '<br>katakana, hangeul, Kiril, dan huruf Arab.</div>';
+    return;
+  }
+  namaHasil.innerHTML = AKSARA_NAMA.map(a => '<div class="nama-baris">'
+    + '<span class="aks" lang="' + a.kode + '">' + (a.ubah(n) || '—') + '</span>'
+    + '<span class="nm">' + a.nama + '</span></div>').join('');
+}
+namaIsi.addEventListener('input', gambarNama);
+gambarNama();
+
+/* ── Harga per bahasa ────────────────────────────────────────────
+   Angka inilah yang paling sering dihitung sendiri di kepala calon
+   pembeli. Menghitungkannya lebih cepat daripada membiarkannya
+   menebak — dan hasilnya kebetulan memang memihak kita. */
+for (const el of document.querySelectorAll('[data-perbahasa]')) {
+  const [harga, jumlah] = el.dataset.perbahasa.split('/').map(Number);
+  const per = Math.round(harga / jumlah / 1000);
+  el.textContent = 'Rp' + per + '.000 per bahasa';
+}
+
 </script>
