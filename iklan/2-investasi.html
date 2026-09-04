@@ -47,10 +47,22 @@ h1 .emas { color: #ffc531; }
 .per { font-family: 'JetBrains Mono', monospace; font-size: 26px; color: #9aabcd; }
 .cta { margin-top: 20px; align-self: flex-start; display: inline-flex; background: #ff4b1f;
   color: #fff; font-weight: 800; font-size: 30px; padding: 20px 38px; border-radius: 14px; }
+/* Penanda merek. Iklan tanpa merek melatih orang mengenali
+   penawarannya, bukan produknya — dan penawaran gampang ditiru. */
+.merek { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+.merek img { width: 62px; height: 62px; }
+.merek span { font-family: Anton, sans-serif; font-size: 30px; letter-spacing: .01em; color: #f3f6ff; }
+.merek b { color: #ff7a4d; font-weight: 400; }
+
 </style>
 </head>
 <body>
   <div class="isi">
+    <div class="merek">
+      <img src="../assets/merek/maskot-kepala.svg" alt="">
+      <span>SankaLingo <b>GO</b></span>
+    </div>
+
     <span class="pita">9 bahasa · investasi sekali seumur hidup</span>
 
     <h1>Kursus <span class="coret">habis</span>.<br>Langganan <span class="coret">berhenti</span>.<br><span class="emas">Bahasa tidak.</span></h1>

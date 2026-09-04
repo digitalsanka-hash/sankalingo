@@ -51,6 +51,13 @@ h1 .api { background: #ff4b1f; padding: 2px 14px 6px; display: inline-block; }
 .harga .ket { font-size: 26px; color: #9aabcd; }
 .cta { margin-top: 22px; align-self: flex-start; display: inline-flex; background: #ff4b1f;
   color: #fff; font-weight: 800; font-size: 30px; padding: 20px 38px; border-radius: 14px; }
+/* Penanda merek. Iklan tanpa merek melatih orang mengenali
+   penawarannya, bukan produknya — dan penawaran gampang ditiru. */
+.merek { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+.merek img { width: 62px; height: 62px; }
+.merek span { font-family: Anton, sans-serif; font-size: 30px; letter-spacing: .01em; color: #f3f6ff; }
+.merek b { color: #ff7a4d; font-weight: 400; }
+
 </style>
 </head>
 <body>
@@ -58,6 +65,11 @@ h1 .api { background: #ff4b1f; padding: 2px 14px 6px; display: inline-block; }
   <span class="glif" style="font-size:380px; bottom:-40px; right:-30px; font-family:'Noto Sans KR',sans-serif">한</span>
 
   <div class="isi">
+    <div class="merek">
+      <img src="../assets/merek/maskot-kepala.svg" alt="">
+      <span>SankaLingo <b>GO</b></span>
+    </div>
+
     <span class="pita">9 bahasa · bayar sekali</span>
 
     <h1>Namamu ditulis <span class="api">begini</span> di Tokyo.</h1>
