@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+/* Iklan 3 — takut ketinggalan, tapi yang ditakutkan nyata.
+   Bukan "buruan sebelum kehabisan", melainkan hal yang sudah terjadi
+   di layar pembaca sendiri: iklan lowongan yang mensyaratkan bahasa,
+   dan penyaringan yang berlangsung sebelum ia sempat bicara. */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 1080px; height: 1350px; background: #0a0f1f; color: #f3f6ff;
+  font-family: Inter, sans-serif; overflow: hidden; }
+
+.isi { padding: 66px 68px; height: 100%; display: flex; flex-direction: column; }
+
+.pita { align-self: flex-start; font-family: 'JetBrains Mono', monospace; font-size: 21px;
+  letter-spacing: .18em; text-transform: uppercase; color: #ff7a4d; }
+
+h1 { font-family: Anton, Impact, sans-serif; font-size: 82px; line-height: 1.06;
+  text-transform: uppercase; margin-top: 24px; }
+h1 .api { background: #ff4b1f; padding: 2px 12px 6px; display: inline-block; }
+
+.lowongan { margin-top: 34px; background: #fff; color: #0a0f1f; border-radius: 20px;
+  padding: 26px 32px; transform: rotate(-1.2deg); box-shadow: 0 24px 60px #0008; }
+.lowongan .kop { font-family: 'JetBrains Mono', monospace; font-size: 19px; color: #5b7183;
+  letter-spacing: .12em; text-transform: uppercase; }
+.lowongan h2 { font-family: Anton, sans-serif; font-size: 38px; margin-top: 8px; line-height: 1.05; }
+.syarat { margin-top: 16px; display: flex; flex-direction: column; gap: 9px; }
+.syarat div { display: flex; gap: 14px; align-items: baseline; font-size: 23px; }
+.syarat .cek { color: #17805a; font-weight: 800; }
+.syarat .silang { color: #c4362c; font-weight: 800; }
+.syarat .gugur { color: #c4362c; font-weight: 700; }
+.cap { margin-top: 18px; display: inline-block; border: 3px solid #c4362c; color: #c4362c;
+  font-family: Anton, sans-serif; font-size: 27px; letter-spacing: .06em; padding: 10px 22px;
+  border-radius: 10px; transform: rotate(-3deg); }
+
+.tutup { margin-top: auto; }
+.tutup p { font-size: 27px; line-height: 1.35; color: #9aabcd; }
+.tutup b { color: #f3f6ff; }
+.jam { display: flex; align-items: center; gap: 16px; margin-top: 26px; }
+.jam .kotak { font-family: Anton, sans-serif; font-size: 34px; background: #ff4b1f; color: #fff;
+  padding: 12px 20px; border-radius: 12px; }
+.jam .teks { font-size: 22px; color: #9aabcd; }
+.jam .teks b { color: #ffc531; }
+.baris-harga { display: flex; align-items: baseline; gap: 20px; margin-top: 22px; }
+.rp { font-family: Anton, sans-serif; font-size: 72px; color: #ffc531; line-height: 1; }
+.rp-ket { font-size: 25px; color: #9aabcd; }
+.cta { margin-top: 18px; align-self: flex-start; display: inline-flex; background: #ff4b1f;
+  color: #fff; font-weight: 800; font-size: 30px; padding: 20px 38px; border-radius: 14px; }
+</style>
+</head>
+<body>
+  <div class="isi">
+    <span class="pita">syaratnya ada di iklannya, bukan di wawancara</span>
+
+    <h1>Kamu ditolak <span class="api">sebelum</span> sempat bicara.</h1>
+
+    <div class="lowongan">
+      <div class="kop">Lowongan · dibuka hari ini</div>
+      <h2>Staff Marketing — Jakarta</h2>
+      <div class="syarat">
+        <div><span class="cek">✓</span><span>Pendidikan S1 · IPK 3.0</span></div>
+        <div><span class="cek">✓</span><span>Pengalaman 1–2 tahun</span></div>
+        <div><span class="silang">✕</span><span class="gugur">Mampu berbahasa Inggris aktif</span></div>
+      </div>
+      <div class="cap">Tidak lolos seleksi berkas</div>
+    </div>
+
+    <div class="tutup">
+      <p>Beasiswa menutup kuotanya setahun sekali. Klien asing membayar
+         dengan mata uangnya. <b>Semua pintunya bahasa.</b></p>
+
+      <div class="jam">
+        <span class="kotak">7 JAM</span>
+        <span class="teks">lagi, harga naik jadi <b>Rp1.399.000</b></span>
+      </div>
+
+      <div class="baris-harga">
+        <span class="rp">Rp199.000</span>
+        <span class="rp-ket">sekali bayar · 9 bahasa · selamanya</span>
+      </div>
+      <div class="cta">Mulai malam ini →</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+JP:wght@700&family=Noto+Sans+KR:wght@700&family=Noto+Sans+Arabic:wght@700&display=swap">
+<style>
+/* Iklan 1 — rasa ingin tahu.
+   Hook-nya bukan janji, melainkan pertanyaan yang menjawab dirinya
+   sendiri di detik pertama: orang melihat namanya sendiri dalam
+   aksara asing dan langsung tahu produk ini bisa apa. */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 1080px; height: 1350px; background: #0a0f1f; color: #f3f6ff;
+  font-family: Inter, sans-serif; overflow: hidden; position: relative; }
+
+.glif { position: absolute; font-family: 'Noto Sans JP', sans-serif; font-weight: 700;
+  color: #ff4b1f; opacity: .07; line-height: 1; }
+
+.isi { position: relative; z-index: 2; padding: 70px 68px; height: 100%;
+  display: flex; flex-direction: column; }
+
+.pita { display: inline-flex; align-self: flex-start; gap: 12px; align-items: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 21px; letter-spacing: .18em;
+  text-transform: uppercase; color: #ff7a4d; }
+
+h1 { font-family: Anton, Impact, sans-serif; font-size: 82px; line-height: 1.06;
+  text-transform: uppercase; letter-spacing: -.01em; margin-top: 26px; }
+h1 .api { background: #ff4b1f; padding: 2px 14px 6px; display: inline-block; }
+
+.kartu { margin-top: 38px; background: #111a33; border: 2px solid #24334f;
+  border-radius: 26px; padding: 30px 36px; }
+.nama-latin { font-family: Anton, sans-serif; font-size: 58px; letter-spacing: .02em; color: #ffc531; }
+.nama-ket { font-family: 'JetBrains Mono', monospace; font-size: 18px; color: #9aabcd;
+  letter-spacing: .12em; text-transform: uppercase; margin-bottom: 16px; }
+
+.baris { display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 0; border-top: 1px solid #24334f; }
+.aks { font-size: 46px; font-weight: 700; line-height: 1.15; }
+.aks.ja { font-family: 'Noto Sans JP', sans-serif; }
+.aks.ko { font-family: 'Noto Sans KR', sans-serif; }
+.aks.ar { font-family: 'Noto Sans Arabic', sans-serif; }
+.lbl { font-family: 'JetBrains Mono', monospace; font-size: 20px; color: #9aabcd;
+  letter-spacing: .1em; text-transform: uppercase; }
+
+.tutup { margin-top: auto; }
+.tutup p { font-size: 28px; line-height: 1.35; color: #9aabcd; }
+.tutup b { color: #f3f6ff; }
+.harga { display: flex; align-items: baseline; gap: 18px; margin-top: 26px; }
+.harga .rp { font-family: Anton, sans-serif; font-size: 70px; color: #ffc531; line-height: 1; }
+.harga .ket { font-size: 26px; color: #9aabcd; }
+.cta { margin-top: 22px; align-self: flex-start; display: inline-flex; background: #ff4b1f;
+  color: #fff; font-weight: 800; font-size: 30px; padding: 20px 38px; border-radius: 14px; }
+</style>
+</head>
+<body>
+  <span class="glif" style="font-size:420px; top:-60px; left:-40px">あ</span>
+  <span class="glif" style="font-size:380px; bottom:-40px; right:-30px; font-family:'Noto Sans KR',sans-serif">한</span>
+
+  <div class="isi">
+    <span class="pita">9 bahasa · bayar sekali</span>
+
+    <h1>Namamu ditulis <span class="api">begini</span> di Tokyo.</h1>
+
+    <div class="kartu">
+      <div class="nama-ket">Contoh nama</div>
+      <div class="nama-latin">ANDI</div>
+
+      <div class="baris"><span class="aks ja">アンディ</span><span class="lbl">Jepang</span></div>
+      <div class="baris"><span class="aks ko">안디</span><span class="lbl">Korea</span></div>
+      <div class="baris"><span class="aks">Анди</span><span class="lbl">Rusia</span></div>
+      <div class="baris"><span class="aks ar">اندي</span><span class="lbl">Arab</span></div>
+    </div>
+
+    <div class="tutup">
+      <p>Aksara yang tadinya cuma coretan, <b>malam ini sudah bisa kamu baca.</b><br>
+         Sembilan bahasa dalam satu aplikasi.</p>
+      <div class="harga">
+        <span class="rp">Rp199.000</span>
+        <span class="ket">sekali bayar · akses selamanya</span>
+      </div>
+      <div class="cta">Coba tulis namamu →</div>
+    </div>
+  </div>
+</body>
+</html>

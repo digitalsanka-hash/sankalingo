@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+/* Iklan 2 — investasi jangka panjang.
+   Argumennya digambar, bukan dikatakan: dua batang berdampingan
+   membuat "bayar sekali" masuk lewat mata sebelum lewat kalimat.
+   Angkanya nyata — dua belas bulan langganan menumpuk, satu kali
+   bayar tetap datar. */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 1080px; height: 1350px; background: #0a0f1f; color: #f3f6ff;
+  font-family: Inter, sans-serif; overflow: hidden; position: relative; }
+
+.isi { padding: 70px 68px; height: 100%; display: flex; flex-direction: column; }
+
+.pita { align-self: flex-start; font-family: 'JetBrains Mono', monospace; font-size: 21px;
+  letter-spacing: .18em; text-transform: uppercase; color: #ff7a4d; }
+
+h1 { font-family: Anton, Impact, sans-serif; font-size: 90px; line-height: 1.02;
+  text-transform: uppercase; margin-top: 26px; }
+h1 .coret { position: relative; display: inline-block; }
+h1 .coret::after { content: ''; position: absolute; left: -6px; right: -6px; top: 52%;
+  height: 8px; background: #ff4b1f; transform: rotate(-2deg); }
+h1 .emas { color: #ffc531; }
+
+.grafik { margin-top: 44px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.kolom { background: #111a33; border: 1px solid #24334f; border-radius: 22px; padding: 30px 28px; }
+.batang { display: flex; align-items: flex-end; gap: 6px; height: 230px; }
+.batang i { flex: 1; border-radius: 6px 6px 0 0; display: block; }
+.naik i { background: #ff4b1f; opacity: .55; }
+.datar i { background: #35d07f; }
+.judul-kolom { font-family: Anton, sans-serif; font-size: 30px; margin-top: 18px; }
+.ket-kolom { font-size: 20px; color: #9aabcd; line-height: 1.4; margin-top: 8px; }
+.total { font-family: 'JetBrains Mono', monospace; font-size: 21px; margin-top: 12px; }
+.total.merah { color: #ff7a4d; }
+.total.hijau { color: #35d07f; }
+
+.tutup { margin-top: auto; }
+.tutup p { font-size: 28px; line-height: 1.35; color: #9aabcd; }
+.tutup b { color: #f3f6ff; }
+.baris-harga { display: flex; align-items: baseline; gap: 20px; margin-top: 24px; flex-wrap: wrap; }
+.rp { font-family: Anton, sans-serif; font-size: 72px; color: #ffc531; line-height: 1; }
+.per { font-family: 'JetBrains Mono', monospace; font-size: 26px; color: #9aabcd; }
+.cta { margin-top: 20px; align-self: flex-start; display: inline-flex; background: #ff4b1f;
+  color: #fff; font-weight: 800; font-size: 30px; padding: 20px 38px; border-radius: 14px; }
+</style>
+</head>
+<body>
+  <div class="isi">
+    <span class="pita">9 bahasa · investasi sekali seumur hidup</span>
+
+    <h1>Kursus <span class="coret">habis</span>.<br>Langganan <span class="coret">berhenti</span>.<br><span class="emas">Bahasa tidak.</span></h1>
+
+    <div class="grafik">
+      <div class="kolom">
+        <div class="batang naik" id="naik"></div>
+        <div class="judul-kolom">Langganan bulanan</div>
+        <div class="ket-kolom">Berhenti bayar, akses hilang — padahal bahasa butuh tahunan.</div>
+        <div class="total merah">terus menumpuk tiap bulan</div>
+      </div>
+      <div class="kolom">
+        <div class="batang datar" id="datar"></div>
+        <div class="judul-kolom">SankaLingo GO</div>
+        <div class="ket-kolom">Sekali tebus, menempel di akunmu tanpa tanggal kedaluwarsa.</div>
+        <div class="total hijau">bayar sekali, selesai</div>
+      </div>
+    </div>
+
+    <div class="tutup">
+      <p>Sembilan bahasa: Inggris, Jepang, Korea, Mandarin, Arab,<br>
+         Jerman, Prancis, Spanyol, Rusia — <b>semuanya milikmu.</b></p>
+      <div class="baris-harga">
+        <span class="rp">Rp199.000</span>
+        <span class="per">≈ Rp40.000 per bahasa</span>
+      </div>
+      <div class="cta">Ambil sekarang →</div>
+    </div>
+  </div>
+
+<script>
+/* Batangnya digambar dari data, bukan digambar tangan: dua belas bulan
+   langganan naik bertahap, satu kali bayar tetap rata. */
+const bln = 12;
+document.getElementById('naik').innerHTML =
+  Array.from({ length: bln }, (_, i) => `<i style="height:${((i + 1) / bln * 100).toFixed(1)}%"></i>`).join('');
+document.getElementById('datar').innerHTML =
+  Array.from({ length: bln }, () => '<i style="height:22%"></i>').join('');
+</script>
+</body>
+</html>
