@@ -37,7 +37,7 @@
 //   supabase secrets set SCALEV_WEBHOOK_SIGNING_SECRET=...
 //   supabase secrets set RESEND_API_KEY=...
 //   supabase secrets set RESEND_FROM="SankaLingo GO <kode@domainmu.com>"
-//   supabase secrets set APP_URL=https://sankalingo.vercel.app
+//   supabase secrets set APP_URL=https://www.sankalingogo.com
 // Opsional:
 //   supabase secrets set SCALEV_PRODUK="SankaLingo"   (saring nama produk)
 //   supabase secrets set ADMIN_EMAIL=kamu@email.com   (peringatan stok habis)
@@ -238,7 +238,7 @@ serve(async (req) => {
   const { data: barisKode } = await db
     .from('kode_lisensi').select('bulan_aktif').eq('kode', kode).single();
 
-  const alamatApp = Deno.env.get('APP_URL') || 'https://sankalingo.vercel.app';
+  const alamatApp = Deno.env.get('APP_URL') || 'https://www.sankalingogo.com';
   try {
     await kirimEmail(email, 'Kode akses SankaLingo GO',
       suratKode(kode as string, nama, alamatApp, barisKode?.bulan_aktif ?? null));

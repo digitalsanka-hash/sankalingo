@@ -127,7 +127,7 @@ Seluruh isi pelajaran masih berupa berkas statis di `/data/*.js`, dan berkas
 itu bisa diunduh siapa pun tanpa membayar:
 
 ```
-curl https://sankalingo.vercel.app/data/lang/ja-course.js   → HTTP 200
+curl https://www.sankalingogo.com/data/lang/ja-course.js   → HTTP 200
 ```
 
 Membuat repo GitHub jadi privat **tidak** mengubah hal ini, karena yang
@@ -191,7 +191,7 @@ yang tiba bersamaan tidak memperebutkan kode yang sama.
 supabase secrets set SCALEV_WEBHOOK_SIGNING_SECRET=<isi dari Scalev, langkah 6>
 supabase secrets set RESEND_API_KEY=<kunci dari langkah 2>
 supabase secrets set RESEND_FROM="SankaLingo GO <kode@mail.domainmu.com>"
-supabase secrets set APP_URL=https://sankalingo.vercel.app
+supabase secrets set APP_URL=https://www.sankalingogo.com
 supabase secrets set ADMIN_EMAIL=<emailmu>
 ```
 

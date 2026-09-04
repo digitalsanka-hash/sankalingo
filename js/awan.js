@@ -225,7 +225,7 @@ export async function verifikasiKode(email, kode) {
    Jadi kedua jalan harus dilayani. Kalau yang datang tautan, Supabase
    mengembalikan pengguna ke Site URL dengan sesinya tertempel di hash:
 
-     https://sankalingo.vercel.app/#access_token=...&refresh_token=...
+     https://www.sankalingogo.com/#access_token=...&refresh_token=...
 
    Fungsi ini menangkap hash itu sebelum router sempat membacanya —
    kalau tidak, router melihat rute tak dikenal lalu melempar pengguna ke
