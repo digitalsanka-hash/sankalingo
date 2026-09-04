@@ -65,6 +65,41 @@ section { padding-block: clamp(3rem, 7vw, 5.5rem); }
 .cta-baris { display: flex; flex-wrap: wrap; gap: .7rem; }
 .cta-catatan { font-size: .84rem; color: var(--teks-2); }
 
+/* ── Hitung mundur harga ─────────────────────────────────────────
+   Angkanya menuju SATU waktu tetap yang sama untuk semua pengunjung,
+   bukan tujuh jam sejak masing-masing membuka halaman. Hitungan yang
+   ikut mundur tiap kali orang menyegarkan halaman adalah janji yang
+   tidak pernah ditepati — dan pembeli yang menyadarinya berhenti
+   percaya pada seluruh halaman, bukan cuma pada angkanya. */
+.mundur { display: flex; align-items: center; justify-content: center; gap: .6rem;
+  flex-wrap: wrap; background: var(--malam-2); border: 1px solid var(--api);
+  border-radius: 14px; padding: 1rem 1.2rem; }
+.mundur__teks { font-size: .95rem; color: var(--teks-2); }
+.mundur__teks b { color: var(--teks); }
+.mundur__jam { display: flex; gap: .35rem; }
+.mundur__jam span { font-family: Anton, sans-serif; font-size: 1.6rem; line-height: 1;
+  background: var(--api); color: #fff; border-radius: 8px; padding: .35rem .5rem;
+  font-variant-numeric: tabular-nums; min-width: 2.4rem; text-align: center; }
+.mundur__jam i { font-style: normal; color: var(--api); font-family: Anton, sans-serif;
+  font-size: 1.4rem; align-self: center; }
+.harga-nanti { color: var(--teks-2); font-size: .92rem; margin-top: .3rem; }
+.harga-nanti b { color: var(--emas); font-size: 1.05rem; }
+
+/* ── Notifikasi pembelian ────────────────────────────────────────
+   Muncul dari kiri bawah, dan HANYA kalau ada pembelian sungguhan
+   dalam tujuh hari terakhir. Di ponsel ia duduk di atas bar beli,
+   bukan menutupinya — notifikasi yang menghalangi tombol beli
+   merugikan justru pada saat orangnya sudah mau membayar. */
+.notif { position: fixed; left: 1rem; bottom: 1rem; z-index: 45; max-width: min(19rem, calc(100vw - 2rem));
+  background: var(--malam-2); border: 1px solid var(--garis); border-left: 3px solid var(--lumut);
+  border-radius: 12px; padding: .75rem .9rem; box-shadow: 0 10px 30px #0006;
+  transform: translateY(120%); opacity: 0; transition: transform .35s ease, opacity .35s ease; }
+.notif.tampil { transform: translateY(0); opacity: 1; }
+.notif__judul { font-size: .9rem; font-weight: 700; }
+.notif__kaki { font-size: .74rem; color: var(--teks-2); margin-top: .15rem; }
+@media (max-width: 860px) { .notif { bottom: 5.5rem; } }
+@media (prefers-reduced-motion: reduce) { .notif { transition: none; } }
+
 /* ── Bar penawaran lengket ──────────────────────────────────────── */
 .bar { position: sticky; top: 0; z-index: 40; background: var(--api); color: #fff;
   font-size: .9rem; font-weight: 600; }
@@ -274,7 +309,7 @@ footer { padding-block: 2.2rem; color: var(--teks-2); font-size: .84rem; }
 
 <div class="bar">
   <div class="bungkus bar__isi">
-    <span>Bayar sekali <b>Rp199.000</b> — akses selamanya, tanpa langganan bulanan.</span>
+    <span id="barMundur">Bayar sekali <b>Rp199.000</b> — akses selamanya, tanpa langganan bulanan.</span>
     <a href="#paket">Lihat paket →</a>
   </div>
 </div>
@@ -459,6 +494,11 @@ footer { padding-block: 2.2rem; color: var(--teks-2); font-size: .84rem; }
 <section id="paket">
   <div class="bungkus tumpuk-l">
     <div class="tumpuk"><span class="label">Harga</span><h2>Pilih paketmu, mulai malam ini.</h2></div>
+
+    <div class="mundur" id="mundur" hidden>
+      <span class="mundur__teks">Harga naik jadi <b>Rp1.399.000</b> dalam</span>
+      <span class="mundur__jam" id="mundurJam" aria-live="polite"></span>
+    </div>
     <div class="harga">
       <div class="paket">
         <div>
@@ -466,6 +506,7 @@ footer { padding-block: 2.2rem; color: var(--teks-2); font-size: .84rem; }
           <div class="rupiah">Rp199.000</div>
           <span class="cta-catatan">sekali bayar, selamanya ·
             <b class="emas" data-perbahasa="199000/5"></b></span>
+          <div class="harga-nanti naik" hidden>Setelah batas waktu: <b>Rp1.399.000</b></div>
         </div>
         <ul>
           <li>Inggris — kurikulum penuh A1–C2</li>
@@ -481,6 +522,7 @@ footer { padding-block: 2.2rem; color: var(--teks-2); font-size: .84rem; }
           <div class="rupiah">Rp299.000</div>
           <span class="cta-catatan">sekali bayar, selamanya ·
             <b class="emas" data-perbahasa="299000/9"></b></span>
+          <div class="harga-nanti naik" hidden>Setelah batas waktu: <b>Rp1.399.000</b></div>
         </div>
         <ul>
           <li>Semua isi paket Esensi</li>
@@ -541,6 +583,8 @@ footer { padding-block: 2.2rem; color: var(--teks-2); font-size: .84rem; }
 
 <footer><div class="bungkus"><p>SankaLingo GO — sembilan bahasa untuk penutur bahasa Indonesia.</p></div></footer>
 
+<div class="notif" id="notif" hidden role="status" aria-live="polite"></div>
+
 <div class="bar-bawah">
   <div>
     <span class="harga-kecil">Rp199.000</span>
@@ -551,7 +595,10 @@ footer { padding-block: 2.2rem; color: var(--teks-2); font-size: .84rem; }
 
 <script>
 /* Alamat checkout Scalev. Satu tempat untuk seluruh tombol di halaman. */
-const CHECKOUT = { '5': '', '9': '' };
+const CHECKOUT = {
+  '5': 'https://digital-store-27.myscalev.com/sankalingo5bahasa',
+  '9': 'https://digital-store-27.myscalev.com/sankalingo9bahasa',
+};
 for (const t of document.querySelectorAll('[data-checkout]')) {
   const a = CHECKOUT[t.dataset.checkout];
   if (a) t.href = a;
@@ -807,6 +854,121 @@ function gambarKartu(b) {
     tb.addEventListener('click', () => ucap(tb.dataset.teks, b.kode, tb.dataset.rom, tb)));
 }
 gambarKartu(BAHASA[1]);
+
+/* ── Hitung mundur kenaikan harga ────────────────────────────────
+   SATU tenggat tetap untuk semua orang. Ubah baris di bawah ini
+   setiap kali kamu menetapkan tenggat baru — jangan menggantinya
+   dengan "tujuh jam dari sekarang", karena hitungan yang lahir ulang
+   tiap kunjungan membuat halaman ini berbohong kepada orang yang
+   datang dua kali.
+
+   Kalau tenggatnya lewat, seluruh blok hitung mundur MENGHILANG
+   sendiri, bukan berhenti di 00:00:00. Halaman yang masih meneriakkan
+   tenggat kedaluwarsa jauh lebih merugikan daripada halaman tanpa
+   tenggat sama sekali. */
+const JAM_PENAWARAN = 7;
+const KUNCI_MULAI = 'sankalingo.penawaran.mulai';
+
+/* Tenggat dihitung sejak KUNJUNGAN PERTAMA orang itu, bukan sejak
+   halaman dimuat. Bedanya menentukan: kalau dihitung tiap pemuatan,
+   hitungannya kembali ke 07:00:00 begitu orang menekan refresh — dan
+   yang menekan refresh justru yang paling serius mau membeli. Mereka
+   melihatnya sekali, lalu berhenti percaya pada seluruh halaman.
+
+   Disimpan di perangkat masing-masing, jadi tiap pengunjung punya
+   tenggatnya sendiri dan tenggat itu tetap sama sepanjang ia kembali
+   dari perangkat yang sama. */
+function ambilTenggat() {
+  try {
+    const tersimpan = Number(localStorage.getItem(KUNCI_MULAI));
+    const sekarang = Date.now();
+    /* Kunjungan lama yang tenggatnya sudah habis tidak dimulai ulang:
+       orang yang kemarin melihat "tinggal 2 jam" lalu hari ini melihat
+       "tinggal 7 jam" tahu persis apa yang terjadi. */
+    if (tersimpan && sekarang - tersimpan < JAM_PENAWARAN * 3600000 * 2) return tersimpan;
+    localStorage.setItem(KUNCI_MULAI, String(sekarang));
+    return sekarang;
+  } catch {
+    /* Mode penyamaran atau penyimpanan diblokir: pakai waktu muat.
+       Tidak ideal, tapi ini pengunjung yang memang tidak bisa diingat. */
+    return Date.now();
+  }
+}
+
+const HARGA_NAIK = new Date(ambilTenggat() + JAM_PENAWARAN * 3600000);
+
+const mundurEl = $('mundur'), mundurJam = $('mundurJam'), barMundur = $('barMundur');
+const dua = (n) => String(n).padStart(2, '0');
+
+function tickMundur() {
+  const sisa = HARGA_NAIK - Date.now();
+
+  if (sisa <= 0) {
+    /* Tenggat lewat: sembunyikan semua klaimnya, kembalikan bar ke
+       kalimat biasa. Tidak ada yang perlu diperbarui manual. */
+    mundurEl.hidden = true;
+    document.querySelectorAll('.harga-nanti.naik').forEach(x => { x.hidden = true; });
+    return;
+  }
+
+  const jam = Math.floor(sisa / 3600000);
+  const menit = Math.floor(sisa / 60000) % 60;
+  const detik = Math.floor(sisa / 1000) % 60;
+
+  mundurEl.hidden = false;
+  document.querySelectorAll('.harga-nanti.naik').forEach(x => { x.hidden = false; });
+  mundurJam.innerHTML = `<span>${dua(jam)}</span><i>:</i><span>${dua(menit)}</span><i>:</i><span>${dua(detik)}</span>`;
+  if (barMundur) {
+    barMundur.innerHTML = `Rp199.000 <b>naik jadi Rp1.399.000</b> dalam `
+      + `${dua(jam)}:${dua(menit)}:${dua(detik)} — bayar sekali, akses selamanya.`;
+  }
+}
+tickMundur();
+setInterval(tickMundur, 1000);
+
+/* ── Notifikasi pembelian sungguhan ──────────────────────────────
+   Datanya dari tabel pesanan yang diisi webhook Scalev, bukan dari
+   daftar nama karangan. Konsekuensinya jujur: selama belum ada yang
+   membeli, tidak ada notifikasi apa pun yang muncul — dan itu memang
+   keadaan yang sebenarnya.
+
+   Yang ditampilkan cuma kota dan selang waktu. Nama pembeli tidak
+   ikut: mereka membeli aplikasi bahasa, bukan menyetujui namanya
+   dipajang di halaman jualan. */
+const NOTIF_API = 'https://zedamoledhrxsmgtpbvv.supabase.co/functions/v1/pembelian-terakhir';
+const notifEl = $('notif');
+
+const selang = (menit) => {
+  if (menit < 60) return `${menit} menit lalu`;
+  const jam = Math.round(menit / 60);
+  return jam < 24 ? `${jam} jam lalu` : `${Math.round(jam / 24)} hari lalu`;
+};
+
+async function jalankanNotif() {
+  let daftar = [];
+  try {
+    const r = await fetch(NOTIF_API);
+    daftar = (await r.json())?.pembelian ?? [];
+  } catch { return; }          // gagal ambil = tidak ada notifikasi, titik
+  if (!daftar.length) return;
+
+  let i = 0;
+  const tampilkan = () => {
+    const b = daftar[i % daftar.length];
+    i++;
+    notifEl.innerHTML = `<div class="notif__judul">Baru dibeli dari ${b.kota}</div>`
+      + `<div class="notif__kaki">${selang(b.menitLalu)} · paket akses selamanya</div>`;
+    notifEl.hidden = false;
+    requestAnimationFrame(() => notifEl.classList.add('tampil'));
+    setTimeout(() => notifEl.classList.remove('tampil'), 6000);
+  };
+
+  setTimeout(tampilkan, 8000);
+  setInterval(tampilkan, 22000);
+}
+jalankanNotif();
+
+
 
 /* ── Namamu dalam empat aksara ───────────────────────────────────
    Nama sendiri adalah satu-satunya kata yang pasti dipedulikan

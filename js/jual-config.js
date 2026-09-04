@@ -11,7 +11,7 @@
 
 export const JUAL = {
   /* Halaman checkout. Contoh: 'https://sankalingo.scalev.id/paket' */
-  beli: '',
+  beli: 'https://digital-store-27.myscalev.com/sankalingo5bahasa',
   /* Nomor WhatsApp untuk bertanya, format internasional tanpa tanda
      plus. Contoh: '6281234567890'. Kosongkan kalau belum dipakai. */
   wa: '',
