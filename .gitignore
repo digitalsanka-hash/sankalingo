@@ -10,3 +10,6 @@ node_modules/
 
 # Berkas sementara Supabase CLI
 supabase/.temp/
+
+# HTML sementara pembangun konten
+konten/_render/

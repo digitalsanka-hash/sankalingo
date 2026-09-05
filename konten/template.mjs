@@ -199,25 +199,45 @@ export function kartuJual({ pita, judul, isi, harga = 'Rp199.000', hargaKet = 's
     <div class="alamat">sankalingogo.com</div>`, { nomor });
 }
 
-/* ── Tipe 6: dua kolom pembanding ─────────────────────────────── */
-export function kartuBanding({ pita, judul, kiri, kanan, kaki, geser, nomor }) {
+/* ── Tipe 6: dua kolom pembanding ─────────────────────────────────
+
+   Dua nada. Bawaannya kiri-buruk / kanan-baik, dipakai waktu memang
+   ada yang lebih baik (langganan vs sekali bayar). Untuk dua pilihan
+   yang sama-sama sah — TOEFL vs IELTS, paket lima vs sembilan —
+   pakai `netral: true`, karena mewarnai salah satunya merah
+   membuatnya terbaca sebagai pilihan yang salah.
+
+   Kelas isinya sengaja `kol-isi`, bukan `isi`: `.isi` sudah dipakai
+   pembungkus halaman (height:100%, padding besar, flex tengah), dan
+   memakai ulang namanya membuat kolomnya melompong.                */
+export function kartuBanding({ pita, judul, kiri, kanan, kaki, geser, nomor, netral = false }) {
   const gaya = `
-    .dua { margin-top:34px; display:grid; grid-template-columns:1fr 1fr; gap:24px; }
-    .kol { background:${WARNA.malam2}; border:1px solid ${WARNA.garis}; border-radius:20px; padding:28px 26px; }
+    .dua { margin-top:34px; display:grid; grid-template-columns:1fr 1fr; gap:24px;
+      align-items:stretch; }
+    .kol { background:${WARNA.malam2}; border:1px solid ${WARNA.garis}; border-radius:20px;
+      padding:30px 28px; display:flex; flex-direction:column; }
     .kol.buruk { border-color:${WARNA.api}; }
     .kol.baik { border-color:${WARNA.lumut}; }
-    .kol .jd { font-family:Anton,sans-serif; font-size:30px; }
-    .kol .isi { margin-top:16px; font-size:24px; line-height:1.45; color:${WARNA.teks2}; }
-    .kol .isi b { color:${WARNA.teks}; }
-    .kol .cap { margin-top:18px; font-family:'JetBrains Mono',monospace; font-size:20px; }
+    .kol.satu { border-color:${WARNA.garis}; }
+    .kol.dua2 { border-color:${WARNA.emas}; }
+    .kol .jd { font-family:Anton,sans-serif; font-size:32px; line-height:1.1; }
+    .kol .kol-isi { margin-top:18px; font-size:25px; line-height:1.5; color:${WARNA.teks2}; }
+    .kol .kol-isi b { color:${WARNA.teks}; }
+    .kol .cap { margin-top:22px; padding-top:18px; border-top:1px solid ${WARNA.garis};
+      font-family:'JetBrains Mono',monospace; font-size:20px; }
     .buruk .cap { color:${WARNA.api2}; }
-    .baik .cap { color:${WARNA.lumut}; }`;
+    .baik .cap { color:${WARNA.lumut}; }
+    .satu .cap { color:${WARNA.teks2}; }
+    .dua2 .cap { color:${WARNA.emas}; }`;
+  const [kls1, kls2] = netral ? ['satu', 'dua2'] : ['buruk', 'baik'];
+  const kolom = (k, kls) => `<div class="kol ${kls}"><div class="jd">${k.judul}</div>` +
+    `<div class="kol-isi">${k.isi}</div><div class="cap">${k.cap}</div></div>`;
   return halaman(gaya, `
     <span class="pita">${pita}</span>
     <h1>${judul}</h1>
     <div class="dua">
-      <div class="kol buruk"><div class="jd">${kiri.judul}</div><div class="isi">${kiri.isi}</div><div class="cap">${kiri.cap}</div></div>
-      <div class="kol baik"><div class="jd">${kanan.judul}</div><div class="isi">${kanan.isi}</div><div class="cap">${kanan.cap}</div></div>
+      ${kolom(kiri, kls1)}
+      ${kolom(kanan, kls2)}
     </div>
     <div class="kaki">
       <span class="kaki-teks">${kaki || ''}</span>
