@@ -67,6 +67,7 @@ const ROUTES_EN = [
   [/^ujian$/,                     () => Exams.renderHub()],
   [/^ujian\/([^/]+)$/,            m => Exams.renderExam(m[1])],
   [/^ujian\/([^/]+)\/simulasi$/,  m => Mock.renderMock(m[1])],
+  [/^ujian\/([^/]+)\/simulasi\/(\d+)$/, m => Mock.renderMock(m[1], +m[2])],
   [/^penempatan$/,                () => Plan.renderPlacement()],
   [/^rencana$/,                   () => Plan.renderIndex()],
   [/^rencana\/(.+)$/,             m => Plan.renderPlan(m[1])],
@@ -193,7 +194,7 @@ async function route() {
     const head = LEGACY[seg[0]];
     if (head !== undefined) {
       const rest = [head, ...seg.slice(1)].filter(Boolean).join('/');
-      if (seg[0] === 'mock') return location.replace(`#/${code}/ujian/${seg[1]}/simulasi`);
+      if (seg[0] === 'mock') return location.replace(`#/${code}/ujian/${seg[1]}/simulasi${seg[2] ? '/' + seg[2] : ''}`);
       return location.replace(`#/${code}/${rest}${kueri}`);
     }
     return location.replace('#/' + code);

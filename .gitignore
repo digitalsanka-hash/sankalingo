@@ -13,3 +13,11 @@ supabase/.temp/
 
 # HTML sementara pembangun konten
 konten/_render/
+
+# Rekaman mentah iklan — video sumber, bukan hasil yang perlu diversikan.
+# Total 2 GB lebih; GitHub menolak berkas di atas 100 MB dan repo jadi
+# tidak bisa di-clone. Berkasnya tetap ada di disk, hanya tidak dilacak.
+*.mp4
+*.MOV
+*.mov
+*.MP4

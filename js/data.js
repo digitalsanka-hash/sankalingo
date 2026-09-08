@@ -17,16 +17,18 @@ import { LEVELS, ALL_UNITS, ALL_LESSONS, CEFR_CANDO, levelById, unitById } from 
 import { IELTS } from '../data/exam-ielts.js';
 import { TOEFL } from '../data/exam-toefl.js';
 import { TOEIC } from '../data/exam-toefl-toeic.js';
-import { SPECS, SOURCES, VERIFIED_ON, convertScore, ieltsOverall } from '../data/exam-specs.js';
+import { ITP } from '../data/exam-itp.js';
+import { SPECS, SOURCES, VERIFIED_ON, convertScore, ieltsOverall, itpTotal } from '../data/exam-specs.js';
 import { TACTICS, TIME_BUDGET } from '../data/exam-tactics.js';
+import { TACTICS_ITP, TIME_BUDGET_ITP } from '../data/exam-tactics-itp.js';
 import { READINGS, DICTATIONS, SHADOWING, SPEAKING_PROMPTS, WRITING_TASKS, WRITING_RULES } from '../data/skills.js';
 import { IPA_VOWELS, IPA_CONSONANTS, HARD_SOUNDS, STRESS_RULES, TONGUE_TWISTERS, CONNECTED_SPEECH } from '../data/pronunciation.js';
 import { TRICKS, PLANS, PLACEMENT, placementResult } from '../data/study.js';
 
 export {
   LEVELS, ALL_UNITS, ALL_LESSONS, CEFR_CANDO, levelById, unitById,
-  IELTS, TOEFL, TOEIC,
-  SPECS, SOURCES, VERIFIED_ON, convertScore, ieltsOverall, TACTICS, TIME_BUDGET,
+  IELTS, TOEFL, TOEIC, ITP,
+  SPECS, SOURCES, VERIFIED_ON, convertScore, ieltsOverall, itpTotal, TACTICS, TIME_BUDGET,
   READINGS, DICTATIONS, SHADOWING, SPEAKING_PROMPTS, WRITING_TASKS, WRITING_RULES,
   IPA_VOWELS, IPA_CONSONANTS, HARD_SOUNDS, STRESS_RULES, TONGUE_TWISTERS, CONNECTED_SPEECH,
   TRICKS, PLANS, PLACEMENT, placementResult,
@@ -107,8 +109,13 @@ IELTS.quickBank = [...IELTS.quickBank, ...IELTS_BANK];
 TOEFL.quickBank = [...TOEFL.quickBank, ...TOEFL_BANK];
 TOEIC.quickBank = [...TOEIC.quickBank, ...TOEIC_BANK];
 
-export const EXAMS = { ielts: IELTS, toefl: TOEFL, toeic: TOEIC };
-export const EXAM_LIST = [IELTS, TOEFL, TOEIC];
+/* Trik dan anggaran waktu ITP hidup di berkasnya sendiri; disambungkan
+   di sini supaya halaman ujian membacanya lewat satu peta yang sama. */
+TACTICS.itp = TACTICS_ITP;
+TIME_BUDGET.itp = TIME_BUDGET_ITP;
+
+export const EXAMS = { ielts: IELTS, toefl: TOEFL, itp: ITP, toeic: TOEIC };
+export const EXAM_LIST = [IELTS, TOEFL, ITP, TOEIC];
 
 /* ── Statistik isi (dipakai di beranda) ───────────────────────── */
 export const CONTENT_STATS = {
@@ -126,6 +133,9 @@ export const CONTENT_STATS = {
     a + (e.quickBank?.length || 0)
       + e.readings.reduce((s, r) => s + r.questions.length, 0)
       + e.listenings.reduce((s, l) => s + l.questions.length, 0), 0)
+    /* Sepuluh set ITP × 140 butir dimuat terpisah, jadi dihitung dari
+       blueprint-nya, bukan dari berkas yang sudah dimuat. */
+    + ITP.jumlahSet * 140
 };
 
 /* ── Indeks pencarian ─────────────────────────────────────────── */

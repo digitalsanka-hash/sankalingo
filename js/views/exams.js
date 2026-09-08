@@ -9,7 +9,7 @@ import { runQuiz } from '../quiz.js';
 import { say, sayList, stopSpeaking } from '../speech.js';
 import { EXAMS, EXAM_LIST, SPECS, SOURCES, VERIFIED_ON, TACTICS, TIME_BUDGET } from '../data.js';
 
-const EXAM_ICON = { ielts: 'globe', toefl: 'brain', toeic: 'target' };
+const EXAM_ICON = { ielts: 'globe', toefl: 'brain', itp: 'award', toeic: 'target' };
 
 /* ── Hub ──────────────────────────────────────────────────────── */
 export function renderHub() {
@@ -20,7 +20,7 @@ export function renderHub() {
   <div class="page-head">
     <div class="page-head__txt">
       <span class="eyebrow">Persiapan ujian</span>
-      <h1>IELTS · TOEFL iBT · TOEIC</h1>
+      <h1>IELTS · TOEFL iBT · TOEFL ITP · TOEIC</h1>
       <p>Format, waktu, jumlah butir, dan cara penyekoran di halaman ini diverifikasi langsung
          ke penerbit ujian pada ${VERIFIED_ON}.</p>
     </div>
@@ -55,6 +55,7 @@ export function renderHub() {
         <tbody>
           <tr><td>Kuliah di Inggris / Australia / Selandia Baru</td><td><b>IELTS Academic</b></td><td>Paling diterima luas dan sering disyaratkan untuk visa.</td></tr>
           <tr><td>Kuliah di Amerika Serikat / Kanada</td><td><b>TOEFL iBT</b></td><td>Standar utama universitas Amerika Utara.</td></tr>
+          <tr><td>S2 / beasiswa / syarat kampus di dalam negeri</td><td><b>TOEFL ITP</b></td><td>Ujian kertas yang paling banyak disyaratkan lembaga Indonesia; ambang lazim 500–550.</td></tr>
           <tr><td>Migrasi / kerja terampil</td><td><b>IELTS General Training</b></td><td>Diakui badan imigrasi Australia, Kanada, Inggris.</td></tr>
           <tr><td>Rekrutmen & promosi perusahaan</td><td><b>TOEIC</b></td><td>Fokus bahasa Inggris kerja.</td></tr>
           <tr><td>Belum tahu, mau ukur diri</td><td><b>Tes penempatan SankaLingo GO</b></td><td>Gratis, 30 soal, langsung tahu level CEFR-mu.</td></tr>
@@ -71,13 +72,13 @@ export function renderHub() {
     <div class="card__title">Perbandingan skor antar ujian</div>
     <div class="table-wrap" style="margin-top:var(--s-4)">
       <table class="tbl">
-        <thead><tr><th>CEFR</th><th>IELTS</th><th>TOEFL iBT (1–6)</th><th>TOEFL (0–120, transisi)</th><th>TOEIC L&R</th></tr></thead>
+        <thead><tr><th>CEFR</th><th>IELTS</th><th>TOEFL iBT (1–6)</th><th>TOEFL (0–120, transisi)</th><th>TOEFL ITP</th><th>TOEIC L&R</th></tr></thead>
         <tbody>
-          <tr><td><span class="badge badge--lv lv-A2">A2</span></td><td>3.0–4.0</td><td>2</td><td>32–45</td><td>255–400</td></tr>
-          <tr><td><span class="badge badge--lv lv-B1">B1</span></td><td>4.0–5.0</td><td>3</td><td>46–70</td><td>405–600</td></tr>
-          <tr><td><span class="badge badge--lv lv-B2">B2</span></td><td>5.5–6.5</td><td>4</td><td>71–93</td><td>605–780</td></tr>
-          <tr><td><span class="badge badge--lv lv-C1">C1</span></td><td>7.0–8.0</td><td>5</td><td>94–114</td><td>785–900</td></tr>
-          <tr><td><span class="badge badge--lv lv-C2">C2</span></td><td>8.5–9.0</td><td>6</td><td>115–120</td><td>905–990</td></tr>
+          <tr><td><span class="badge badge--lv lv-A2">A2</span></td><td>3.0–4.0</td><td>2</td><td>32–45</td><td>337–459</td><td>255–400</td></tr>
+          <tr><td><span class="badge badge--lv lv-B1">B1</span></td><td>4.0–5.0</td><td>3</td><td>46–70</td><td>460–542</td><td>405–600</td></tr>
+          <tr><td><span class="badge badge--lv lv-B2">B2</span></td><td>5.5–6.5</td><td>4</td><td>71–93</td><td>543–626</td><td>605–780</td></tr>
+          <tr><td><span class="badge badge--lv lv-C1">C1</span></td><td>7.0–8.0</td><td>5</td><td>94–114</td><td>627–677</td><td>785–900</td></tr>
+          <tr><td><span class="badge badge--lv lv-C2">C2</span></td><td>8.5–9.0</td><td>6</td><td>115–120</td><td>—</td><td>905–990</td></tr>
         </tbody>
       </table>
     </div>
@@ -117,8 +118,8 @@ export function renderExam(id) {
     <button class="is-active" data-t="format">Format resmi</button>
     <button data-t="tactics">Trik jitu</button>
     <button data-t="score">Skor & band</button>
-    <button data-t="writing">Writing</button>
-    <button data-t="speaking">Speaking</button>
+    ${raw((e.writing || e.tasks2026) ? '<button data-t="writing">Writing</button>' : '')}
+    ${raw((e.speaking || e.tasks2026) ? '<button data-t="speaking">Speaking</button>' : '')}
     <button data-t="practice">Latihan cepat</button>
     <button data-t="myth">Mitos</button>
     <button data-t="src">Sumber</button>

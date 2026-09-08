@@ -10,8 +10,8 @@ import { $, $$, el, html, raw, esc, toast, shuffle, sample, hhmmss, mmss, ring }
 import { ico } from '../icons.js';
 import { state, recordExam, addXP, addMinutes } from '../state.js';
 import { checkAnswer, promptOf, answerOf } from '../quiz.js';
-import { say, sayList, stopSpeaking } from '../speech.js';
-import { EXAMS, SPECS, convertScore, ieltsOverall } from '../data.js';
+import { say, sayList, stopSpeaking, englishVoices } from '../speech.js';
+import { EXAMS, SPECS, convertScore, ieltsOverall, itpTotal } from '../data.js';
 
 /* ── Menyusun blueprint yang bisa dijalankan ──────────────────── */
 
@@ -123,24 +123,190 @@ function buildTOEIC() {
   };
 }
 
+/* ── TOEFL ITP ────────────────────────────────────────────────────
+
+   Berbeda dari tiga ujian di atas, ITP punya SEPULUH set penuh yang
+   masing-masing memuat 140 butir — persis blueprint resmi — dan set
+   dimuat hanya ketika dipilih. Tiga hal yang khas ITP dan ditiru di sini:
+
+   · Pertanyaan Listening TIDAK tercetak. Part A: pertanyaannya ada di
+     akhir rekaman dialog. Part B/C: tiap soal punya tombol "dengar
+     pertanyaan" yang hanya bisa ditekan sekali.
+   · Dialog dibaca dengan suara berbeda untuk pria, wanita, dan narator,
+     karena soal Part A sering bergantung pada SIAPA yang bicara.
+   · Written Expression menampilkan kalimat dengan empat bagian bergaris
+     bawah berlabel A–D; peserta memilih bagian yang salah. Pilihannya
+     tidak diacak — hurufnya melekat pada posisi di kalimat.            */
+
+const ABCD = 'ABCD';
+
+/* {{segmen}} → <u><i>A</i>segmen</u>, empat kali. */
+function weHtml(q) {
+  let k = 0;
+  return String(q).split(/(\{\{[^}]+\}\})/).map(p => {
+    const m = p.match(/^\{\{([^}]+)\}\}$/);
+    if (!m) return esc(p);
+    return `<u class="we-seg"><i>${ABCD[k++]}</i>${esc(m[1])}</u>`;
+  }).join('');
+}
+
+function buildITP(set, setNo) {
+  const E = EXAMS.itp, S = SPECS.itp;
+  const bersih = l => String(l).replace(/^[MWN]:\s*/, '');
+  const L = set.listening;
+
+  const A = L.partA.map((x, i) => ({
+    t: 'mcq', opts: x.opts, a: x.a,
+    q: 'Dengarkan percakapan dan pertanyaannya, lalu pilih jawaban terbaik.',
+    why: `Pertanyaan: ${x.q} — ${x.why}`,
+    part: 'Part A — Short Conversations',
+    ctx: { kind: 'audio', title: `Part A · Percakapan ${i + 1}`, lines: x.lines.map(bersih), dialog: x.lines }
+  }));
+  const panjang = (daftar, label, judulAwal) => daftar.flatMap((p, i) => p.questions.map(q => ({
+    t: 'mcq', opts: q.opts, a: q.a, qa: q.q,
+    q: 'Pertanyaan dibacakan satu kali — tekan "Dengar pertanyaan", lalu pilih jawaban terbaik.',
+    why: `Pertanyaan: ${q.q} — ${q.why}`,
+    part: label,
+    ctx: { kind: 'audio', title: `${judulAwal} ${i + 1} · ${p.title}`, lines: p.lines.map(bersih), dialog: p.lines }
+  })));
+  const B = panjang(L.partB, 'Part B — Longer Conversations', 'Part B · Percakapan');
+  const C = panjang(L.partC, 'Part C — Talks', 'Part C · Ceramah');
+
+  const ST = set.structure.map(x => ({ t: 'mcq', q: x.q, opts: x.opts, a: x.a, why: x.why, part: 'Structure' }));
+  const WE = set.written.map(x => {
+    const segs = [];
+    const polos = String(x.q).replace(/\{\{([^}]+)\}\}/g, (_, s) => { segs.push(s); return `[${ABCD[segs.length - 1]}] ${s}`; });
+    return { t: 'mcq', q: polos, we: true, segHtml: weHtml(x.q), opts: segs, a: x.a, noShuffle: true,
+             why: `Seharusnya: ${x.fix}. ${x.why}`, part: 'Written Expression' };
+  });
+
+  const R = set.reading.flatMap((r, i) => r.questions.map(q => ({
+    t: 'mcq', q: q.q, opts: q.opts, a: q.a, why: q.why,
+    part: `Bacaan ${i + 1} — ${r.title}`,
+    ctx: { kind: 'text', title: r.title, text: r.text }
+  })));
+
+  return {
+    exam: E, spec: S, setNo,
+    sections: [
+      { id: 'listening', name: 'Section 1 — Listening Comprehension', minutes: 35, target: 50,
+        items: [...A, ...B, ...C], audioOnce: true, parts: S.sections[0].parts,
+        note: 'Audio sekali putar. Pertanyaan tidak tercetak — baca pilihan jawabannya, lalu dengarkan.' },
+      { id: 'structure', name: 'Section 2 — Structure and Written Expression', minutes: 25, target: 40,
+        items: [...ST, ...WE], parts: S.sections[1].parts,
+        note: '15 kalimat rumpang, lalu 25 kalimat bergaris bawah: pilih bagian yang SALAH. Rata-rata 37 detik per soal.' },
+      { id: 'reading', name: 'Section 3 — Reading Comprehension', minutes: 55, target: 50,
+        items: R, parts: S.sections[2].parts,
+        note: 'Lima bacaan dari termudah ke tersulit. Sekitar 11 menit per bacaan.' }
+    ]
+  };
+}
+
+/* Suara untuk dialog: pria, wanita, narator. Kalau perangkat tidak punya
+   suara berbeda, nadanya yang dibedakan supaya tetap terdengar dua orang. */
+function pilihSuaraDialog() {
+  const semua = englishVoices();
+  const cari = re => semua.find(v => re.test(v.name));
+  const wanita = cari(/female|zira|aria|jenny|samantha|susan|hazel|karen|moira|tessa|victoria|fiona|serena|ava|allison|emma|libby|sonia|natasha|michelle/i);
+  const pria = cari(/(^|[^fe])male|david|mark|daniel|alex|fred|george|guy|ryan|james|tom|christopher|eric|william|thomas|brian/i);
+  return {
+    M: { voice: pria?.voiceURI,   pitch: pria ? 1.0 : 0.85 },
+    W: { voice: wanita?.voiceURI, pitch: wanita ? 1.0 : 1.2 },
+    N: { voice: undefined,        pitch: 1.0 }
+  };
+}
+
+let dialogToken = 0;
+const hentikanDialog = () => { dialogToken++; };
+
+async function putarDialog(ctx, stage) {
+  const mine = ++dialogToken;
+  const suara = pilihSuaraDialog();
+  for (const baris of ctx.dialog) {
+    if (mine !== dialogToken || !document.body.contains(stage)) return;
+    const tag = /^([MWN]):/.exec(baris)?.[1] || 'N';
+    const teks = baris.replace(/^[MWN]:\s*/, '');
+    await say(teks, { voice: suara[tag].voice, pitch: suara[tag].pitch, style: 'ujian' });
+    if (mine !== dialogToken) return;
+    await new Promise(r => setTimeout(r, tag === 'N' ? 900 : 380));
+  }
+}
+
 const BUILDERS = { ielts: buildIELTS, toefl: buildTOEFL, toeic: buildTOEIC };
+
+/* ── Pemilih set ITP ──────────────────────────────────────────── */
+
+function renderPilihSetITP() {
+  const E = EXAMS.itp, S = SPECS.itp;
+  const riwayat = state().exams.filter(x => x.exam === 'itp');
+  const terbaik = n => {
+    const r = riwayat.filter(x => x.set === n).map(x => Number(x.score)).filter(Number.isFinite);
+    return r.length ? Math.max(...r) : null;
+  };
+  $('#main').innerHTML = html`
+  <div class="page-head">
+    <div class="page-head__txt">
+      <a class="small muted" href="#/exam/itp">${ico('chevronL', { size: 14 })} Kembali ke ${esc(E.name)}</a>
+      <h1 style="margin-top:.4rem">Simulasi ${esc(E.name)}</h1>
+      <p>${E.jumlahSet} set penuh, masing-masing 140 soal dalam 115 menit — persis blueprint resmi. ${esc(S.totalTime)}.</p>
+    </div>
+  </div>
+  <div class="grid grid--3">
+    ${Array.from({ length: E.jumlahSet }, (_, i) => i + 1).map(n => {
+      const b = terbaik(n);
+      const kali = riwayat.filter(x => x.set === n).length;
+      return `<a class="card card--link exam-card" href="#/mock/itp/${n}">
+        <div class="row row--between">
+          <span class="exam-card__ico">${ico('award', { size: 22 })}</span>
+          ${b != null ? `<span class="badge badge--ok">terbaik ${b}</span>` : '<span class="badge">belum dikerjakan</span>'}
+        </div>
+        <div class="card__title" style="margin-top:.7rem">Set ${n}</div>
+        <div class="card__sub">Listening 50 · Structure 40 · Reading 50</div>
+        <p class="small soft" style="margin:.6rem 0 0">${kali ? `${kali}× dikerjakan` : 'Sekitar 2 jam. Siapkan headphone.'}</p>
+      </a>`;
+    }).join('')}
+  </div>
+  <div class="note note--warn" style="margin-top:var(--s-5)">
+    <strong>Kerjakan seperti ujian sungguhan</strong>
+    Satu set = satu duduk, 115 menit, tanpa jeda antarbagian selain layar pengantar. Skor yang keluar
+    hanya berarti kalau kondisinya sama dengan hari ujian. Ulangi set yang sama paling cepat dua minggu
+    kemudian — lebih cepat dari itu, kamu mengingat jawabannya, bukan mengukur kemampuanmu.
+  </div>`;
+}
 
 /* ── Layar utama ──────────────────────────────────────────────── */
 
-export function renderMock(examId) {
-  const bp = BUILDERS[examId]?.();
+export async function renderMock(examId, setNo) {
+  if (examId === 'itp' && !setNo) return renderPilihSetITP();
+
+  let bp;
+  if (examId === 'itp') {
+    $('#main').innerHTML = '<div class="card"><p class="soft">Memuat Set ' + Number(setNo) + '…</p></div>';
+    try {
+      const set = await EXAMS.itp.muatSet(setNo);
+      bp = buildITP(set, Number(setNo));
+    } catch (e) {
+      console.error(e);
+      return $('#main').innerHTML = `<div class="card"><p>Set ${esc(String(setNo))} belum tersedia.</p>
+        <a class="btn btn--soft" href="#/mock/itp">Pilih set lain</a></div>`;
+    }
+  } else {
+    bp = BUILDERS[examId]?.();
+  }
   if (!bp) return $('#main').innerHTML = '<p>Ujian tidak ditemukan.</p>';
   const E = bp.exam, S = bp.spec;
 
   const scored = bp.sections.filter(s => !s.kind);
   const authored = scored.reduce((a, s) => a + s.items.length, 0);
   const official = scored.reduce((a, s) => a + s.target, 0);
+  const judul = bp.setNo ? `Simulasi ${E.name} — Set ${bp.setNo}` : `Simulasi ${E.name}`;
+  const kembali = bp.setNo ? `#/mock/${examId}` : `#/exam/${examId}`;
 
   $('#main').innerHTML = html`
   <div class="page-head">
     <div class="page-head__txt">
-      <a class="small muted" href="#/exam/${examId}">${ico('chevronL', { size: 14 })} Kembali ke ${esc(E.name)}</a>
-      <h1 style="margin-top:.4rem">Simulasi ${esc(E.name)}</h1>
+      <a class="small muted" href="${kembali}">${ico('chevronL', { size: 14 })} ${bp.setNo ? 'Pilih set lain' : 'Kembali ke ' + esc(E.name)}</a>
+      <h1 style="margin-top:.4rem">${esc(judul)}</h1>
       <p>${esc(S.totalTime)}</p>
     </div>
   </div>
@@ -260,6 +426,8 @@ async function runQuestionSection(stage, bp, sec, strict, done) {
   const answers = new Array(items.length).fill(null);
   const flags = new Set();
   const played = new Set();
+  /* Pertanyaan Listening ITP Part B/C dibacakan sekali per soal. */
+  const tanyaDiputar = new Set();
   let cur = 0, left = sec.minutes * 60, iv = null, reviewing = false;
 
   iv = setInterval(() => {
@@ -305,7 +473,7 @@ async function runQuestionSection(stage, bp, sec, strict, done) {
               <span class="mock-num">${cur + 1}</span>
               <span class="small muted">dari ${items.length}</span>
             </div>
-            <div class="q-prompt">${esc(promptOf(it))}</div>
+            ${raw(promptHtml(it))}
             <div class="opts" id="mkOpts">
               ${raw(renderInput(it, answers[cur]))}
             </div>
@@ -325,8 +493,33 @@ async function runQuestionSection(stage, bp, sec, strict, done) {
     $('#mkPrev').onclick = () => { save(); if (cur > 0) { cur--; draw(); } };
     $('#mkNext').onclick = () => { save(); cur < items.length - 1 ? (cur++, draw()) : review(); };
     const p = $('#mkPlay');
-    if (p) p.onclick = () => { played.add(it.ctx.title); sayList(it.ctx.lines, 420); draw(); };
+    if (p) p.onclick = () => {
+      played.add(it.ctx.title);
+      if (it.ctx.dialog) putarDialog(it.ctx, stage); else sayList(it.ctx.lines, 420);
+      draw();
+    };
+    const t = $('#mkTanya');
+    if (t) t.onclick = () => {
+      tanyaDiputar.add(cur);
+      hentikanDialog();
+      say(it.qa, { style: 'ujian' });
+      draw();
+    };
     window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  /* Tiga bentuk soal: Written Expression (kalimat bergaris bawah),
+     Listening ITP (pertanyaan tidak tercetak), dan soal biasa. */
+  function promptHtml(it) {
+    if (it.we) return `<div class="q-prompt" style="font-weight:500">${it.segHtml}</div>
+      <p class="small muted" style="margin-top:.5rem">Pilih bagian bergaris bawah yang <b>salah</b>.</p>`;
+    if (it.qa) {
+      const sudah = tanyaDiputar.has(cur);
+      return `<div class="q-prompt" style="font-size:var(--fs-md);font-weight:500">${esc(it.q)}</div>
+        <button class="btn btn--soft btn--sm" id="mkTanya" style="margin-top:.6rem" ${sudah ? 'disabled' : ''}>
+          ${ico('volume', { size: 16 })} ${sudah ? 'Pertanyaan sudah dibacakan' : 'Dengar pertanyaan (sekali)'}</button>`;
+    }
+    return `<div class="q-prompt">${esc(promptOf(it))}</div>`;
   }
 
   function renderInput(it, val) {
@@ -398,7 +591,7 @@ async function runQuestionSection(stage, bp, sec, strict, done) {
   }
 
   function finishSection() {
-    clearInterval(iv); stopSpeaking();
+    clearInterval(iv); stopSpeaking(); hentikanDialog();
     let right = 0;
     const wrong = [];
     items.forEach((it, i) => {
@@ -581,6 +774,16 @@ function finishAll(stage, bp, results) {
     const total = perSection.reduce((a, p) => a + (p.conv || 0), 0);
     headline = total || '—';
     headlineNote = 'Total TOEIC (Listening + Reading, skala 10–990)';
+  } else if (E.id === 'itp') {
+    /* Tiga skala bagian (31–68) → total 310–677 = jumlah × 10 ÷ 3. */
+    const skala = Object.fromEntries(perSection.map(p => [p.id, p.conv ?? 31]));
+    const total = itpTotal(skala.listening ?? 31, skala.structure ?? 31, skala.reading ?? 31);
+    const cefr = (S.bandScale || []).find(([r]) => {
+      const [lo, hi] = String(r).split('–').map(Number);
+      return total >= lo && total <= hi;
+    })?.[1];
+    headline = total;
+    headlineNote = `Skor total TOEFL ITP (310–677)${cefr ? ' · setara CEFR ' + cefr : ''}`;
   } else {
     const avgPct = perSection.length
       ? perSection.reduce((a, p) => a + p.pct, 0) / perSection.length : 0;
@@ -589,7 +792,8 @@ function finishAll(stage, bp, results) {
     headlineNote = 'Perkiraan band TOEFL (skala 1–6, berlaku sejak Januari 2026)';
   }
 
-  recordExam({ exam: E.id, kind: 'Simulasi penuh', right: perSection.reduce((a, p) => a + p.right, 0),
+  recordExam({ exam: E.id, kind: bp.setNo ? `Simulasi Set ${bp.setNo}` : 'Simulasi penuh',
+               set: bp.setNo, right: perSection.reduce((a, p) => a + p.right, 0),
                total: perSection.reduce((a, p) => a + p.total, 0), score: headline });
   addXP(perSection.reduce((a, p) => a + p.right, 0) * 5, 'reading');
   addMinutes(results.reduce((a, r) => a + (r.minutesUsed || 5), 0));
@@ -642,7 +846,8 @@ function finishAll(stage, bp, results) {
       </div>
       <div class="row" style="margin-top:var(--s-5)">
         <a class="btn btn--soft" href="#/exam/${E.id}">Kembali ke ${esc(E.name)}</a>
-        <a class="btn btn--primary" href="#/mock/${E.id}">Ulangi simulasi</a>
+        ${raw(bp.setNo ? `<a class="btn btn--soft" href="#/mock/${E.id}">Pilih set lain</a>` : '')}
+        <a class="btn btn--primary" href="#/mock/${E.id}${bp.setNo ? '/' + bp.setNo : ''}">Ulangi simulasi</a>
       </div>
     </div>`;
   window.scrollTo({ top: 0, behavior: 'smooth' });

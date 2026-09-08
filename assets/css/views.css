@@ -48,6 +48,9 @@
 .lesson-step{display:grid;gap:var(--s-5)}
 .q-card{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface-2);padding:var(--s-6)}
 .q-prompt{font-size:var(--fs-xl);font-weight:600;line-height:1.5}
+/* Written Expression (TOEFL ITP): empat bagian bergaris bawah berlabel A–D */
+.we-seg{text-decoration:none;border-bottom:2.5px solid var(--brand);padding-bottom:1px;position:relative;margin-right:.15em;white-space:nowrap}
+.we-seg i{font-style:normal;font-size:.62em;font-weight:800;color:var(--brand);vertical-align:super;margin-right:.18em;letter-spacing:.02em}
 .q-prompt .blank{display:inline-block;min-width:96px;border-bottom:2px dashed var(--brand);
   text-align:center;color:var(--brand-text);font-weight:700}
 .q-sub{color:var(--text-mute);font-size:var(--fs-sm);margin-top:var(--s-2)}

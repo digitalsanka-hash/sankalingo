@@ -96,7 +96,7 @@ Kita tidak menandai waktu di kata kerja, jadi kita lupa memakainya.
 Sekali paham sebabnya, kesalahan itu tidak terulang.
 
 Empat puluh empat unit, tiga ratus dua puluh enam pelajaran berurutan.
-Sepuluh simulasi ujian di dalamnya: IELTS, TOEFL, TOEIC, JLPT.
+Sebelas simulasi ujian di dalamnya: IELTS, TOEFL, TOEIC, JLPT.
 Semua dibuka dari HP, kapan saja. Tiga puluh menit sehari sudah cukup.
 
 Seratus sembilan puluh sembilan ribu. Sekali bayar, bukan langganan.
@@ -112,7 +112,7 @@ sankalingogo.com
 | 0:24–0:31 | Harapan | Kursor menekan tombol Lamar | — |
 | 0:31–0:45 | **DEMO D1 · Suara** | Kartu kamus, tombol suara ditekan tiga kali berturut-turut | `tiap bentuk ada suaranya` |
 | 0:45–1:00 | **DEMO D3 · Latihan** | Jawaban salah dipilih, kotak penjelasan terbuka | — |
-| 1:00–1:09 | **DEMO D4 + D6** | Peta unit digulir, potong ke simulasi ujian | `326 pelajaran · 10 simulasi` |
+| 1:00–1:09 | **DEMO D4 + D6** | Peta unit digulir, potong ke simulasi ujian | `326 pelajaran · 11 simulasi` |
 | 1:09–1:15 | CTA | Tombol | `Rp199.000 · sekali bayar` |
 
 ---
@@ -299,7 +299,7 @@ Sementara dari nol ke IELTS enam setengah itu berbulan-bulan.
 Urutannya harus dibalik. Bahasa duluan, selalu.
 Bukan karena paling penting, tapi karena paling lama.
 
-Di dalam SankaLingo GO ada sepuluh simulasi ujian.
+Di dalam SankaLingo GO ada sebelas simulasi ujian.
 IELTS, TOEFL, TOEIC, JLPT, TOPIK, HSK, Goethe, DELF, DELE, TORFL.
 Format dan cara penilaiannya ditiru, termasuk ambang nilai tiap bagian.
 Bagian itu yang menggagalkan banyak orang meski total nilainya sudah cukup.
@@ -407,7 +407,7 @@ Cara menulis hurufnya juga diajarkan.
 Goresannya dianimasikan, kamu telusuri sendiri dengan jari, lalu dinilai.
 
 Tiga ratus dua puluh enam pelajaran berurutan.
-Sepuluh simulasi ujian resmi, lengkap dengan ambang nilai tiap bagiannya.
+Sebelas simulasi ujian resmi, lengkap dengan ambang nilai tiap bagiannya.
 Semua dibuka dari HP, tanpa unduh dari toko aplikasi. Tidak ada langganan.
 
 Mulai dari satu bahasa yang kamu butuhkan sekarang.
@@ -425,7 +425,7 @@ sankalingogo.com
 | 0:05–0:13 | Daftar bahasa | Sembilan aksara berganti cepat layar penuh | nama bahasa mengikuti suara |
 | 0:13–0:24 | **DEMO D1 · Suara** | Kartu kamus, tombol suara ditekan tiga kali | `9.052 entri` |
 | 0:24–0:33 | **DEMO D2 · Menulis** | Goresan → jari menelusuri → nilai | `Ditelusuri. Dinilai.` |
-| 0:33–0:44 | Isi lain | Peta unit → simulasi ujian | `326 pelajaran · 10 simulasi` |
+| 0:33–0:44 | Isi lain | Peta unit → simulasi ujian | `326 pelajaran · 11 simulasi` |
 | 0:44–0:50 | CTA | Tombol | `9 bahasa · Rp299.000 · sekali bayar` |
 
 ---

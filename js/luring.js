@@ -7,6 +7,7 @@ import { toast } from './ui.js';
 /* Semua berkas materi & tampilan. Dipakai untuk "siapkan mode luring". */
 export const BERKAS_MATERI = [
   ...['curriculum', 'curriculum-plus', 'exam-bank', 'exam-ielts', 'exam-specs', 'exam-tactics',
+      'exam-tactics-itp', 'exam-itp',
       'exam-toefl-toeic', 'exam-toefl', 'exam-toeic-bank', 'grammar-a1', 'grammar-a2',
       'grammar-b1', 'grammar-b2', 'grammar-c',
       'grammar-gabung', 'grammar-kelompok',
@@ -24,6 +25,8 @@ export const BERKAS_MATERI = [
      penyiapan luring melaporkan kegagalan yang sebenarnya bukan
      kegagalan. */
   ...['ar', 'de', 'ru', 'zh'].map(c => `./data/lang/${c}-goresan.js`),
+  /* Sepuluh set simulasi TOEFL ITP, 140 butir tiap set. */
+  ...Array.from({ length: 10 }, (_, i) => `./data/itp/itp-${String(i + 1).padStart(2, '0')}.js`),
   ...['ja', 'zh'].map(c => `./data/lang/${c}-contoh-aksara.js`),
   './data/lang/registry.js',
   './data/lang/exam-blueprints.js',

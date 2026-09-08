@@ -50,7 +50,7 @@ dan apa bedanya, dalam dua detik.
 ```
 Belajar 9 bahasa — tanpa langganan.
 Tiap koreksi menjelaskan kebiasaan Indonesia yang menyeretmu.
-9.052 kata · 326 pelajaran · 10 simulasi ujian
+9.052 kata · 326 pelajaran · 11 simulasi ujian
 👇
 ```
 

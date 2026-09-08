@@ -27,7 +27,9 @@ export const SOURCES = [
   ['TOEFL iBT — Test Content', 'https://www.ets.org/toefl/test-takers/ibt/about/content.html'],
   ['TOEFL iBT — pembaruan Januari 2026', 'https://toeflaccess.ets.org/help/en/articles/11758550-toefl-ibt-updates-coming-january-2026'],
   ['TOEIC L&R — Examinee Handbook (ETS)', 'https://www.ets.org/pdfs/toeic/toeic-listening-reading-test-examinee-handbook.pdf'],
-  ['TOEIC L&R — format resmi', 'https://www.ets.org/toeic/about/listening-reading.html']
+  ['TOEIC L&R — format resmi', 'https://www.ets.org/toeic/about/listening-reading.html'],
+  ['TOEFL ITP — Test Content (Level 1)', 'https://www.ets.org/toefl/institutions/itp/about/content.html'],
+  ['TOEFL ITP — Scores & CEFR mapping', 'https://www.ets.org/toefl/institutions/itp/scores.html']
 ];
 
 export const VERIFIED_ON = '15 Agustus 2026';
@@ -209,13 +211,96 @@ export const SPEC_TOEIC = {
   }
 };
 
-export const SPECS = { ielts: SPEC_IELTS, toefl: SPEC_TOEFL, toeic: SPEC_TOEIC };
+/* ── TOEFL ITP (Institutional Testing Program, Level 1) ────────── */
+export const SPEC_ITP = {
+  id: 'itp',
+  totalTime: 'Sekitar 2 jam (115 menit mengerjakan soal, di luar petunjuk)',
+  scoring: 'Tiga skor bagian pada skala 31–68 (Reading 31–67), lalu skor total 310–677. Total = (Listening + Structure + Reading) × 10 ÷ 3. Tidak ada pengurangan nilai untuk jawaban salah.',
+  rounding: 'Contoh: Listening 52 + Structure 50 + Reading 48 = 150 → 150 × 10 ÷ 3 = 500. Skor 500 lazim dipakai sebagai ambang S2 dan beasiswa dalam negeri; 550 untuk sebagian kampus luar negeri.',
+  sections: [
+    { id:'listening', name:'Section 1 — Listening Comprehension', minutes:35, items:50,
+      marks:'Skala 31–68. Pertanyaan DIBACAKAN, tidak tercetak; hanya pilihan jawaban yang tercetak.',
+      parts:[
+        { n:'A', name:'Part A — Short Conversations', items:30, range:'Soal 1–30',
+          note:'Dialog dua kalimat antara pria dan wanita, lalu narator bertanya. Menguji idiom, makna tersirat, dan kata yang bunyinya mirip.' },
+        { n:'B', name:'Part B — Longer Conversations', items:8, range:'Soal 31–38',
+          note:'Dua percakapan panjang bersuasana kampus, masing-masing empat soal.' },
+        { n:'C', name:'Part C — Talks', items:12, range:'Soal 39–50',
+          note:'Tiga ceramah atau kuliah singkat, masing-masing empat soal.' }
+      ],
+      facts:['Audio diputar SATU KALI dan waktunya diatur rekaman — tidak bisa dipercepat.',
+             'Pertanyaan tidak tercetak di lembar soal: kamu harus mendengar pertanyaannya.',
+             'Tidak boleh mencatat pada versi kertas.']
+    },
+    { id:'structure', name:'Section 2 — Structure and Written Expression', minutes:25, items:40,
+      marks:'Skala 31–68',
+      parts:[
+        { n:1, name:'Structure', items:15, range:'Soal 1–15',
+          note:'Kalimat rumpang dengan empat pilihan; pilih yang membuat kalimatnya benar secara tata bahasa.' },
+        { n:2, name:'Written Expression', items:25, range:'Soal 16–40',
+          note:'Kalimat dengan empat bagian bergaris bawah (A–D); pilih bagian yang SALAH.' }
+      ],
+      facts:['25 menit untuk 40 soal — rata-rata 37 detik per soal.',
+             'Written Expression tidak meminta perbaikan, hanya menunjuk bagian yang salah.',
+             'Kesalahan yang paling sering diuji: kesesuaian subjek–kata kerja, bentuk kata, paralelisme, dan artikel.']
+    },
+    { id:'reading', name:'Section 3 — Reading Comprehension', minutes:55, items:50,
+      marks:'Skala 31–67',
+      parts:[
+        { n:1, name:'Lima bacaan', items:50, range:'Soal 1–50',
+          note:'Sekitar lima bacaan akademik (sejarah Amerika, sains, seni, ilmu sosial), masing-masing ±10 soal.' }
+      ],
+      qTypes:['Gagasan utama / tujuan','Detail','NOT / EXCEPT','Kosakata dalam konteks','Rujukan kata ganti','Inferensi','Organisasi / kenapa penulis menyebut'],
+      facts:['55 menit untuk 50 soal — rata-rata 66 detik per soal, termasuk membaca teksnya.',
+             'Bacaan disusun dari yang termudah ke yang tersulit.',
+             'Soal kosakata selalu mengutip kata yang ada di teks — jawabannya harus cocok di konteks itu.']
+    }
+  ],
+  /* Konversi jumlah benar → skala bagian. Ini tabel perkiraan yang lazim
+     dipublikasikan untuk ITP Level 1; tiap sesi resmi punya penyetaraan
+     sendiri, jadi selisih 1–2 poin adalah hal biasa. */
+  convert: {
+    listening: [[50,68],[49,67],[48,66],[47,65],[46,63],[45,62],[44,61],[43,60],[42,59],[41,58],
+                [40,57],[39,57],[38,56],[37,55],[36,54],[35,54],[34,53],[33,52],[32,52],[31,51],
+                [30,51],[29,50],[28,49],[27,49],[26,48],[25,48],[24,47],[23,47],[22,46],[21,45],
+                [20,45],[19,44],[18,43],[17,42],[16,41],[15,41],[14,39],[13,38],[12,37],[11,35],
+                [10,33],[9,32],[8,32],[7,31]],
+    structure: [[40,68],[39,67],[38,65],[37,63],[36,61],[35,60],[34,58],[33,57],[32,56],[31,55],
+                [30,54],[29,53],[28,52],[27,51],[26,50],[25,49],[24,48],[23,47],[22,46],[21,45],
+                [20,44],[19,43],[18,42],[17,41],[16,40],[15,40],[14,38],[13,37],[12,36],[11,35],
+                [10,33],[9,31]],
+    reading:   [[50,67],[49,66],[48,65],[47,63],[46,61],[45,60],[44,59],[43,58],[42,57],[41,56],
+                [40,55],[39,54],[38,54],[37,53],[36,52],[35,52],[34,51],[33,50],[32,49],[31,48],
+                [30,48],[29,47],[28,46],[27,46],[26,45],[25,44],[24,43],[23,43],[22,42],[21,41],
+                [20,40],[19,39],[18,39],[17,38],[16,37],[15,36],[14,35],[13,34],[12,32],[11,31]]
+  },
+  /* Peta skor total → CEFR yang dipublikasikan ETS untuk ITP Level 1. */
+  bandScale: [
+    ['627–677','C1','Mahir: menangani teks akademik padat dan percakapan cepat dengan mudah.'],
+    ['543–626','B2','Menengah atas: ambang umum kampus luar negeri dan beasiswa bergengsi.'],
+    ['460–542','B1','Menengah: ambang lazim S2 dan beasiswa dalam negeri (skor 500 ada di rentang ini).'],
+    ['337–459','A2','Dasar: mengerti kalimat sederhana; belum siap perkuliahan berbahasa Inggris.'],
+    ['310–336','di bawah A2','Skor terendah yang bisa dilaporkan.']
+  ],
+  cefrPerBagian: {
+    listening: [[64,'C1'],[54,'B2'],[47,'B1'],[38,'A2']],
+    structure: [[65,'C1'],[53,'B2'],[43,'B1'],[32,'A2']],
+    reading:   [[64,'C1'],[55,'B2'],[48,'B1'],[31,'A2']]
+  }
+};
+
+export const SPECS = { ielts: SPEC_IELTS, toefl: SPEC_TOEFL, toeic: SPEC_TOEIC, itp: SPEC_ITP };
+
+/* Skor total ITP dari tiga skala bagian. Dibulatkan ke bilangan bulat
+   terdekat seperti laporan resmi. */
+export const itpTotal = (l, s, r) => Math.round((l + s + r) * 10 / 3);
 
 /* Dasar skala resmi tiap ujian, dipakai ketika jumlah benarnya di bawah
    baris terendah tabel konversi. */
 const DASAR = {
   ielts: { nilai: 0, bulat: 0.5 },   /* band 0 = tidak dikerjakan sama sekali */
-  toeic: { nilai: 5, bulat: 5 }      /* skor terendah tiap bagian TOEIC = 5   */
+  toeic: { nilai: 5, bulat: 5 },     /* skor terendah tiap bagian TOEIC = 5   */
+  itp:   { nilai: 31, bulat: 1 }     /* skala bagian ITP dimulai dari 31       */
 };
 
 /* Konversi jumlah benar → skor, memakai tabel di atas.
