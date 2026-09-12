@@ -96,7 +96,7 @@ Yang bikin langganan bulanan tidak cocok untuk ini: kamu tetap membayar di bulan
 
 SankaLingo GO dibayar sekali. Berhenti tiga bulan, kembali — akunmu masih di sana, riwayat belajarmu masih di sana.
 
-Rp199.000 untuk lima bahasa. Rp299.000 untuk sembilan.
+Rp149.000 untuk lima bahasa. Rp199.000 untuk sembilan.
 
 sankalingogo.com
 ```

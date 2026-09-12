@@ -104,7 +104,7 @@ Yang benar-benar menghambat pemelajar: bentuk yang berubah, dan tidak bisa diteb
 
 9.052 entri di SankaLingo GO memuat bentuk-bentuk ini, masing-masing dengan tombol suaranya sendiri. Sekitar seribu kata per bahasa, dipilih yang paling sering dipakai.
 
-Rp299.000 untuk sembilan bahasa. sankalingogo.com
+Rp199.000 untuk sembilan bahasa. sankalingogo.com
 ```
 
 **Tagar:**

@@ -98,7 +98,7 @@ Masalahnya urutan. Hari ini video tenses, besok kosakata makanan, lusa tips loga
 
 Kamu selalu tahu ada di mana, dan apa yang berikutnya. Itu yang membuat orang bertahan sampai bulan ketiga — bukan motivasi.
 
-Rp199.000 sekali bayar. sankalingogo.com
+Rp149.000 sekali bayar. sankalingogo.com
 ```
 
 **Tagar:**

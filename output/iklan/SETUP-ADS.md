@@ -32,7 +32,7 @@ Tautan tujuan: `https://www.sankalingogo.com/lp/index.html`
 >
 > Sembilan bahasa dalam satu aplikasi — Inggris, Jepang, Korea,
 > Mandarin, Arab, Jerman, Prancis, Spanyol, Rusia.
-> Bayar sekali Rp199.000, dipakai selamanya. Tanpa langganan bulanan.
+> Bayar sekali Rp149.000, dipakai selamanya. Tanpa langganan bulanan.
 
 **Headline**: Namamu dalam 4 aksara — coba gratis
 **Description**: 9 bahasa · bayar sekali · akses selamanya
@@ -55,9 +55,9 @@ kreatif dingin terbaik — dipakai untuk audiens yang belum kenal produk.
 > membayar, aksesmu hilang — padahal bahasa butuh tahunan, bukan
 > mingguan.
 >
-> SankaLingo GO: Rp199.000 sekali. Kodenya menempel di akunmu tanpa
+> SankaLingo GO: Rp149.000 sekali. Kodenya menempel di akunmu tanpa
 > tanggal kedaluwarsa. Lima bahasa untuk paket Esensi, sembilan untuk
-> paket Lengkap — sekitar Rp40.000 per bahasa.
+> paket Lengkap — sekitar Rp30.000 per bahasa.
 >
 > Kursus habis masa berlakunya. Langganan berhenti kalau kamu berhenti
 > bayar. Kemampuan bahasa tidak: ia menempel seumur hidup, menumpuk,
@@ -66,8 +66,8 @@ kreatif dingin terbaik — dipakai untuk audiens yang belum kenal produk.
 > 9.052 entri kamus · 326 pelajaran · 767 latihan · 10 simulasi ujian
 > resmi (IELTS, TOEFL, TOEIC, JLPT, TOPIK, HSK, Goethe, DELF, DELE, TORFL)
 
-**Headline**: Bayar sekali Rp199.000, bukan tiap bulan
-**Description**: 9 bahasa · sekitar Rp40.000 per bahasa
+**Headline**: Bayar sekali Rp149.000, bukan tiap bulan
+**Description**: 9 bahasa · sekitar Rp22.000 per bahasa
 **CTA**: Learn more
 
 Kenapa sudut ini: menyasar orang yang sudah pernah berlangganan aplikasi
@@ -99,7 +99,7 @@ tinggalkan seperti yang sebelumnya.
 > selamanya. Mulai malam ini dengan yang paling kamu butuhkan.
 
 **Headline**: Syarat bahasa menyaringmu sebelum wawancara
-**Description**: Mulai Rp199.000 · sekali bayar · selamanya
+**Description**: Mulai Rp149.000 · sekali bayar · selamanya
 **CTA**: Learn more
 
 Kenapa sudut ini: tekanan waktunya datang dari hal yang benar-benar

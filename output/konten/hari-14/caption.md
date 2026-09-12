@@ -96,7 +96,7 @@ Yang tidak berhasil biasanya bukan kurang usaha — usahanya tersebar, jadi tida
 
 Yang kamu bayar di sini bukan informasinya. Informasi memang ada gratis di mana-mana. Yang kamu bayar: urutannya, penjelasan kenapa kamu salah, dan sistem yang memunculkan kata tepat sebelum kamu melupakannya.
 
-Rp199.000 sekali. sankalingogo.com
+Rp149.000 sekali. sankalingogo.com
 ```
 
 **Tagar:**

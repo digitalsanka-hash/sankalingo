@@ -100,7 +100,7 @@ Itu semua memang dibagikan gratis dengan sengaja — supaya kamu tahu isi kepala
 
 Yang di dalam aplikasinya: 9.052 entri kamus, 326 pelajaran berurutan, 767 latihan yang masing-masing menjelaskan kebiasaan berbahasa Indonesia mana yang menyeretmu, dan sepuluh simulasi ujian.
 
-Rp199.000 untuk lima bahasa. Rp299.000 untuk sembilan. Sekali bayar.
+Rp149.000 untuk lima bahasa. Rp199.000 untuk sembilan. Sekali bayar.
 
 sankalingogo.com
 ```

@@ -101,7 +101,7 @@ Mulai dari satu. Selesaikan sampai terasa berguna. Lalu kalau setahun lagi peker
 
 Ini sengaja dirancang begitu, karena hidup orang berubah. Yang hari ini butuh Inggris untuk kerja, tiga tahun lagi mungkin butuh Jepang untuk pindah.
 
-Rp199.000 untuk lima bahasa. Rp299.000 untuk sembilan.
+Rp149.000 untuk lima bahasa. Rp199.000 untuk sembilan.
 
 sankalingogo.com
 ```

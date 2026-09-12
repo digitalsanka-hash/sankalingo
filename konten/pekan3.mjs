@@ -114,7 +114,7 @@ Masalahnya urutan. Hari ini video tenses, besok kosakata makanan, lusa tips loga
 
 Kamu selalu tahu ada di mana, dan apa yang berikutnya. Itu yang membuat orang bertahan sampai bulan ketiga — bukan motivasi.
 
-Rp199.000 sekali bayar. sankalingogo.com`,
+Rp149.000 sekali bayar. sankalingogo.com`,
   tagar: t('jual','umum') },
 
 /* ══ HARI 16 ═════════════════════════════════════════════════════ */
@@ -226,7 +226,7 @@ Di SankaLingo GO, tiap bentuk kata punya tombol suaranya sendiri. Bukan cuma kat
 
 Empat bentuk, empat tombol. Termasuk yang tidak beraturan — yang justru paling sering dipakai.
 
-Rp199.000 sekali bayar. sankalingogo.com`,
+Rp149.000 sekali bayar. sankalingogo.com`,
   tagar: t('jual','umum') },
 
 /* ══ HARI 17 ═════════════════════════════════════════════════════ */
@@ -320,10 +320,10 @@ Itu sebabnya kartu ulang terjadwal ada di aplikasi ini — supaya kamu tidak per
     pita: 'Hitungan sederhana',
     judul: 'Rp40.000 <span class="emas">per bahasa.</span>',
     kiri: { judul: 'Kursus satu bahasa', isi: 'Ratusan ribu sampai jutaan per level, dan <b>berhenti begitu kelasnya selesai</b>.', cap: 'per level, per bahasa' },
-    kanan: { judul: 'SankaLingo GO', isi: 'Rp199.000 untuk lima bahasa. <b>Tanpa level tambahan, tanpa perpanjangan.</b>', cap: '≈ Rp40.000 per bahasa' },
-    kaki: 'Paket sembilan bahasa: sekitar Rp33.000 per bahasa.' }],
-  caption: `Rp199.000 dibagi lima bahasa = sekitar Rp40.000 per bahasa.
-Rp299.000 dibagi sembilan = sekitar Rp33.000 per bahasa.
+    kanan: { judul: 'SankaLingo GO', isi: 'Rp149.000 untuk lima bahasa. <b>Tanpa level tambahan, tanpa perpanjangan.</b>', cap: '≈ Rp30.000 per bahasa' },
+    kaki: 'Paket sembilan bahasa: sekitar Rp22.000 per bahasa.' }],
+  caption: `Rp149.000 dibagi lima bahasa = sekitar Rp30.000 per bahasa.
+Rp199.000 dibagi sembilan = sekitar Rp22.000 per bahasa.
 
 Sebagai perbandingan: satu kali makan di luar.
 
@@ -441,7 +441,7 @@ Termasuk aturan nilai minimum per bagian — yang membuat banyak orang gagal mes
 
 Soalnya ditulis sendiri, bukan bocoran soal asli. Yang ditiru formatnya.
 
-Rp199.000 sekali bayar. sankalingogo.com`,
+Rp149.000 sekali bayar. sankalingogo.com`,
   tagar: '#ielts #toefl #jlpt ' + TAGAR.umum },
 
 /* ══ HARI 19 ═════════════════════════════════════════════════════ */
@@ -543,7 +543,7 @@ Bahasa Inggris yang kamu kuasai hari ini masih akan berguna dua puluh tahun lagi
 
 Itu sebabnya bahasa termasuk investasi paling awet yang bisa kamu beli — dan kenapa membelinya sekali seumur hidup lebih masuk akal daripada menyewanya bulanan.
 
-Rp199.000 untuk lima bahasa. Rp299.000 untuk sembilan.
+Rp149.000 untuk lima bahasa. Rp199.000 untuk sembilan.
 
 sankalingogo.com`,
   tagar: t('jual','umum') },
@@ -651,7 +651,7 @@ Bukan karena otaknya berubah. Karena dia sudah tahu caranya belajar bahasa: meng
 
 Itu sebabnya punya sembilan bahasa sekaligus masuk akal — bukan supaya kamu belajar sembilan-sembilannya sekarang, tapi supaya waktu bahasa kedua terasa memanggil, tidak ada yang perlu dibeli lagi.
 
-Rp199.000 untuk lima. Rp299.000 untuk sembilan.
+Rp149.000 untuk lima. Rp199.000 untuk sembilan.
 
 sankalingogo.com`,
   tagar: t('jual','umum') },
@@ -762,7 +762,7 @@ Itu semua memang dibagikan gratis dengan sengaja — supaya kamu tahu isi kepala
 
 Yang di dalam aplikasinya: 9.052 entri kamus, 326 pelajaran berurutan, 767 latihan yang masing-masing menjelaskan kebiasaan berbahasa Indonesia mana yang menyeretmu, dan sepuluh simulasi ujian.
 
-Rp199.000 untuk lima bahasa. Rp299.000 untuk sembilan. Sekali bayar.
+Rp149.000 untuk lima bahasa. Rp199.000 untuk sembilan. Sekali bayar.
 
 sankalingogo.com`,
   tagar: t('jual','umum') },

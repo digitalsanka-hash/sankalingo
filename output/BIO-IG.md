@@ -39,7 +39,7 @@ Alternatif (pas 30 karakter semua):
 9 bahasa. Sekali bayar, selamanya.
 Inggris·Jepang·Korea·Mandarin·Arab·Jerman·Prancis·Spanyol·Rusia
 Bukan langganan bulanan.
-👇 mulai dari Rp199rb
+👇 mulai dari Rp149rb
 ```
 
 Paling cocok untuk akun baru: orang tahu apa produknya, berapa harganya,
@@ -63,7 +63,7 @@ kenapa ini beda dari aplikasi lain.
 Bahasa untuk kerja, beasiswa, pindah negara.
 9 bahasa · IELTS TOEFL JLPT TOPIK HSK
 Sekali bayar, akses selamanya.
-👇 Rp199rb
+👇 Rp149rb
 ```
 
 Pakai kalau iklanmu diarahkan ke pencari kerja dan pelamar beasiswa.
@@ -86,8 +86,8 @@ Urutkan begini — yang paling banyak diklik di atas:
 | Urutan | Judul tautan | Alamat |
 |---|---|---|
 | 1 | Lihat isi & harga | `https://sankalingogo.com/lp` |
-| 2 | 5 bahasa — Rp199.000 | `https://digital-store-27.myscalev.com/sankalingo5bahasa` |
-| 3 | 9 bahasa — Rp299.000 | `https://digital-store-27.myscalev.com/sankalingo9bahasa` |
+| 2 | 5 bahasa — Rp149.000 | `https://digital-store-27.myscalev.com/sankalingo5bahasa` |
+| 3 | 9 bahasa — Rp199.000 | `https://digital-store-27.myscalev.com/sankalingo9bahasa` |
 | 4 | Sudah beli? Masuk di sini | `https://sankalingogo.com` |
 
 Kalau cuma mau satu tautan, pakai nomor 1. Halaman itu sudah memuat kedua
@@ -141,5 +141,5 @@ Instagram mengizinkan tiga sematan. Isi dengan:
 
 - Jangan menaruh jumlah pengguna atau testimoni yang belum ada. Sekali
   ketahuan dikarang, seluruh akun ikut kehilangan kepercayaan.
-- Ganti bio ketika harga naik, bukan sebelumnya. Bio memuat "Rp199rb";
+- Ganti bio ketika harga naik, bukan sebelumnya. Bio memuat "Rp149rb";
   kalau harga berubah, ini yang pertama harus disunting.

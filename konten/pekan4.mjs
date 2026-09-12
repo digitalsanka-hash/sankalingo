@@ -106,7 +106,7 @@ Langsung ke isi. Kejelasan yang dinilai orang, bukan kesempurnaan.`,
     pita: 'Hitungan',
     judul: 'Sekali bayar, <span class="emas">bukan langganan.</span>',
     kiri: { judul: 'Langganan bulanan', isi: 'Berhenti bayar, akses hilang. Setahun berhenti, <b>mulai lagi dari nol biaya</b>.', cap: 'terus berjalan' },
-    kanan: { judul: 'SankaLingo GO', isi: 'Rp199.000 sekali. <b>Berhenti setahun, kembali kapan saja</b> — akunnya masih ada.', cap: 'selesai' },
+    kanan: { judul: 'SankaLingo GO', isi: 'Rp149.000 sekali. <b>Berhenti setahun, kembali kapan saja</b> — akunnya masih ada.', cap: 'selesai' },
     kaki: 'Belajar bahasa itu berhenti dan mulai lagi. Harganya sebaiknya mengikuti.' }],
   caption: `Belajar bahasa itu tidak pernah lurus. Ada bulan yang rajin, ada bulan yang hilang sama sekali.
 
@@ -114,7 +114,7 @@ Yang bikin langganan bulanan tidak cocok untuk ini: kamu tetap membayar di bulan
 
 SankaLingo GO dibayar sekali. Berhenti tiga bulan, kembali — akunmu masih di sana, riwayat belajarmu masih di sana.
 
-Rp199.000 untuk lima bahasa. Rp299.000 untuk sembilan.
+Rp149.000 untuk lima bahasa. Rp199.000 untuk sembilan.
 
 sankalingogo.com`,
   tagar: t('jual','umum') },
@@ -182,7 +182,7 @@ Latih bicaranya terpisah. Sejak sekarang, bukan setelah lulus.`,
     { tipe: 'jual', nomor: '6/6',
       pita: 'Semuanya ada',
       judul: 'Sembilan bahasa, satu aplikasi.',
-      isi: 'Inggris, Jepang, Korea, Mandarin, Arab, Jerman, Prancis, Spanyol, Rusia — beserta ujian resmi masing-masing. Rp299.000 sekali bayar.' }],
+      isi: 'Inggris, Jepang, Korea, Mandarin, Arab, Jerman, Prancis, Spanyol, Rusia — beserta ujian resmi masing-masing. Rp199.000 sekali bayar.' }],
   caption: `Kalau tujuanmu bekerja atau menetap di luar negeri, pilih bahasanya berdasarkan tujuan — bukan berdasarkan mana yang terdengar paling keren.
 
 🇯🇵 Jepang — JLPT N2. Kebutuhan tenaga tinggi di perawatan, konstruksi, manufaktur.
@@ -217,9 +217,9 @@ Dan itu masalah jadwal, bukan masalah bakat. 30 menit sehari bisa dicari.`,
 { hari: 23, slot: 4, jenis: 'tunggal', nama: 'jual-9-bahasa',
   gambar: [{ tipe: 'jual',
     pita: 'Paket lengkap',
-    judul: 'Sembilan bahasa <span class="emas">Rp299.000.</span>',
+    judul: 'Sembilan bahasa <span class="emas">Rp199.000.</span>',
     isi: 'Inggris · Jepang · Korea · Mandarin · Arab · Jerman · Prancis · Spanyol · Rusia. Sekali bayar, tanpa perpanjangan, tanpa bahasa yang dijual terpisah.' }],
-  caption: `Sembilan bahasa, satu kali bayar Rp299.000:
+  caption: `Sembilan bahasa, satu kali bayar Rp199.000:
 
 🇬🇧 Inggris — 44 unit CEFR A1–C2
 🇯🇵 Jepang — hiragana, katakana, kanji
@@ -344,7 +344,7 @@ Kita menaruh keterangan waktu di depan, jadi urutan kalimat kita janggal.
 
 Kesalahan yang dipahami sebabnya tidak terulang. Itu bedanya.
 
-Rp199.000 sekali bayar. sankalingogo.com`,
+Rp149.000 sekali bayar. sankalingogo.com`,
   tagar: t('jual','umum') },
 
 /* ══ HARI 25 ═════════════════════════════════════════════════════ */
@@ -408,7 +408,7 @@ Kebalikan dari bahasa Inggris.`,
     { tipe: 'jual', nomor: '6/6',
       pita: 'Empat-empatnya ada',
       judul: 'Jerman, Prancis, Spanyol, Rusia.',
-      isi: 'Lengkap dengan ujian resminya — Goethe, DELF, DELE, TORFL. Termasuk dalam paket sembilan bahasa Rp299.000.' }],
+      isi: 'Lengkap dengan ujian resminya — Goethe, DELF, DELE, TORFL. Termasuk dalam paket sembilan bahasa Rp199.000.' }],
   caption: `Bahasa Eropa mana yang paling mudah untuk penutur Indonesia? Jawabannya bukan bahasa Inggris.
 
 🇪🇸 Spanyol — paling ramah. Dibaca hampir persis seperti ditulis, dan vokalnya lima seperti bahasa kita.
@@ -460,7 +460,7 @@ Yang benar-benar menghambat pemelajar: bentuk yang berubah, dan tidak bisa diteb
 
 9.052 entri di SankaLingo GO memuat bentuk-bentuk ini, masing-masing dengan tombol suaranya sendiri. Sekitar seribu kata per bahasa, dipilih yang paling sering dipakai.
 
-Rp299.000 untuk sembilan bahasa. sankalingogo.com`,
+Rp199.000 untuk sembilan bahasa. sankalingogo.com`,
   tagar: t('jual','umum') },
 
 /* ══ HARI 26 ═════════════════════════════════════════════════════ */
@@ -579,7 +579,7 @@ SankaLingo GO dibuka lewat peramban, lalu bisa dipasang ke layar utama HP sepert
 
 Buka sankalingogo.com dari HP-mu, dan pilih "Tambahkan ke Layar Utama".
 
-Rp199.000 sekali bayar.`,
+Rp149.000 sekali bayar.`,
   tagar: t('jual','umum') },
 
 /* ══ HARI 27 ═════════════════════════════════════════════════════ */
@@ -686,7 +686,7 @@ Mulai dari satu. Selesaikan sampai terasa berguna. Lalu kalau setahun lagi peker
 
 Ini sengaja dirancang begitu, karena hidup orang berubah. Yang hari ini butuh Inggris untuk kerja, tiga tahun lagi mungkin butuh Jepang untuk pindah.
 
-Rp199.000 untuk lima bahasa. Rp299.000 untuk sembilan.
+Rp149.000 untuk lima bahasa. Rp199.000 untuk sembilan.
 
 sankalingogo.com`,
   tagar: t('jual','umum') },
@@ -801,7 +801,7 @@ Itu bagian yang butuh sistem, bukan unggahan.
 
 9.052 entri kamus · 326 pelajaran · 767 latihan · 10 simulasi ujian · 9 bahasa.
 
-Rp199.000 untuk lima. Rp299.000 untuk sembilan. Sekali bayar, selamanya.
+Rp149.000 untuk lima. Rp199.000 untuk sembilan. Sekali bayar, selamanya.
 
 sankalingogo.com`,
   tagar: t('jual','umum') },

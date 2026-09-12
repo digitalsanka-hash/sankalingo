@@ -98,7 +98,7 @@ Termasuk aturan nilai minimum per bagian — yang membuat banyak orang gagal mes
 
 Soalnya ditulis sendiri, bukan bocoran soal asli. Yang ditiru formatnya.
 
-Rp199.000 sekali bayar. sankalingogo.com
+Rp149.000 sekali bayar. sankalingogo.com
 ```
 
 **Tagar:**

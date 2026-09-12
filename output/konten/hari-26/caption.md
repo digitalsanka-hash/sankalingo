@@ -109,7 +109,7 @@ SankaLingo GO dibuka lewat peramban, lalu bisa dipasang ke layar utama HP sepert
 
 Buka sankalingogo.com dari HP-mu, dan pilih "Tambahkan ke Layar Utama".
 
-Rp199.000 sekali bayar.
+Rp149.000 sekali bayar.
 ```
 
 **Tagar:**

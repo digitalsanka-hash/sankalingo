@@ -99,7 +99,7 @@ Empat puluh empat unit, tiga ratus dua puluh enam pelajaran berurutan.
 Sebelas simulasi ujian di dalamnya: IELTS, TOEFL, TOEIC, JLPT.
 Semua dibuka dari HP, kapan saja. Tiga puluh menit sehari sudah cukup.
 
-Seratus sembilan puluh sembilan ribu. Sekali bayar, bukan langganan.
+Seratus empat puluh sembilan ribu. Sekali bayar, bukan langganan.
 sankalingogo.com
 ```
 
@@ -113,7 +113,7 @@ sankalingogo.com
 | 0:31–0:45 | **DEMO D1 · Suara** | Kartu kamus, tombol suara ditekan tiga kali berturut-turut | `tiap bentuk ada suaranya` |
 | 0:45–1:00 | **DEMO D3 · Latihan** | Jawaban salah dipilih, kotak penjelasan terbuka | — |
 | 1:00–1:09 | **DEMO D4 + D6** | Peta unit digulir, potong ke simulasi ujian | `326 pelajaran · 11 simulasi` |
-| 1:09–1:15 | CTA | Tombol | `Rp199.000 · sekali bayar` |
+| 1:09–1:15 | CTA | Tombol | `Rp149.000 · sekali bayar` |
 
 ---
 
@@ -131,9 +131,9 @@ Sabtu kemarin habis seratus ribu buat kopi dan makan.
 Besoknya tidak ada yang tersisa. Tidak apa-apa, semua orang begitu.
 Tapi coba bandingkan sebentar.
 
-Seratus sembilan puluh sembilan ribu, sekali bayar, lima bahasa.
-Dua ratus sembilan puluh sembilan ribu untuk sembilan bahasa.
-Itu sekitar empat puluh ribu per bahasa. Sekali seumur hidup.
+Seratus empat puluh sembilan ribu, sekali bayar, lima bahasa.
+Seratus sembilan puluh sembilan ribu untuk sembilan bahasa.
+Itu sekitar tiga puluh ribu per bahasa. Sekali seumur hidup.
 
 Dan yang bikin angka ini masuk akal bukan murahnya.
 Tapi tidak adanya lanjutan.
@@ -155,7 +155,7 @@ sankalingogo.com
 |---|---|---|---|
 | 0:00–0:06 | Hook | Meja kafe, gelas kosong | `Habis semalam.` |
 | 0:06–0:20 | Banding | Struk kafe → potong ke layar HP | — |
-| 0:20–0:33 | Harga | Dua kartu harga bersebelahan | `Rp199.000 / Rp299.000` |
+| 0:20–0:33 | Harga | Dua kartu harga bersebelahan | `Rp149.000 / Rp199.000` |
 | 0:33–0:47 | Pembeda | Tiga baris "tidak ada" muncul satu per satu | tiga baris itu |
 | 0:47–0:56 | Fleksibel | Kalender melompat setahun, aplikasi tetap terbuka | — |
 | 0:56–1:00 | CTA | Tombol | `sankalingogo.com` |
@@ -194,7 +194,7 @@ Hiragana. Katakana. Hangeul. Kanji. Hanzi. Huruf Kiril. Sampai huruf hijaiyah.
 Setelah aksaranya duduk, pelajarannya menyambung berurutan.
 Sampai simulasi TOPIK, JLPT, dan HSK — lengkap dengan ambang nilai tiap bagiannya.
 
-Mulai seratus sembilan puluh sembilan ribu. Sekali bayar, selamanya.
+Mulai seratus empat puluh sembilan ribu. Sekali bayar, selamanya.
 sankalingogo.com
 ```
 
@@ -208,7 +208,7 @@ sankalingogo.com
 | 0:32–1:00 | **DEMO D2 · Menulis** | Goresan beranimasi bernomor → jari menelusuri → nilai keluar → satu percobaan salah arah diulang | `Ditelusuri. Dinilai.` |
 | 1:00–1:07 | Cakupan | Tujuh aksara berganti cepat layar penuh | nama aksara mengikuti suara |
 | 1:07–1:14 | **DEMO D6 · Ujian** | Peta unit → simulasi berjalan → nilai per bagian | `TOPIK · JLPT · HSK` |
-| 1:14–1:20 | CTA | Tombol | `Rp199.000 · sekali bayar` |
+| 1:14–1:20 | CTA | Tombol | `Rp149.000 · sekali bayar` |
 
 > Bagian menulis adalah bagian terkuat iklan ini — 28 detik, sepertiga
 > durasinya. Jangan dipotong jadi lima detik. Sertakan satu percobaan
@@ -257,7 +257,7 @@ Kamu selalu tahu sedang di mana dan apa berikutnya.
 Semua dibuka dari HP, kapan saja. Tiga puluh menit sehari sudah cukup.
 Berhenti kapan saja, lanjut kapan saja. Akunmu tidak hilang.
 
-Seratus sembilan puluh sembilan ribu. Sekali bayar, bukan langganan.
+Seratus empat puluh sembilan ribu. Sekali bayar, bukan langganan.
 Dan tidak akan basi seperti keahlian yang lain.
 Setahun itu akan lewat dengan atau tanpa kamu memutuskan.
 
@@ -276,7 +276,7 @@ sankalingogo.com
 | 1:00–1:15 | **DEMO D3 · Latihan** | Jawaban salah, kotak penjelasan terbuka | — |
 | 1:15–1:32 | **DEMO D5 · Kartu ulang** | Layar jatuh tempo, kartu dinilai, jadwal berikutnya muncul | `dijadwalkan otomatis` |
 | 1:32–1:42 | **DEMO D4 · Jalur** | Peta 44 unit digulir | `326 pelajaran berurutan` |
-| 1:42–1:50 | CTA | HP di tangan → tombol | `Rp199.000 sekali bayar` |
+| 1:42–1:50 | CTA | HP di tangan → tombol | `Rp149.000 sekali bayar` |
 
 ---
 
@@ -310,7 +310,7 @@ Karena JLPT dan HSK menguji karakter, dan karakter tidak bisa dihafal dari melih
 
 Latihannya pun menjelaskan kenapa kamu salah, bukan cuma bahwa kamu salah.
 
-Seratus sembilan puluh sembilan ribu, sekali bayar.
+Seratus empat puluh sembilan ribu, sekali bayar.
 Ujiannya boleh diulang nanti. Kemampuannya tidak basi.
 sankalingogo.com
 ```
@@ -324,7 +324,7 @@ sankalingogo.com
 | 0:24–0:32 | Harapan | Urutan langkah dibalik di layar | `Bahasa duluan` |
 | 0:32–0:50 | **DEMO D6 · Ujian** | Sepuluh nama ujian ditumpuk → simulasi berjalan → nilai per bagian | daftar ujian |
 | 0:50–1:04 | **DEMO D2 · Menulis** | Goresan kanji beranimasi → jari menelusuri → nilai | `Ditelusuri. Dinilai.` |
-| 1:04–1:10 | CTA | Tombol | `Rp199.000 · sekali bayar` |
+| 1:04–1:10 | CTA | Tombol | `Rp149.000 · sekali bayar` |
 
 ---
 
@@ -368,7 +368,7 @@ Kamu tidak perlu mengingat kapan waktunya mengulang.
 Tiga puluh menit sehari, dibuka dari HP.
 Berhenti sebulan, balik lagi. Riwayat belajarmu masih ada.
 
-Seratus sembilan puluh sembilan ribu. Sekali bayar, selamanya.
+Seratus empat puluh sembilan ribu. Sekali bayar, selamanya.
 sankalingogo.com
 ```
 
@@ -383,7 +383,7 @@ sankalingogo.com
 | 0:52–1:08 | **DEMO D2 · Menulis** | Goresan beranimasi → jari menelusuri → salah → diulang → benar | `Ditelusuri. Dinilai.` |
 | 1:08–1:26 | **DEMO D3 · Latihan** | Jawaban salah, kotak penjelasan terbuka | `767 latihan` |
 | 1:26–1:36 | **DEMO D5 · Kartu ulang** | Layar jatuh tempo, jadwal berikutnya muncul | `dijadwalkan otomatis` |
-| 1:36–1:40 | CTA | Kalender melompat, aplikasi tetap terbuka → tombol | `Rp199.000 sekali bayar` |
+| 1:36–1:40 | CTA | Kalender melompat, aplikasi tetap terbuka → tombol | `Rp149.000 sekali bayar` |
 
 ---
 
@@ -413,7 +413,7 @@ Semua dibuka dari HP, tanpa unduh dari toko aplikasi. Tidak ada langganan.
 Mulai dari satu bahasa yang kamu butuhkan sekarang.
 Yang delapan lagi menunggu, dan tidak perlu beli apa-apa lagi.
 
-Dua ratus sembilan puluh sembilan ribu untuk sembilannya.
+Seratus sembilan puluh sembilan ribu untuk sembilannya.
 sankalingogo.com
 ```
 
@@ -426,7 +426,7 @@ sankalingogo.com
 | 0:13–0:24 | **DEMO D1 · Suara** | Kartu kamus, tombol suara ditekan tiga kali | `9.052 entri` |
 | 0:24–0:33 | **DEMO D2 · Menulis** | Goresan → jari menelusuri → nilai | `Ditelusuri. Dinilai.` |
 | 0:33–0:44 | Isi lain | Peta unit → simulasi ujian | `326 pelajaran · 11 simulasi` |
-| 0:44–0:50 | CTA | Tombol | `9 bahasa · Rp299.000 · sekali bayar` |
+| 0:44–0:50 | CTA | Tombol | `9 bahasa · Rp199.000 · sekali bayar` |
 
 ---
 
@@ -445,7 +445,7 @@ sankalingogo.com
   membedakan demo dari daftar fitur.
 - **Angka dieja penuh** di naskah ("seratus sembilan puluh sembilan
   ribu") karena pengisi suara membaca "199rb" dengan tempo
-  berbeda-beda. Yang di layar tetap ditulis `Rp199.000`.
+  berbeda-beda. Yang di layar tetap ditulis `Rp149.000`.
 - **Sebagian besar orang menonton tanpa suara.** Takarir wajib, dan
   kalimat hook harus muncul sebagai teks sejak detik nol.
 - **Jangan menambah klaim** di luar naskah ini. Tidak ada jumlah

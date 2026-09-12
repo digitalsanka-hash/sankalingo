@@ -68,6 +68,11 @@ for (const pekan of dipakai) {
         writeFileSync(berkasHtml, html, 'utf8');
 
         execFileSync(CHROME, [
+          /* Profil sendiri, bukan profil bawaan. Kalau Chrome biasa
+             sedang terbuka, profil bawaannya terkunci dan proses
+             headless menggantung tanpa pesan apa pun — gambar tidak
+             pernah ditulis dan perintahnya tidak pernah selesai. */
+          `--user-data-dir=${join(SEMENTARA, '_profil')}`,
           '--headless=old', '--disable-gpu', '--hide-scrollbars',
           '--window-size=1080,1350', '--virtual-time-budget=9000',
           `--screenshot=${join(folder, nama + '.png')}`,

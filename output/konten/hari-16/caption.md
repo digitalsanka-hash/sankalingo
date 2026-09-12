@@ -103,7 +103,7 @@ Di SankaLingo GO, tiap bentuk kata punya tombol suaranya sendiri. Bukan cuma kat
 
 Empat bentuk, empat tombol. Termasuk yang tidak beraturan — yang justru paling sering dipakai.
 
-Rp199.000 sekali bayar. sankalingogo.com
+Rp149.000 sekali bayar. sankalingogo.com
 ```
 
 **Tagar:**

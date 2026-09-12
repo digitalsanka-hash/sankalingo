@@ -110,7 +110,7 @@ Karena kebutuhanmu berubah. Hari ini Inggris untuk kerja. Tahun depan mungkin Je
 
 Kalau tiap bahasa harus beli lagi, kamu akan menunda sampai "nanti kalau sudah butuh" — dan waktu butuh itu datang, kamu mulai dari nol lagi.
 
-Rp199.000 sekali. Lima bahasa. Mau sembilan? Rp299.000, selisihnya bisa dibayar kapan saja.
+Rp149.000 sekali. Lima bahasa. Mau sembilan? Rp199.000, selisihnya bisa dibayar kapan saja.
 
 Link di bio.`,
   tagar: t('jual','umum') },
@@ -195,15 +195,15 @@ Kamu masih sering salah yang mana? 👇`,
     pita: 'Hitung ulang sebentar',
     judul: 'Langganan berhenti. <span class="emas">Bahasa tidak.</span>',
     kiri: { judul: 'Langganan bulanan', isi: 'Bayar tiap bulan. Berhenti membayar, akses hilang — padahal bahasa butuh <b>tahunan</b>, bukan mingguan.', cap: 'terus menumpuk' },
-    kanan: { judul: 'SankaLingo GO', isi: 'Rp199.000 sekali. Kodenya menempel di akunmu <b>tanpa tanggal kedaluwarsa</b>.', cap: 'bayar sekali, selesai' },
-    kaki: 'Sekitar Rp40.000 per bahasa.' }],
+    kanan: { judul: 'SankaLingo GO', isi: 'Rp149.000 sekali. Kodenya menempel di akunmu <b>tanpa tanggal kedaluwarsa</b>.', cap: 'bayar sekali, selesai' },
+    kaki: 'Sekitar Rp30.000 per bahasa.' }],
   caption: `Kalau kamu pernah berlangganan aplikasi bahasa lalu berhenti setelah dua bulan, kamu tidak sendirian — dan itu bukan soal niat.
 
 Langganan menghukum orang yang belajarnya tidak lurus. Padahal belajar bahasa memang tidak lurus: ada bulan sibuk, ada bulan libur, ada bulan hilang semangat lalu kembali lagi.
 
 Bayar sekali menghapus hukuman itu. Berhenti tiga bulan, kembali lagi, semuanya masih di tempatnya.
 
-Rp199.000 untuk 5 bahasa. Rp299.000 untuk 9.
+Rp149.000 untuk 5 bahasa. Rp199.000 untuk 9.
 Link di bio.`,
   tagar: t('jual','umum') },
 
@@ -296,16 +296,16 @@ Kalimat ini sering muncul di wawancara kerja dan tes IELTS speaking. Simpan.`,
   gambar: [{ tipe: 'banding', netral: true,
     pita: 'Dua paket',
     judul: 'Lima bahasa, <span class="emas">atau sembilan?</span>',
-    kiri: { judul: 'Esensi · Rp199.000', isi: 'Inggris, Jepang, Korea, Mandarin, Arab.<br><b>≈ Rp40.000 per bahasa.</b>', cap: 'yang paling dicari' },
-    kanan: { judul: 'Lengkap · Rp299.000', isi: 'Ditambah Jerman, Prancis, Spanyol, Rusia.<br><b>≈ Rp33.000 per bahasa.</b>', cap: 'plus bahasa berikutnya, gratis' },
+    kiri: { judul: 'Esensi · Rp149.000', isi: 'Inggris, Jepang, Korea, Mandarin, Arab.<br><b>≈ Rp30.000 per bahasa.</b>', cap: 'yang paling dicari' },
+    kanan: { judul: 'Lengkap · Rp199.000', isi: 'Ditambah Jerman, Prancis, Spanyol, Rusia.<br><b>≈ Rp22.000 per bahasa.</b>', cap: 'plus bahasa berikutnya, gratis' },
     kaki: 'Ambil Esensi dulu? Selisihnya bisa dibayar kapan saja.' }],
   caption: `Sering ditanya: ambil yang mana?
 
-Esensi (Rp199.000) — lima bahasa yang paling banyak dicari di Indonesia: Inggris, Jepang, Korea, Mandarin, Arab.
+Esensi (Rp149.000) — lima bahasa yang paling banyak dicari di Indonesia: Inggris, Jepang, Korea, Mandarin, Arab.
 
-Lengkap (Rp299.000) — sembilan bahasa, plus bahasa apa pun yang ditambahkan nanti tanpa bayar lagi.
+Lengkap (Rp199.000) — sembilan bahasa, plus bahasa apa pun yang ditambahkan nanti tanpa bayar lagi.
 
-Selisihnya Rp100.000 untuk empat bahasa Eropa. Kalau kamu belum yakin butuh Jerman atau Prancis, ambil Esensi dulu — nanti tinggal bayar selisihnya, dan kemajuan belajarmu tetap utuh.
+Selisihnya Rp50.000 untuk empat bahasa Eropa. Kalau kamu belum yakin butuh Jerman atau Prancis, ambil Esensi dulu — nanti tinggal bayar selisihnya, dan kemajuan belajarmu tetap utuh.
 
 Dua-duanya bayar sekali. Tidak ada tagihan bulanan.
 
@@ -407,7 +407,7 @@ Yang membedakan dari kamus biasa: tiap entri tidak berhenti di arti.
 
 Empat bentuk, masing-masing dengan tombol suaranya sendiri. Karena yang bikin orang mandek bukan tidak tahu artinya, tapi tidak tahu bentuk mana yang dipakai kapan.
 
-Rp199.000 sekali bayar. Link di bio.`,
+Rp149.000 sekali bayar. Link di bio.`,
   tagar: TAGAR.jual + ' ' + TAGAR.umum },
 
 /* ══ HARI 5 ══════════════════════════════════════════════════════ */
@@ -507,7 +507,7 @@ SankaLingo GO menyimpan seluruh materinya di perangkatmu setelah dibuka sekali. 
 
 Begitu tersambung lagi, kemajuanmu ikut berpindah ke HP atau laptop lain.
 
-Rp199.000 sekali bayar, akses selamanya. Link di bio.`,
+Rp149.000 sekali bayar, akses selamanya. Link di bio.`,
   tagar: TAGAR.jual + ' ' + TAGAR.umum },
 
 /* ══ HARI 6 ══════════════════════════════════════════════════════ */
@@ -616,7 +616,7 @@ Di aplikasinya ada simulasi sepuluh ujian resmi: IELTS, TOEFL, TOEIC, JLPT, TOPI
 
 Soal-soalnya ditulis sendiri — bukan bocoran soal asli, karena soal ujian resmi berhak cipta.
 
-Rp199.000 sekali. Link di bio.`,
+Rp149.000 sekali. Link di bio.`,
   tagar: '#ielts #toefl #jlpt #topik #hsk ' + TAGAR.umum },
 
 /* ══ HARI 7 ══════════════════════════════════════════════════════ */
@@ -715,7 +715,7 @@ Itu memang niatnya. Kalau tujuh hari saja sudah berguna, kamu jadi tahu isi apli
 
 Yang di dalam: 326 pelajaran berurutan A1–C2, 9.052 entri kamus sembilan bahasa, 767 latihan yang masing-masing menjelaskan kebiasaan berbahasa Indonesia mana yang menyeretmu, dan sepuluh simulasi ujian resmi.
 
-Rp199.000 untuk 5 bahasa. Rp299.000 untuk 9. Sekali bayar, dipakai selamanya.
+Rp149.000 untuk 5 bahasa. Rp199.000 untuk 9. Sekali bayar, dipakai selamanya.
 
 sankalingogo.com — link di bio.`,
   tagar: TAGAR.jual + ' ' + TAGAR.umum },

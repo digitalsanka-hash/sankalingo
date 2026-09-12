@@ -103,7 +103,7 @@ Di aplikasinya ada simulasi sepuluh ujian resmi: IELTS, TOEFL, TOEIC, JLPT, TOPI
 
 Soal-soalnya ditulis sendiri — bukan bocoran soal asli, karena soal ujian resmi berhak cipta.
 
-Rp199.000 sekali. Link di bio.
+Rp149.000 sekali. Link di bio.
 ```
 
 **Tagar:**

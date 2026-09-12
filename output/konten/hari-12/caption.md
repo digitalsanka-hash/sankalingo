@@ -106,7 +106,7 @@ Berhenti tiga bulan, akses hilang. Mau lanjut? Bayar lagi dari awal.
 
 Di sini kodenya menempel pada akunmu tanpa tanggal kedaluwarsa. Berhenti setahun, kembali, semuanya masih di tempatnya — termasuk kemajuan belajarmu.
 
-Rp199.000 sekali. Itu saja.
+Rp149.000 sekali. Itu saja.
 
 sankalingogo.com
 ```

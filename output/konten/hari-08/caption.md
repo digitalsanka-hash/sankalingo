@@ -93,7 +93,7 @@ Kamu ulangi sampai hafal jawabannya — bukan sampai paham polanya. Enam bulan k
 
 Yang diperbaiki bukan jawabanmu. Kebiasaannya.
 
-Rp199.000 sekali bayar. sankalingogo.com
+Rp149.000 sekali bayar. sankalingogo.com
 ```
 
 **Tagar:**

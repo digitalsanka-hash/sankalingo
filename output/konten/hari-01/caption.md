@@ -89,7 +89,7 @@ Karena kebutuhanmu berubah. Hari ini Inggris untuk kerja. Tahun depan mungkin Je
 
 Kalau tiap bahasa harus beli lagi, kamu akan menunda sampai "nanti kalau sudah butuh" — dan waktu butuh itu datang, kamu mulai dari nol lagi.
 
-Rp199.000 sekali. Lima bahasa. Mau sembilan? Rp299.000, selisihnya bisa dibayar kapan saja.
+Rp149.000 sekali. Lima bahasa. Mau sembilan? Rp199.000, selisihnya bisa dibayar kapan saja.
 
 Link di bio.
 ```

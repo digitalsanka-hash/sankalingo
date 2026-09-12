@@ -92,8 +92,8 @@ Itu sebabnya kartu ulang terjadwal ada di aplikasi ini — supaya kamu tidak per
 **Caption:**
 
 ```
-Rp199.000 dibagi lima bahasa = sekitar Rp40.000 per bahasa.
-Rp299.000 dibagi sembilan = sekitar Rp33.000 per bahasa.
+Rp149.000 dibagi lima bahasa = sekitar Rp30.000 per bahasa.
+Rp199.000 dibagi sembilan = sekitar Rp22.000 per bahasa.
 
 Sebagai perbandingan: satu kali makan di luar.
 

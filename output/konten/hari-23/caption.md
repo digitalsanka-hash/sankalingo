@@ -92,7 +92,7 @@ Dan itu masalah jadwal, bukan masalah bakat. 30 menit sehari bisa dicari.
 **Caption:**
 
 ```
-Sembilan bahasa, satu kali bayar Rp299.000:
+Sembilan bahasa, satu kali bayar Rp199.000:
 
 🇬🇧 Inggris — 44 unit CEFR A1–C2
 🇯🇵 Jepang — hiragana, katakana, kanji

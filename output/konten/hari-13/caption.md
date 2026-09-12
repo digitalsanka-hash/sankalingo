@@ -96,7 +96,7 @@ Banyak yang nilai membacanya tinggi, menyimaknya rendah, lalu kaget waktu hasiln
 
 Simulasi di SankaLingo GO meniru format dan ambang itu, termasuk aturan minimumnya — jadi kamu tahu bagian mana yang perlu diselamatkan sebelum mendaftar.
 
-Rp199.000 sekali bayar. sankalingogo.com
+Rp149.000 sekali bayar. sankalingogo.com
 ```
 
 **Tagar:**

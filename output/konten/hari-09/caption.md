@@ -93,7 +93,7 @@ Terlalu cepat, kamu buang waktu mengulang yang masih ingat. Terlalu lambat, kamu
 
 SankaLingo GO menjadwalkannya untukmu, per kata, berdasarkan seberapa sering kamu benar.
 
-Rp199.000 sekali bayar, akses selamanya. sankalingogo.com
+Rp149.000 sekali bayar, akses selamanya. sankalingogo.com
 ```
 
 **Tagar:**

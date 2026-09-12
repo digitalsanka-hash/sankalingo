@@ -96,7 +96,7 @@ SankaLingo GO menyimpan seluruh materinya di perangkatmu setelah dibuka sekali. 
 
 Begitu tersambung lagi, kemajuanmu ikut berpindah ke HP atau laptop lain.
 
-Rp199.000 sekali bayar, akses selamanya. Link di bio.
+Rp149.000 sekali bayar, akses selamanya. Link di bio.
 ```
 
 **Tagar:**

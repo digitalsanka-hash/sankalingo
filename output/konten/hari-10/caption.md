@@ -97,7 +97,7 @@ Dan kalau HP-mu hilang atau ganti baru, semuanya masih ada.
 
 Ini yang membedakan aplikasi yang dipakai bertahun-tahun dengan yang dipakai dua minggu lalu ditinggalkan.
 
-Rp199.000 sekali bayar. sankalingogo.com
+Rp149.000 sekali bayar. sankalingogo.com
 ```
 
 **Tagar:**

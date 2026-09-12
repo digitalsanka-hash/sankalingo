@@ -103,7 +103,7 @@ Kita menaruh keterangan waktu di depan, jadi urutan kalimat kita janggal.
 
 Kesalahan yang dipahami sebabnya tidak terulang. Itu bedanya.
 
-Rp199.000 sekali bayar. sankalingogo.com
+Rp149.000 sekali bayar. sankalingogo.com
 ```
 
 **Tagar:**

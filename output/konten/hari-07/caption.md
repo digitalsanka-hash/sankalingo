@@ -97,7 +97,7 @@ Itu memang niatnya. Kalau tujuh hari saja sudah berguna, kamu jadi tahu isi apli
 
 Yang di dalam: 326 pelajaran berurutan A1–C2, 9.052 entri kamus sembilan bahasa, 767 latihan yang masing-masing menjelaskan kebiasaan berbahasa Indonesia mana yang menyeretmu, dan sepuluh simulasi ujian resmi.
 
-Rp199.000 untuk 5 bahasa. Rp299.000 untuk 9. Sekali bayar, dipakai selamanya.
+Rp149.000 untuk 5 bahasa. Rp199.000 untuk 9. Sekali bayar, dipakai selamanya.
 
 sankalingogo.com — link di bio.
 ```

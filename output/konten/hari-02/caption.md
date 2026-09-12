@@ -90,7 +90,7 @@ Langganan menghukum orang yang belajarnya tidak lurus. Padahal belajar bahasa me
 
 Bayar sekali menghapus hukuman itu. Berhenti tiga bulan, kembali lagi, semuanya masih di tempatnya.
 
-Rp199.000 untuk 5 bahasa. Rp299.000 untuk 9.
+Rp149.000 untuk 5 bahasa. Rp199.000 untuk 9.
 Link di bio.
 ```
 

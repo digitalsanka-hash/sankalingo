@@ -44,8 +44,8 @@ Kalau yang kemarin-kemarin berguna, ini isi lengkapnya:
 
 Sembilan bahasa: Inggris, Jepang, Korea, Mandarin, Arab, Jerman, Prancis, Spanyol, Rusia.
 
-Rp199.000 untuk lima bahasa.
-Rp299.000 untuk sembilan.
+Rp149.000 untuk lima bahasa.
+Rp199.000 untuk sembilan.
 
 Sekali bayar. Tidak ada langganan, tidak ada level tambahan, tidak ada bahasa yang dikunci belakangan.
 
@@ -109,7 +109,7 @@ Pintu-pintu itu tidak terlihat sekarang, karena pintu yang tertutup memang tidak
 
 Itu sebabnya bahasa termasuk keterampilan yang paling awet nilainya: ia tidak menyelesaikan satu masalah, ia membuka satu kategori kemungkinan.
 
-Rp199.000 untuk lima bahasa. Rp299.000 untuk sembilan. Sekali bayar, selamanya.
+Rp149.000 untuk lima bahasa. Rp199.000 untuk sembilan. Sekali bayar, selamanya.
 
 sankalingogo.com
 

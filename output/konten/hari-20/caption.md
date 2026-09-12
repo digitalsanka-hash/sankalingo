@@ -96,7 +96,7 @@ Bukan karena otaknya berubah. Karena dia sudah tahu caranya belajar bahasa: meng
 
 Itu sebabnya punya sembilan bahasa sekaligus masuk akal — bukan supaya kamu belajar sembilan-sembilannya sekarang, tapi supaya waktu bahasa kedua terasa memanggil, tidak ada yang perlu dibeli lagi.
 
-Rp199.000 untuk lima. Rp299.000 untuk sembilan.
+Rp149.000 untuk lima. Rp199.000 untuk sembilan.
 
 sankalingogo.com
 ```

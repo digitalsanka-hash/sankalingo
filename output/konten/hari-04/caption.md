@@ -99,7 +99,7 @@ Yang membedakan dari kamus biasa: tiap entri tidak berhenti di arti.
 
 Empat bentuk, masing-masing dengan tombol suaranya sendiri. Karena yang bikin orang mandek bukan tidak tahu artinya, tapi tidak tahu bentuk mana yang dipakai kapan.
 
-Rp199.000 sekali bayar. Link di bio.
+Rp149.000 sekali bayar. Link di bio.
 ```
 
 **Tagar:**

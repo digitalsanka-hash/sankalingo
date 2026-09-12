@@ -76,7 +76,7 @@ Besok hari terakhir rangkaian ini.`,
     { tipe: 'jual', nomor: '7/7',
       pita: 'Semuanya tersusun',
       judul: 'Sembilan bahasa, satu kali bayar.',
-      isi: '9.052 entri kamus · 326 pelajaran berurutan · 767 latihan yang menjelaskan sebabnya · 10 simulasi ujian resmi. Rp199.000 untuk lima bahasa, Rp299.000 untuk sembilan.' }],
+      isi: '9.052 entri kamus · 326 pelajaran berurutan · 767 latihan yang menjelaskan sebabnya · 10 simulasi ujian resmi. Rp149.000 untuk lima bahasa, Rp199.000 untuk sembilan.' }],
   caption: `Tiga puluh hari dirangkum jadi tujuh slide. Kalau kamu baru menemukan akun ini hari ini, mulai dari sini.
 
 Slide 2 — aksara: yang terlihat paling mustahil ternyata bagian paling cepat. Hangeul bisa dibaca dalam satu jam.
@@ -130,7 +130,7 @@ Setahun itu akan lewat dengan atau tanpa kamu memutuskan apa pun. Itu bagian yan
 
 📝 10 simulasi ujian — IELTS, TOEFL, TOEIC, JLPT, TOPIK, HSK, Goethe, DELF, DELE, TORFL. Format dan penilaiannya ditiru; soalnya ditulis sendiri.
 
-Rp199.000 untuk lima bahasa. Rp299.000 untuk sembilan.
+Rp149.000 untuk lima bahasa. Rp199.000 untuk sembilan.
 
 Sekali bayar. sankalingogo.com`,
   tagar: t('jual','umum') },
@@ -178,8 +178,8 @@ Terima kasih sudah mengikuti sampai hari ini. 🙏`,
     { tipe: 'banding', nomor: '4/6', netral: true,
       pita: 'Dua pilihan',
       judul: 'Pilih yang mana',
-      kiri: { judul: 'Lima bahasa', isi: '<b>Rp199.000</b><br>≈ Rp40.000 per bahasa', cap: 'sekali bayar' },
-      kanan: { judul: 'Sembilan bahasa', isi: '<b>Rp299.000</b><br>≈ Rp33.000 per bahasa', cap: 'sekali bayar' },
+      kiri: { judul: 'Lima bahasa', isi: '<b>Rp149.000</b><br>≈ Rp30.000 per bahasa', cap: 'sekali bayar' },
+      kanan: { judul: 'Sembilan bahasa', isi: '<b>Rp199.000</b><br>≈ Rp22.000 per bahasa', cap: 'sekali bayar' },
       geser: 'geser →' },
     { tipe: 'hook', nomor: '5/6', glif: '∞',
       pita: 'Yang membuatnya berbeda',
@@ -201,8 +201,8 @@ Kalau yang kemarin-kemarin berguna, ini isi lengkapnya:
 
 Sembilan bahasa: Inggris, Jepang, Korea, Mandarin, Arab, Jerman, Prancis, Spanyol, Rusia.
 
-Rp199.000 untuk lima bahasa.
-Rp299.000 untuk sembilan.
+Rp149.000 untuk lima bahasa.
+Rp199.000 untuk sembilan.
 
 Sekali bayar. Tidak ada langganan, tidak ada level tambahan, tidak ada bahasa yang dikunci belakangan.
 
@@ -239,7 +239,7 @@ sankalingogo.com`,
   gambar: [{ tipe: 'jual',
     pita: 'Penutup',
     judul: 'Bahasa <span class="emas">membuka pintu</span> yang tidak kamu tahu ada.',
-    isi: 'Pekerjaan, beasiswa, percakapan, bacaan — semuanya menunggu di balik satu keterampilan yang tidak pernah kedaluwarsa.<br><br>Rp199.000 untuk lima bahasa · Rp299.000 untuk sembilan.' }],
+    isi: 'Pekerjaan, beasiswa, percakapan, bacaan — semuanya menunggu di balik satu keterampilan yang tidak pernah kedaluwarsa.<br><br>Rp149.000 untuk lima bahasa · Rp199.000 untuk sembilan.' }],
   caption: `Bagian paling menarik dari menguasai bahasa asing bukan yang kamu rencanakan.
 
 Tapi yang muncul tanpa diduga.
@@ -250,7 +250,7 @@ Pintu-pintu itu tidak terlihat sekarang, karena pintu yang tertutup memang tidak
 
 Itu sebabnya bahasa termasuk keterampilan yang paling awet nilainya: ia tidak menyelesaikan satu masalah, ia membuka satu kategori kemungkinan.
 
-Rp199.000 untuk lima bahasa. Rp299.000 untuk sembilan. Sekali bayar, selamanya.
+Rp149.000 untuk lima bahasa. Rp199.000 untuk sembilan. Sekali bayar, selamanya.
 
 sankalingogo.com
 

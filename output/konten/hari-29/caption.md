@@ -103,7 +103,7 @@ Isi lengkap SankaLingo GO, tanpa dilebih-lebihkan:
 
 📝 10 simulasi ujian — IELTS, TOEFL, TOEIC, JLPT, TOPIK, HSK, Goethe, DELF, DELE, TORFL. Format dan penilaiannya ditiru; soalnya ditulis sendiri.
 
-Rp199.000 untuk lima bahasa. Rp299.000 untuk sembilan.
+Rp149.000 untuk lima bahasa. Rp199.000 untuk sembilan.
 
 Sekali bayar. sankalingogo.com
 ```

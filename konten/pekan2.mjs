@@ -105,7 +105,7 @@ Kamu ulangi sampai hafal jawabannya — bukan sampai paham polanya. Enam bulan k
 
 Yang diperbaiki bukan jawabanmu. Kebiasaannya.
 
-Rp199.000 sekali bayar. sankalingogo.com`,
+Rp149.000 sekali bayar. sankalingogo.com`,
   tagar: t('jual','umum') },
 
 /* ══ HARI 9 ══════════════════════════════════════════════════════ */
@@ -204,7 +204,7 @@ Terlalu cepat, kamu buang waktu mengulang yang masih ingat. Terlalu lambat, kamu
 
 SankaLingo GO menjadwalkannya untukmu, per kata, berdasarkan seberapa sering kamu benar.
 
-Rp199.000 sekali bayar, akses selamanya. sankalingogo.com`,
+Rp149.000 sekali bayar, akses selamanya. sankalingogo.com`,
   tagar: t('jual','umum') },
 
 /* ══ HARI 10 ═════════════════════════════════════════════════════ */
@@ -301,7 +301,7 @@ Dan kalau HP-mu hilang atau ganti baru, semuanya masih ada.
 
 Ini yang membedakan aplikasi yang dipakai bertahun-tahun dengan yang dipakai dua minggu lalu ditinggalkan.
 
-Rp199.000 sekali bayar. sankalingogo.com`,
+Rp149.000 sekali bayar. sankalingogo.com`,
   tagar: t('jual','umum') },
 
 /* ══ HARI 11 ═════════════════════════════════════════════════════ */
@@ -405,7 +405,7 @@ Semua angka itu bisa kamu hitung sendiri di dalam aplikasinya.
 
 Berapa cepat kamu bisa? Itu tergantung berapa sering kamu buka. Yang kami urus: begitu kamu buka, ada urutan yang jelas dan penjelasan yang masuk akal.
 
-Rp199.000 sekali bayar. sankalingogo.com`,
+Rp149.000 sekali bayar. sankalingogo.com`,
   tagar: t('jual','umum') },
 
 /* ══ HARI 12 ═════════════════════════════════════════════════════ */
@@ -511,7 +511,7 @@ Berhenti tiga bulan, akses hilang. Mau lanjut? Bayar lagi dari awal.
 
 Di sini kodenya menempel pada akunmu tanpa tanggal kedaluwarsa. Berhenti setahun, kembali, semuanya masih di tempatnya — termasuk kemajuan belajarmu.
 
-Rp199.000 sekali. Itu saja.
+Rp149.000 sekali. Itu saja.
 
 sankalingogo.com`,
   tagar: t('jual','umum') },
@@ -615,7 +615,7 @@ Banyak yang nilai membacanya tinggi, menyimaknya rendah, lalu kaget waktu hasiln
 
 Simulasi di SankaLingo GO meniru format dan ambang itu, termasuk aturan minimumnya — jadi kamu tahu bagian mana yang perlu diselamatkan sebelum mendaftar.
 
-Rp199.000 sekali bayar. sankalingogo.com`,
+Rp149.000 sekali bayar. sankalingogo.com`,
   tagar: '#ielts #toefl #jlpt #goethe #hsk ' + TAGAR.umum },
 
 /* ══ HARI 14 ═════════════════════════════════════════════════════ */
@@ -722,6 +722,6 @@ Yang tidak berhasil biasanya bukan kurang usaha — usahanya tersebar, jadi tida
 
 Yang kamu bayar di sini bukan informasinya. Informasi memang ada gratis di mana-mana. Yang kamu bayar: urutannya, penjelasan kenapa kamu salah, dan sistem yang memunculkan kata tepat sebelum kamu melupakannya.
 
-Rp199.000 sekali. sankalingogo.com`,
+Rp149.000 sekali. sankalingogo.com`,
   tagar: t('jual','umum') },
 ];

@@ -95,7 +95,7 @@ Bahasa Inggris yang kamu kuasai hari ini masih akan berguna dua puluh tahun lagi
 
 Itu sebabnya bahasa termasuk investasi paling awet yang bisa kamu beli — dan kenapa membelinya sekali seumur hidup lebih masuk akal daripada menyewanya bulanan.
 
-Rp199.000 untuk lima bahasa. Rp299.000 untuk sembilan.
+Rp149.000 untuk lima bahasa. Rp199.000 untuk sembilan.
 
 sankalingogo.com
 ```

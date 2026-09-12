@@ -106,7 +106,7 @@ Itu bagian yang butuh sistem, bukan unggahan.
 
 9.052 entri kamus · 326 pelajaran · 767 latihan · 10 simulasi ujian · 9 bahasa.
 
-Rp199.000 untuk lima. Rp299.000 untuk sembilan. Sekali bayar, selamanya.
+Rp149.000 untuk lima. Rp199.000 untuk sembilan. Sekali bayar, selamanya.
 
 sankalingogo.com
 ```

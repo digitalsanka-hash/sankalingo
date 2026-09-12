@@ -94,11 +94,11 @@ Kalimat ini sering muncul di wawancara kerja dan tes IELTS speaking. Simpan.
 ```
 Sering ditanya: ambil yang mana?
 
-Esensi (Rp199.000) — lima bahasa yang paling banyak dicari di Indonesia: Inggris, Jepang, Korea, Mandarin, Arab.
+Esensi (Rp149.000) — lima bahasa yang paling banyak dicari di Indonesia: Inggris, Jepang, Korea, Mandarin, Arab.
 
-Lengkap (Rp299.000) — sembilan bahasa, plus bahasa apa pun yang ditambahkan nanti tanpa bayar lagi.
+Lengkap (Rp199.000) — sembilan bahasa, plus bahasa apa pun yang ditambahkan nanti tanpa bayar lagi.
 
-Selisihnya Rp100.000 untuk empat bahasa Eropa. Kalau kamu belum yakin butuh Jerman atau Prancis, ambil Esensi dulu — nanti tinggal bayar selisihnya, dan kemajuan belajarmu tetap utuh.
+Selisihnya Rp50.000 untuk empat bahasa Eropa. Kalau kamu belum yakin butuh Jerman atau Prancis, ambil Esensi dulu — nanti tinggal bayar selisihnya, dan kemajuan belajarmu tetap utuh.
 
 Dua-duanya bayar sekali. Tidak ada tagihan bulanan.
 

@@ -106,7 +106,7 @@ Semua angka itu bisa kamu hitung sendiri di dalam aplikasinya.
 
 Berapa cepat kamu bisa? Itu tergantung berapa sering kamu buka. Yang kami urus: begitu kamu buka, ada urutan yang jelas dan penjelasan yang masuk akal.
 
-Rp199.000 sekali bayar. sankalingogo.com
+Rp149.000 sekali bayar. sankalingogo.com
 ```
 
 **Tagar:**
