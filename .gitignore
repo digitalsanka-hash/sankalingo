@@ -21,3 +21,7 @@ konten/_render/
 *.MOV
 *.mov
 *.MP4
+
+# Profil Chrome sementara untuk render headless — dibuat ulang tiap jalan.
+_render/
+_profil/
