@@ -98,9 +98,15 @@ console.log(`[${dmarc ? OK : ' opsi '}] DMARC di  _dmarc.${domain}`);
 if (dmarc) console.log(`         ${potong(dmarc)}`);
 else console.log('         belum ada. Boleh dilewati dulu; tambahkan nanti: v=DMARC1; p=none;');
 
-/* ── Yang tidak boleh salah: domain harus benar-benar ada ────────── */
-const apex = await coba(() => r.resolve4(domain.split('.').slice(-2).join('.')));
-if (!apex) console.log(`\n! Domain ${domain} tidak menjawab sama sekali — periksa ejaannya.`);
+/* Peringatan salah eja hanya masuk akal kalau TIDAK ADA satu pun catatan
+   yang terbaca. Sebelumnya ia bersandar pada resolve4 di apex, dan itu
+   sempat gagal sesaat pada domain yang jelas-jelas hidup — sehingga alat
+   yang gunanya memberi kepastian justru menyalakan alarm palsu tepat di
+   bawah baris yang semuanya OK. */
+if (siap === 0 && !dmarc) {
+  const apex = await coba(() => r.resolve4(domain.split('.').slice(-2).join('.')));
+  if (!apex) console.log(`\n! Domain ${domain} tidak menjawab sama sekali — periksa ejaannya.`);
+}
 
 console.log(`\nBentuk setelan: ${bentukCname ? 'CNAME' : 'TXT + MX'}`);
 console.log(`${siap} dari ${total} catatan wajib sudah terbaca.`);
