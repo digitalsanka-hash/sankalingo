@@ -151,10 +151,14 @@ serve(async (req) => {
 
         const rapi = String(kode).toUpperCase();
         const { data: baris, error: eBaca } = await db.from('kode_lisensi')
-          .select('kode, bulan_aktif, dipakai_oleh').eq('kode', rapi).maybeSingle();
+          .select('kode, bulan_aktif, terpakai, maks_pakai, dipesan_untuk')
+          .eq('kode', rapi).maybeSingle();
         if (eBaca) return jawab({ error: eBaca.message }, 500);
         if (!baris) return jawab({ error: 'Kode tidak ditemukan.' }, 404);
-        if (baris.dipakai_oleh) return jawab({ error: 'Kode ini sudah dipakai orang lain.' }, 409);
+        /* Habis dipakai ditandai hitungan, bukan kolom pemilik: satu kode
+           boleh berjatah lebih dari satu penebusan (maks_pakai). */
+        if (baris.terpakai >= baris.maks_pakai)
+          return jawab({ error: 'Kode ini sudah ditebus sampai habis jatahnya.' }, 409);
 
         /* Masa aktif boleh diubah saat mengirim — pembeli kadang
            mengambil paket yang berbeda dari batch kodenya dicetak.
