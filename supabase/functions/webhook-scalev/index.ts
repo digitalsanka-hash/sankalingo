@@ -44,6 +44,7 @@
 
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { suratKode, kirimEmail } from '../_shared/surat.ts';
 
 const jawab = (b: unknown, s = 200) =>
   new Response(JSON.stringify(b), { status: s, headers: { 'Content-Type': 'application/json' } });
@@ -73,58 +74,9 @@ async function tandaTanganSah(rahasia: string, mentah: string, kiriman: string):
   }
 }
 
-/** Isi email. Sengaja sama isinya dengan pesan manual di panel admin,
- *  supaya pembeli yang dilayani otomatis dan yang dilayani tangan
- *  membaca petunjuk yang persis sama. */
-function suratKode(kode: string, nama: string, alamatApp: string, bulan: number | null) {
-  const sapaan = nama ? `Halo ${nama}!` : 'Halo!';
-  const masa = bulan ? `berlaku ${bulan} bulan` : 'berlaku selamanya';
-  const teks = `${sapaan}
-
-Terima kasih sudah membeli SankaLingo GO. Ini kode aksesmu:
-
-${kode}
-
-Cara memakainya:
-1. Buka ${alamatApp}
-2. Pilih tab "Daftar"
-3. Isi emailmu, buat kata sandi, lalu tempel kode di atas
-4. Selesai. Masuk berikutnya cukup email + kata sandi
-
-Kode ini sekali pakai dan ${masa}.
-Ada kendala? Balas email ini.`;
-
-  const html = `<div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.6;color:#1a1a2e">
-    <p>${sapaan}</p>
-    <p>Terima kasih sudah membeli <b>SankaLingo GO</b>. Ini kode aksesmu:</p>
-    <p style="font-size:22px;font-weight:700;letter-spacing:2px;background:#f4f4fb;
-              border:1px solid #ddd;border-radius:10px;padding:14px 18px;text-align:center">${kode}</p>
-    <p><b>Cara memakainya:</b></p>
-    <ol>
-      <li>Buka <a href="${alamatApp}">${alamatApp}</a></li>
-      <li>Pilih tab <b>Daftar</b></li>
-      <li>Isi emailmu, buat kata sandi, lalu tempel kode di atas</li>
-      <li>Selesai. Masuk berikutnya cukup email + kata sandi</li>
-    </ol>
-    <p style="color:#555">Kode ini sekali pakai dan ${masa}. Ada kendala? Balas email ini.</p>
-  </div>`;
-
-  return { teks, html };
-}
-
-async function kirimEmail(ke: string, subjek: string, isi: { teks: string; html: string }) {
-  const kunci = Deno.env.get('RESEND_API_KEY');
-  const dari = Deno.env.get('RESEND_FROM');
-  if (!kunci || !dari) throw new Error('RESEND_API_KEY / RESEND_FROM belum dipasang.');
-
-  const r = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${kunci}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: dari, to: [ke], subject: subjek, text: isi.teks, html: isi.html }),
-  });
-  if (!r.ok) throw new Error(`Resend menolak (${r.status}): ${(await r.text()).slice(0, 300)}`);
-  return r.json();
-}
+/* Isi surat dan pengiriman Resend ada di ../_shared/surat.ts,
+   dipakai bersama panel-admin supaya pembeli yang dilayani otomatis
+   dan yang dilayani tangan membaca petunjuk yang persis sama. */
 
 serve(async (req) => {
   if (req.method !== 'POST') return jawab({ error: 'Hanya POST.' }, 405);
@@ -241,7 +193,7 @@ serve(async (req) => {
   const alamatApp = Deno.env.get('APP_URL') || 'https://www.sankalingogo.com';
   try {
     await kirimEmail(email, 'Kode akses SankaLingo GO',
-      suratKode(kode as string, nama, alamatApp, barisKode?.bulan_aktif ?? null));
+      suratKode(kode as string, nama, barisKode?.bulan_aktif ?? null, alamatApp));
   } catch (e) {
     await db.from('pesanan_scalev').update({
       status: 'gagal_kirim', kode,

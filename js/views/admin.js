@@ -9,7 +9,7 @@
    Kalau seseorang memaksa membuka #/admin tanpa hak, yang ia dapat
    hanyalah rentetan 403; tidak ada satu pun data yang ikut terkirim. */
 
-import { $, html, esc, toast, confirmDialog, tanggal } from '../ui.js';
+import { $, html, raw, esc, toast, confirmDialog, tanggal } from '../ui.js';
 import { ico } from '../icons.js';
 import { fungsi, profil } from '../lisensi.js';
 import { masukSebagai } from '../awan.js';
@@ -125,11 +125,16 @@ Kode ini sekali pakai dan ${masa}.
 Ada kendala? Balas pesan ini.`;
 }
 
-/* Mengirimnya lewat draf, bukan lewat server. Kirim otomatis butuh
-   layanan email berbayar dengan domain terverifikasi; sampai itu ada,
-   membuka draf yang sudah terisi jauh lebih cepat daripada mengetik
-   ulang tiap kali - dan yang menekan "kirim" tetap manusia, sehingga
-   pesannya benar-benar berangkat dari alamatmu sendiri. */
+/* Dua cara mengirim, dan yang tersedia ditentukan server.
+
+   "Kirim sekarang" berangkat dari Resend lewat Edge Function — muncul
+   hanya kalau RESEND_API_KEY dan RESEND_FROM sudah terpasang, karena
+   tombol yang menjanjikan pengiriman lalu gagal jauh lebih buruk
+   daripada tombol yang tidak ada.
+
+   Draf manual (email/WhatsApp/salin) tetap disimpan meskipun Resend
+   sudah aktif: ia tidak bergantung pada apa pun, jadi ia yang menolong
+   waktu Resend bermasalah atau pembeli hanya punya nomor WhatsApp. */
 async function layarKirim(kode, bulan) {
   const { modal } = await import('../ui.js');
   const isi = pesanKode(kode, bulan);
@@ -152,13 +157,19 @@ async function layarKirim(kode, bulan) {
       <label class="xs muted" for="kirimIsi" style="display:block;margin-top:var(--s-3)">Isi pesan</label>
       <textarea id="kirimIsi" class="input" rows="10" style="width:100%;resize:vertical">${esc(isi)}</textarea>
       <p class="xs muted" style="margin:.4rem 0 0">
-        Sesudah dikirim, kodenya ditandai "sudah dikirim" ke alamat itu.</p>
+        Sesudah dikirim, kodenya ditandai "sudah dikirim" ke alamat itu.
+        ${raw(data?.emailOtomatis
+          ? '<b>Kirim sekarang</b> berangkat langsung dari server; isi kotak di atas tidak ikut — yang dikirim surat baku.'
+          : 'Pengiriman otomatis belum aktif, jadi yang ada baru draf.')}</p>
     </div>
     <div class="modal__foot">
       <button class="btn btn--ghost" data-close>Batal</button>
       <button class="btn btn--soft" id="kirimSalin">Salin pesan</button>
       <button class="btn btn--soft" id="kirimWaBtn">WhatsApp</button>
-      <button class="btn btn--primary" id="kirimEmailBtn">Buka email</button>
+      <button class="btn btn--soft" id="kirimEmailBtn">Buka email</button>
+      ${raw(data?.emailOtomatis
+        ? '<button class="btn btn--primary" id="kirimLangsung">Kirim sekarang</button>'
+        : '')}
     </div>`, {
     wide: true,
     onMount(box, close) {
@@ -175,6 +186,24 @@ async function layarKirim(kode, bulan) {
           await muat();
         } catch (e) { toast(e.message, 'bad', 4200); }
       };
+
+      /* Kirim sungguhan. Penandaannya dikerjakan server sesudah Resend
+         menerima, jadi di sini tidak ada tandai() — kalau gagal, kode
+         tetap berstatus siap dan bisa dicoba lagi. */
+      box.querySelector('#kirimLangsung')?.addEventListener('click', async (ev) => {
+        if (!surel().includes('@')) { toast('Isi dulu email pembelinya.', 'warn'); return; }
+        const tbl = ev.currentTarget;
+        tbl.disabled = true; tbl.textContent = 'Mengirim…';
+        try {
+          await fungsi('panel-admin', { tindakan: 'kirim_email', kode, label: surel() });
+          toast(`Kode ${kode} terkirim ke ${surel()}.`, 'ok', 4200);
+          await muat();
+          close();
+        } catch (e) {
+          toast(e.message, 'bad', 8000);
+          tbl.disabled = false; tbl.textContent = 'Kirim sekarang';
+        }
+      });
 
       box.querySelector('#kirimEmailBtn').addEventListener('click', async () => {
         if (!surel().includes('@')) { toast('Isi dulu email pembelinya.', 'warn'); return; }

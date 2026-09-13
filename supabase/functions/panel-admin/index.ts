@@ -17,6 +17,7 @@
 
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { suratKode, kirimEmail, emailSiap } from '../_shared/surat.ts';
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -82,6 +83,9 @@ serve(async (req) => {
             daftar: semua,
           },
           pengguna: profil ?? [],
+          /* Supaya panel tahu harus menampilkan tombol "Kirim sekarang"
+             atau hanya draf manual. Nilainya, bukan kuncinya. */
+          emailOtomatis: emailSiap(),
         });
       }
 
@@ -125,6 +129,48 @@ serve(async (req) => {
           .from('kode_lisensi').insert(baris).select('kode');
         if (error) return jawab({ error: error.message }, 500);
         return jawab({ dibuat: (data ?? []).map((d) => d.kode) });
+      }
+
+      /* ── Kirim kode lewat email, langsung dari server ─────────
+         Bedanya dengan 'pesan': yang ini benar-benar mengirim, lalu
+         menandai. Penandaan dilakukan SESUDAH Resend menerima, bukan
+         sebelumnya — kode yang tercatat terkirim padahal emailnya
+         ditolak akan hilang dari daftar "siap" tanpa pernah sampai
+         ke siapa pun, dan itu kesalahan yang tidak terlihat sampai
+         pembeli mengeluh. */
+      case 'kirim_email': {
+        if (!kode) return jawab({ error: 'Kode wajib diisi.' }, 400);
+        const tujuan = String(label ?? '').trim();
+        if (!tujuan.includes('@')) return jawab({ error: 'Alamat email pembeli belum benar.' }, 400);
+        if (!emailSiap()) {
+          return jawab({
+            error: 'Pengiriman otomatis belum aktif: RESEND_API_KEY / RESEND_FROM belum dipasang. ' +
+                   'Sementara ini pakai tombol "Buka email".',
+          }, 503);
+        }
+
+        const rapi = String(kode).toUpperCase();
+        /* Masa aktifnya dibaca dari barisnya sendiri, bukan dikirim
+           peramban: yang menentukan isi surat harus sumber yang sama
+           dengan yang menentukan akses. */
+        const { data: baris, error: eBaca } = await db.from('kode_lisensi')
+          .select('kode, bulan_aktif, dipakai_oleh').eq('kode', rapi).maybeSingle();
+        if (eBaca) return jawab({ error: eBaca.message }, 500);
+        if (!baris) return jawab({ error: 'Kode tidak ditemukan.' }, 404);
+        if (baris.dipakai_oleh) return jawab({ error: 'Kode ini sudah dipakai orang lain.' }, 409);
+
+        try {
+          await kirimEmail(tujuan, 'Kode akses SankaLingo GO',
+            suratKode(rapi, '', baris.bulan_aktif ?? null));
+        } catch (e) {
+          return jawab({ error: String((e as Error).message) }, 502);
+        }
+
+        const { error } = await db.from('kode_lisensi')
+          .update({ dipesan_untuk: tujuan, dipesan_pada: new Date().toISOString() })
+          .eq('kode', rapi);
+        if (error) return jawab({ error: error.message }, 500);
+        return jawab({ ok: true, terkirim: tujuan });
       }
 
       /* ── Tandai kode sudah diberikan ke seseorang ───────────── */
