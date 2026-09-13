@@ -47,39 +47,47 @@ cara membaca tabel itu sendiri.
 
 ---
 
-## Langkah 2 — Salin ke Hostinger
+## Langkah 2 — Salin empat baris ke Hostinger
+
+Akun Resend ini memakai bentuk **CNAME**, bukan TXT + MX. Namanya sudah
+ditulis Resend dalam bentuk pendek, jadi **salin apa adanya** — tidak ada
+yang perlu dipotong.
 
 **hPanel → Domains → `sankalingogo.com` → DNS / Nameservers → Manage DNS records.**
 
-Tiap baris di layar Resend punya tiga bagian yang harus dipindahkan:
+Nilai di kolom Content diambil dari layar Resend memakai **tombol salin**.
+Yang tampak sebagai `[...]` di layar itu cuma pemendekan tampilan, bukan
+isi sebenarnya.
 
-| Kolom Resend | Kolom Hostinger | Jebakannya |
-|---|---|---|
-| Type | **Type** | TXT, MX, atau CNAME — harus sama persis |
-| Name / Host | **Name** | ⚠️ Lihat catatan di bawah |
-| Value / Content | **Value** / Points to | Salin **seluruhnya**, jangan ada yang terpotong |
-| Priority (hanya MX) | **Priority** | Biasanya `10` |
+| # | Type | Name | Content | TTL |
+|---|---|---|---|---|
+| 1 | TXT | `resend._domainkey` | `p=MIGfMA…QIDAQAB` (panjang, ±216 huruf) | 3600 |
+| 2 | CNAME | `rsend` | `rsend-ap….mta.net` | 3600 |
+| 3 | CNAME | `send` | `send.for….mta.net` | 3600 |
+| 4 | TXT | `_dmarc` | `v=DMARC1; p=none;` | 3600 |
 
-### Jebakan nama — ini yang paling sering bikin gagal
+Baris 4 ditandai *Optional* oleh Resend. Tetap tambahkan — tanpa DMARC,
+Gmail dan Outlook lebih sering melempar surat ke folder spam.
 
-Resend menulis nama **lengkap**, Hostinger minta **potongannya saja**.
-Buang `.sankalingogo.com` di belakangnya:
+### Empat hal yang bisa menggagalkannya
 
-| Ditulis Resend | Diisi di Hostinger |
-|---|---|
-| `send.sankalingogo.com` | `send` |
-| `resend._domainkey.sankalingogo.com` | `resend._domainkey` |
-| `sankalingogo.com` (apex) | `@` |
+1. **Jangan tambahkan `.sankalingogo.com` di kolom Name.** Hostinger
+   menyambungnya sendiri. Kalau ditulis `send.sankalingogo.com`, yang
+   terbentuk `send.sankalingogo.com.sankalingogo.com` — dan tidak ada
+   pesan galat di mana pun.
 
-Kalau kamu menempelkan nama lengkapnya, Hostinger diam-diam membuat
-`send.sankalingogo.com.sankalingogo.com` — catatan yang tidak akan
-pernah ditemukan Resend, dan tidak ada pesan galat apa pun.
+2. **Nilai DKIM harus utuh.** Ini kegagalan yang paling sulit dilihat:
+   catatannya ada, semua alat bilang "terbaca", tetapi tanda tangannya
+   tidak pernah cocok karena beberapa huruf terakhir hilang waktu
+   disorot tetikus. Pakai tombol salin. Pemeriksa di Langkah 3
+   memperingatkan kalau panjangnya kurang wajar.
 
-### Jebakan nilai DKIM
+3. **CNAME tidak boleh berbagi nama dengan catatan lain.** Kalau
+   Hostinger menolak baris `send` atau `rsend`, berarti sudah ada
+   catatan bernama sama — hapus yang lama dulu.
 
-Baris DKIM panjang sekali (ratusan huruf, diawali `p=` atau `v=DKIM1`).
-Salin lewat tombol salin di Resend, jangan disorot pakai tetikus —
-satu huruf hilang membuatnya tidak sah, dan tidak ada yang memberi tahu.
+4. **Jangan sentuh catatan `@` dan `www`.** Dua itu yang membuat situsmu
+   hidup di Vercel. Semua yang ditambahkan di sini nama baru.
 
 ---
 
@@ -88,19 +96,20 @@ satu huruf hilang membuatnya tidak sah, dan tidak ada yang memberi tahu.
 Setelah disimpan di Hostinger, jalankan dari folder proyek:
 
 ```bash
-node tools/cek-dns-email.mjs sankalingogo.com
+node tools/cek-dns-email.mjs sankalingogo.com cname
 ```
 
 Ia bertanya langsung ke DNS publik dan menyebut satu per satu mana yang
-sudah terbaca dan mana yang belum. Tombol **Verify** di Resend cuma
-bilang berhasil atau gagal — ia tidak pernah menyebut baris mana yang
-kurang.
+sudah terbaca. Tombol **Verify** di Resend cuma bilang berhasil atau
+gagal — ia tidak pernah menyebut baris mana yang kurang.
 
-DNS butuh waktu menyebar: biasanya beberapa menit, kadang sampai satu
-jam. Kalau baru saja disimpan dan masih "BELUM", tunggu lalu ulangi.
+DNS butuh waktu menyebar: biasanya beberapa menit di Hostinger, kadang
+sampai satu jam. Kalau baru disimpan dan masih "BELUM", tunggu lalu
+ulangi perintahnya.
 
-Kalau sudah **3 dari 3**, kembali ke Resend → Domains → tekan **Verify**.
-Statusnya harus berubah jadi **Verified**.
+Kalau sudah **3 dari 3**, kembali ke Resend, tekan
+**I've already added the records** → **Verify**. Statusnya harus berubah
+jadi **Verified**.
 
 ---
 
