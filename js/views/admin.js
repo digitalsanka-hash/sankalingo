@@ -9,7 +9,7 @@
    Kalau seseorang memaksa membuka #/admin tanpa hak, yang ia dapat
    hanyalah rentetan 403; tidak ada satu pun data yang ikut terkirim. */
 
-import { $, html, raw, esc, toast, confirmDialog, tanggal } from '../ui.js';
+import { $, $$, html, raw, esc, toast, confirmDialog, tanggal } from '../ui.js';
 import { ico } from '../icons.js';
 import { fungsi, profil } from '../lisensi.js';
 import { masukSebagai } from '../awan.js';
@@ -108,10 +108,13 @@ function barisSaran(s) {
    berbeda isi. Alamat aplikasinya diambil dari halaman yang sedang
    dibuka, bukan ditulis tetap: panel ini SELALU dibuka dari aplikasi
    yang dimaksud, jadi itu satu-satunya alamat yang pasti benar. */
-function pesanKode(kode, bulan) {
+function pesanKode(kode, bulan, nama = '') {
   const alamat = location.origin + location.pathname;
+  const sapaan = nama ? `Halo ${nama}!` : 'Halo!';
   const masa = bulan ? `berlaku ${bulan} bulan` : 'berlaku selamanya';
-  return `Halo! Ini kode akses SankaLingo GO milikmu:
+  return `${sapaan}
+
+Terima kasih sudah membeli SankaLingo GO. Ini kode aksesmu:
 
 ${kode}
 
@@ -123,6 +126,69 @@ Cara memakainya:
 
 Kode ini sekali pakai dan ${masa}.
 Ada kendala? Balas pesan ini.`;
+}
+
+/* ── Kartu kirim email ────────────────────────────────────────────
+
+   Pratinjaunya bukan hiasan. Kode akses dikirim sekali dan tidak bisa
+   ditarik kembali; melihat surat yang persis akan diterima pembeli —
+   termasuk namanya dan masa aktifnya — adalah satu-satunya kesempatan
+   menangkap salah ketik sebelum ia mendarat di kotak masuk orang.
+
+   Teksnya sengaja dijaga sama dengan supabase/functions/_shared/surat.ts.
+   Kalau salah satunya diubah, ubah keduanya. */
+const MASA = [['', 'Selamanya'], ['1', '1 bulan'], ['3', '3 bulan'], ['6', '6 bulan'], ['12', '12 bulan']];
+
+function kartuKirim() {
+  const siap = (data?.kode?.daftar || [])
+    .filter(k => !k.dipesan_untuk && k.terpakai < k.maks_pakai);
+
+  if (!siap.length) return `
+    <div class="card" style="margin-bottom:var(--s-5)">
+      <div class="card__title">${ico('quote')} Kirim kode ke pembeli</div>
+      <div class="note note--warn small" style="margin-top:var(--s-4)">
+        Tidak ada kode yang siap dikirim. Cetak dulu di kartu di atas.</div>
+    </div>`;
+
+  return `
+  <div class="card" style="margin-bottom:var(--s-5)">
+    <div class="card__title">${ico('quote')} Kirim kode ke pembeli</div>
+    <p class="small soft" style="margin:.4rem 0 var(--s-4)">
+      Isi nama dan email, pilih kode, periksa pratinjaunya, lalu kirim.
+      ${data?.emailOtomatis ? '' : '<b>Pengiriman otomatis belum aktif</b> — yang tersedia baru salin dan draf.'}</p>
+
+    <div class="stack stack--sm">
+      <label class="stack stack--sm"><span class="xs muted">Nama pembeli (opsional)</span>
+        <input class="input" id="kmNama" placeholder="misal: Reza Asqalani"></label>
+
+      <label class="stack stack--sm"><span class="xs muted">Email pembeli</span>
+        <input class="input" id="kmEmail" type="email" inputmode="email" placeholder="pembeli@email.com"></label>
+
+      <label class="stack stack--sm"><span class="xs muted">Pilih kode (${nf(siap.length)} siap)</span>
+        <select class="input" id="kmKode">
+          ${siap.map(k => `<option value="${esc(k.kode)}" data-bulan="${esc(String(k.bulan_aktif ?? ''))}">
+            ${esc(k.kode)} — ${k.bulan_aktif ? k.bulan_aktif + ' bulan' : 'selamanya'}</option>`).join('')}
+        </select></label>
+
+      <div class="stack stack--sm"><span class="xs muted">Masa aktif paket pembeli ini</span>
+        <div class="pill-row" id="kmMasa">
+          ${MASA.map(([v, t]) => `<button class="btn btn--soft btn--sm" data-masa="${v}">${t}</button>`).join('')}
+        </div></div>
+    </div>
+
+    <div class="row row--between" style="margin-top:var(--s-5)">
+      <div class="card__title" style="font-size:var(--fs-md)">Pratinjau email</div>
+      <button class="btn btn--ghost btn--sm" id="kmSalin">Salin teks</button>
+    </div>
+    <div class="passage small" id="kmPratinjau"
+         style="margin-top:.5rem;background:var(--bg-2);border-radius:var(--r-md);padding:var(--s-4)"></div>
+
+    <div class="row" style="margin-top:var(--s-5);flex-wrap:wrap">
+      <button class="btn btn--soft" id="kmDraf">Buka draf email</button>
+      <button class="btn btn--soft" id="kmWa">WhatsApp</button>
+      ${data?.emailOtomatis ? '<button class="btn btn--primary" id="kmKirim">Kirim sekarang</button>' : ''}
+    </div>
+  </div>`;
 }
 
 /* Dua cara mengirim, dan yang tersedia ditentukan server.
@@ -290,6 +356,8 @@ function gambar() {
 
   ${kartuSaran()}
 
+  ${kartuKirim()}
+
   <div class="card" style="margin-bottom:var(--s-5)">
     <div class="card__title">${ico('pen')} Cetak kode baru</div>
     <div class="row" style="gap:var(--s-3);margin-top:var(--s-4);flex-wrap:wrap;align-items:flex-end">
@@ -339,11 +407,95 @@ function gambar() {
 /* Satu penangan untuk seluruh tombol tabel. Tabelnya digambar ulang
    tiap kali data berubah, jadi memasang pendengar di tiap tombol akan
    selalu tertinggal satu langkah. */
+/* Menyalakan kartu kirim: pratinjau ikut berubah tiap ketikan, dan
+   tiga tombol kirim membaca keadaan yang sama. */
+function pasangKirim() {
+  const kotak = $('#kmPratinjau');
+  if (!kotak) return;                       // stok kode habis, kartunya ringkas
+
+  const el = id => $('#' + id);
+  /* Masa aktif awal mengikuti kode yang terpilih, bukan dipatok
+     'selamanya': kode yang dicetak untuk batch 3 bulan harus muncul
+     sebagai 3 bulan, supaya admin tidak diam-diam mengubahnya. */
+  let masa = el('kmKode').selectedOptions[0]?.dataset.bulan ?? '';
+
+  const nilai = () => ({
+    nama: el('kmNama').value.trim(),
+    email: el('kmEmail').value.trim(),
+    kode: el('kmKode').value,
+    bulan: masa === '' ? null : Number(masa),
+  });
+
+  const gambarUlang = () => {
+    const v = nilai();
+    kotak.textContent = pesanKode(v.kode, v.bulan, v.nama);
+    $$('#kmMasa button').forEach(b =>
+      b.classList.toggle('btn--primary', (b.dataset.masa ?? '') === masa));
+  };
+
+  ['kmNama', 'kmEmail'].forEach(id => el(id).oninput = gambarUlang);
+  el('kmKode').onchange = () => {
+    masa = el('kmKode').selectedOptions[0]?.dataset.bulan ?? '';
+    gambarUlang();
+  };
+  $('#kmMasa').onclick = e => {
+    const b = e.target.closest('[data-masa]');
+    if (!b) return;
+    masa = b.dataset.masa;
+    gambarUlang();
+  };
+
+  el('kmSalin').onclick = async () => {
+    try { await navigator.clipboard.writeText(kotak.textContent); toast('Teks disalin.'); }
+    catch { toast('Gagal menyalin. Sorot teksnya lalu salin manual.', 'bad'); }
+  };
+
+  el('kmDraf').onclick = () => {
+    const v = nilai();
+    if (!v.email.includes('@')) return toast('Isi dulu email pembelinya.', 'warn');
+    location.href = `mailto:${encodeURIComponent(v.email)}`
+      + `?subject=${encodeURIComponent('Kode akses SankaLingo GO')}`
+      + `&body=${encodeURIComponent(kotak.textContent)}`;
+  };
+
+  el('kmWa').onclick = () => {
+    const no = prompt('Nomor WhatsApp pembeli (format 62…)');
+    if (!no) return;
+    window.open(`https://wa.me/${no.replace(/[^0-9]/g, '')}`
+      + `?text=${encodeURIComponent(kotak.textContent)}`, '_blank', 'noopener');
+  };
+
+  /* Kirim sungguhan. Server yang menandai kodenya terkirim, dan hanya
+     sesudah Resend menerima — jadi kegagalan meninggalkan kode tetap
+     berstatus siap, bukan hilang dari daftar tanpa pernah sampai. */
+  el('kmKirim')?.addEventListener('click', async ev => {
+    const v = nilai();
+    if (!v.email.includes('@')) return toast('Isi dulu email pembelinya.', 'warn');
+    const tbl = ev.currentTarget;
+    tbl.disabled = true; tbl.textContent = 'Mengirim…';
+    try {
+      await fungsi('panel-admin', {
+        tindakan: 'kirim_email', kode: v.kode, label: v.email,
+        nama: v.nama, bulan: v.bulan,
+      });
+      toast(`${v.kode} terkirim ke ${v.email}.`, 'ok', 4500);
+      await muat();
+    } catch (e) {
+      toast(e.message, 'bad', 8000);
+      tbl.disabled = false; tbl.textContent = 'Kirim sekarang';
+    }
+  });
+
+  gambarUlang();
+}
+
 function pasang() {
   const jalankan = async (badan, pesan) => {
     try { await fungsi('panel-admin', badan); toast(pesan); await muat(); }
     catch (e) { toast(e.message, 'bad', 4200); }
   };
+
+  pasangKirim();
 
   $('#adminIsi').onclick = async e => {
     const t = e.target.closest('button');

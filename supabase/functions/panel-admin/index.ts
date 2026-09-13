@@ -63,7 +63,7 @@ serve(async (req) => {
     if (!prof?.admin) return jawab({ error: 'Khusus admin.' }, 403);
 
     const badan = await req.json().catch(() => ({ tindakan: 'ringkasan' }));
-    const { tindakan, jumlah, bulan, kode, label, userId, saranId, status } = badan;
+    const { tindakan, jumlah, bulan, kode, label, userId, saranId, status, nama } = badan;
 
     switch (tindakan) {
       /* ── Ringkasan: stok kode + daftar pengguna ─────────────── */
@@ -150,18 +150,33 @@ serve(async (req) => {
         }
 
         const rapi = String(kode).toUpperCase();
-        /* Masa aktifnya dibaca dari barisnya sendiri, bukan dikirim
-           peramban: yang menentukan isi surat harus sumber yang sama
-           dengan yang menentukan akses. */
         const { data: baris, error: eBaca } = await db.from('kode_lisensi')
           .select('kode, bulan_aktif, dipakai_oleh').eq('kode', rapi).maybeSingle();
         if (eBaca) return jawab({ error: eBaca.message }, 500);
         if (!baris) return jawab({ error: 'Kode tidak ditemukan.' }, 404);
         if (baris.dipakai_oleh) return jawab({ error: 'Kode ini sudah dipakai orang lain.' }, 409);
 
+        /* Masa aktif boleh diubah saat mengirim — pembeli kadang
+           mengambil paket yang berbeda dari batch kodenya dicetak.
+           Kalau diubah, barisnya diperbarui LEBIH DULU, supaya angka di
+           dalam surat dan angka yang menentukan akses tidak mungkin
+           berbeda. Surat yang menjanjikan selamanya sementara basis
+           data menyimpan tiga bulan adalah cacat yang baru ketahuan
+           saat aksesnya mati. */
+        let masa = baris.bulan_aktif ?? null;
+        if (bulan !== undefined) {
+          const minta = bulan === null || bulan === '' ? null : Number(bulan);
+          if (minta !== masa) {
+            const { error: eUbah } = await db.from('kode_lisensi')
+              .update({ bulan_aktif: minta }).eq('kode', rapi);
+            if (eUbah) return jawab({ error: eUbah.message }, 500);
+            masa = minta;
+          }
+        }
+
         try {
           await kirimEmail(tujuan, 'Kode akses SankaLingo GO',
-            suratKode(rapi, '', baris.bulan_aktif ?? null));
+            suratKode(rapi, String(nama ?? '').trim(), masa));
         } catch (e) {
           return jawab({ error: String((e as Error).message) }, 502);
         }

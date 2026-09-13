@@ -98,14 +98,28 @@ console.log(`[${dmarc ? OK : ' opsi '}] DMARC di  _dmarc.${domain}`);
 if (dmarc) console.log(`         ${potong(dmarc)}`);
 else console.log('         belum ada. Boleh dilewati dulu; tambahkan nanti: v=DMARC1; p=none;');
 
-/* Peringatan salah eja hanya masuk akal kalau TIDAK ADA satu pun catatan
-   yang terbaca. Sebelumnya ia bersandar pada resolve4 di apex, dan itu
-   sempat gagal sesaat pada domain yang jelas-jelas hidup — sehingga alat
-   yang gunanya memberi kepastian justru menyalakan alarm palsu tepat di
-   bawah baris yang semuanya OK. */
-if (siap === 0 && !dmarc) {
-  const apex = await coba(() => r.resolve4(domain.split('.').slice(-2).join('.')));
-  if (!apex) console.log(`\n! Domain ${domain} tidak menjawab sama sekali — periksa ejaannya.`);
+/* ── Situsnya sendiri masih hidup? ────────────────────────────────
+   Peringatan ini pernah muncul, saya kira alarm palsu karena baris
+   email semuanya OK, lalu saya bungkam. Ternyata benar: catatan A dan
+   CNAME milik Vercel ikut terhapus waktu catatan Resend ditambahkan,
+   dan situsnya mati sembilan menit tanpa ada yang tahu.
+   Pelajarannya: catatan email dan catatan situs tinggal di zona yang
+   sama, jadi menyunting yang satu bisa menjatuhkan yang lain. Alat ini
+   sekarang memeriksa keduanya, dan tidak boleh dibungkam lagi. */
+const akar = domain.split('.').slice(-2).join('.');
+const apexA = await coba(() => r.resolve4(akar));
+const wwwC = await cname(`www.${akar}`) || await coba(() => r.resolve4(`www.${akar}`));
+
+console.log('\n── Situs (bukan email) ─────────────────────────────');
+lapor(`A     di  ${akar}`, !!apexA, apexA ? apexA.join(', ') : 'TIDAK ADA — situs apex mati');
+lapor(`www   di  www.${akar}`, !!wwwC,
+  Array.isArray(wwwC) ? wwwC.join(', ') : (wwwC || 'TIDAK ADA — www mati'));
+
+if (!apexA || !wwwC) {
+  console.log('\n!! SITUSNYA TIDAK BISA DIBUKA ORANG.');
+  console.log('   Kembalikan di Hostinger → DNS:');
+  console.log('     A      @     216.198.79.1');
+  console.log('     CNAME  www   cname.vercel-dns.com');
 }
 
 console.log(`\nBentuk setelan: ${bentukCname ? 'CNAME' : 'TXT + MX'}`);
