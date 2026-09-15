@@ -63,7 +63,11 @@ serve(async (req) => {
     if (!prof?.admin) return jawab({ error: 'Khusus admin.' }, 403);
 
     const badan = await req.json().catch(() => ({ tindakan: 'ringkasan' }));
-    const { tindakan, jumlah, bulan, kode, label, userId, saranId, status, nama } = badan;
+    const { tindakan, jumlah, bulan, kode, label, userId, saranId, status, nama, paket } = badan;
+    /* Paket hanya boleh dua nilai. Diperiksa di sini, bukan cuma di
+       basis data: pesan "violates check constraint" tidak berarti apa
+       pun bagi orang yang menekan tombol. */
+    const paketSah = (p: unknown) => (p === 'esensi' ? 'esensi' : 'lengkap');
 
     switch (tindakan) {
       /* ── Ringkasan: stok kode + daftar pengguna ─────────────── */
@@ -140,6 +144,7 @@ serve(async (req) => {
         const bln = bulan === null || bulan === undefined ? null : Number(bulan);
         const baris = Array.from({ length: n }, () => ({
           kode: kodeBaru(), bulan_aktif: bln, catatan: label ?? null,
+          paket: paketSah(paket),
         }));
         const { data, error } = await db
           .from('kode_lisensi').insert(baris).select('kode');
@@ -225,6 +230,20 @@ serve(async (req) => {
           .eq('kode', String(kode).toUpperCase());
         if (error) return jawab({ error: error.message }, 500);
         return jawab({ ok: true });
+      }
+
+      /* ── Naikkan atau turunkan paket satu pengguna ────────────
+         Dipakai sesudah pembeli menekan "sudah bayar" di layar naik
+         paket. Permintaannya dikosongkan berbarengan, supaya daftar
+         yang menunggu benar-benar hanya berisi yang belum diurus. */
+      case 'paket': {
+        if (!userId) return jawab({ error: 'Pengguna wajib dipilih.' }, 400);
+        const p = paketSah(paket);
+        const { error } = await db.from('profil')
+          .update({ paket: p, upgrade_diminta: null })
+          .eq('user_id', userId);
+        if (error) return jawab({ error: error.message }, 500);
+        return jawab({ ok: true, paket: p });
       }
 
       /* ── Ubah masa aktif satu pengguna. bulan null = selamanya ─ */

@@ -37,6 +37,8 @@ import * as LC from './views/langcourse.js';
 import * as Pandu from './views/panduan.js';
 import { bukaSaran, pasangSaranOtomatis } from './saran.js';
 import { pastikanAkses, keluarPenuh } from './gerbang.js';
+import { bolehBahasa, paketSaya, bahasaTerkunci } from './paket.js';
+import * as Upg from './views/upgrade.js';
 import * as Audit from './views/auditsuara.js';
 import * as Adm from './views/admin.js';
 import * as Kam from './views/kamus.js';
@@ -202,6 +204,13 @@ async function route() {
 
   const code = seg[0];
   const rest = seg.slice(1).join('/');
+
+  /* Bahasa di luar paketnya dihentikan DI SINI, sebelum modul bahasanya
+     dimuat. Menyembunyikannya dari pengalih bahasa saja tidak cukup —
+     alamatnya bisa diketik langsung, dan pemelajar memang menyimpan
+     tautan. */
+  if (!bolehBahasa(code, paketSaya())) return Upg.renderUpgrade(code);
+
   setLang(code);
 
   let L = null;
@@ -392,12 +401,20 @@ function paintChromeFor(code, L) {
 /* ── Pengalih bahasa ──────────────────────────────────────────── */
 function buildLangSwitch() {
   const menu = $('#langswMenu');
-  menu.innerHTML = LANGS.map(l => `
-    <a class="langsw__item" href="#/${l.code}" data-lang="${l.code}">
-      <span class="langsw__dot" style="background:${l.accent}"></span>
+  /* Bahasa di luar paket tetap DITAMPILKAN, bukan disembunyikan. Daftar
+     yang tiba-tiba kehilangan empat baris terbaca sebagai aplikasi
+     rusak; daftar bergembok terbaca sebagai tawaran. Tautannya tetap
+     hidup — yang dituju layar naik paket, bukan halaman kosong. */
+  const terkunci = new Set(bahasaTerkunci(paketSaya()));
+  menu.innerHTML = LANGS.map(l => {
+    const kunci = terkunci.has(l.code);
+    return `
+    <a class="langsw__item${kunci ? ' is-terkunci' : ''}" href="#/${l.code}" data-lang="${l.code}">
+      <span class="langsw__dot" style="background:${kunci ? 'var(--teks-2)' : l.accent}"></span>
       <span class="langsw__txt"><b>${esc(l.name)}</b><em>${esc(l.native)}</em></span>
-      <small>${esc(l.exam.split('·')[0].trim())}</small>
-    </a>`).join('') +
+      <small>${kunci ? 'Lengkap' : esc(l.exam.split('·')[0].trim())}</small>
+    </a>`;
+  }).join('') +
     `<a class="langsw__all" href="#/lang">Bandingkan semua bahasa →</a>`;
 
   const btn = $('#langswBtn');

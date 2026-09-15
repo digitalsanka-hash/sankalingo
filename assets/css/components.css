@@ -336,3 +336,9 @@ table.tbl{width:100%;border-collapse:collapse;font-size:var(--fs-md);min-width:5
 .voice-row select{padding:.35rem .5rem;font-size:var(--fs-sm)}
 .voice-row .badge{white-space:nowrap}
 @media(max-width:700px){.voice-row{grid-template-columns:1fr auto}.voice-row select{grid-column:1/-1}}
+
+/* Bahasa di luar paket: diredupkan dan diberi gembok, tetap bisa ditekan
+   supaya yang menekan sampai ke layar naik paket — bukan jalan buntu. */
+.langsw__item.is-terkunci { opacity: .58; }
+.langsw__item.is-terkunci small { color: var(--emas); font-weight: 700; }
+.langsw__item.is-terkunci .langsw__txt b::after { content: " 🔒"; font-size: .85em; }

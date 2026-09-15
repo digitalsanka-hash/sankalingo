@@ -13,6 +13,7 @@ import { $, $$, html, raw, esc, toast, confirmDialog, tanggal } from '../ui.js';
 import { ico } from '../icons.js';
 import { fungsi, profil } from '../lisensi.js';
 import { masukSebagai } from '../awan.js';
+import { NAMA_PAKET, paketDari } from '../paket.js';
 
 const nf = n => new Intl.NumberFormat('id-ID').format(n || 0);
 
@@ -42,8 +43,11 @@ function barisKode(k) {
     : k.dipesan_untuk
       ? '<span class="badge badge--warn">sudah dikirim</span>'
       : '<span class="badge">siap</span>';
+  const pk = paketDari(k);
   return `<tr>
     <td><span class="mono">${esc(k.kode)}</span></td>
+    <td><span class="badge badge--${pk === 'lengkap' ? 'ok' : 'warn'}">${esc(NAMA_PAKET[pk].label)}
+      · ${NAMA_PAKET[pk].jumlah}</span></td>
     <td>${status}</td>
     <td>${esc(k.dipesan_untuk || '—')}</td>
     <td>${k.bulan_aktif ? esc(String(k.bulan_aktif)) + ' bulan' : 'selamanya'}</td>
@@ -87,16 +91,26 @@ function hidup(p) {
 function barisPengguna(p) {
   const aktif = p.kode && (!p.akses_sampai || new Date(p.akses_sampai) > new Date());
   const h = hidup(p);
-  return `<tr data-hidup="${h.kunci}">
-    <td>${esc(p.email || '(tanpa email)')}${p.admin ? ' <span class="badge badge--ok">admin</span>' : ''}</td>
+  const pk = paketDari(p);
+  const minta = !!p.upgrade_diminta;
+  return `<tr data-hidup="${h.kunci}"${minta ? ' data-minta="1"' : ''}>
+    <td>${esc(p.email || '(tanpa email)')}${p.admin ? ' <span class="badge badge--ok">admin</span>' : ''}
+      ${minta ? '<span class="badge badge--warn">minta naik</span>' : ''}</td>
     <td>${aktif
       ? '<span class="badge badge--ok">aktif</span>'
       : '<span class="badge badge--warn">belum bayar</span>'}</td>
+    <td><span class="badge badge--${pk === 'lengkap' ? 'ok' : 'warn'}">${esc(NAMA_PAKET[pk].label)}
+      · ${NAMA_PAKET[pk].jumlah}</span></td>
     <td><span class="badge badge--${h.warna}">${esc(h.label)}</span></td>
     <td>${p.kode ? `<span class="mono">${esc(p.kode)}</span>` : '—'}</td>
     <td>${p.akses_sampai ? esc(tanggal(p.akses_sampai)) : (p.kode ? 'selamanya' : '—')}</td>
     <td class="nowrap">${esc(tanggal(p.dibuat))}</td>
     <td class="nowrap">
+      ${pk === 'esensi'
+        ? `<button class="btn btn--primary btn--sm" data-paket="lengkap"
+              data-user="${esc(p.user_id)}" data-email="${esc(p.email || '')}">Jadikan Lengkap</button>`
+        : `<button class="btn btn--ghost btn--sm" data-paket="esensi"
+              data-user="${esc(p.user_id)}" data-email="${esc(p.email || '')}">Turunkan ke Esensi</button>`}
       <button class="btn btn--soft btn--sm" data-selamanya="${esc(p.user_id)}">Beri selamanya</button>
       ${p.admin ? '' : `<button class="btn btn--ghost btn--sm" data-hapus="${esc(p.user_id)}"
         data-email="${esc(p.email || '')}">Hapus</button>`}
@@ -390,6 +404,11 @@ function gambar() {
     <div class="row" style="gap:var(--s-3);margin-top:var(--s-4);flex-wrap:wrap;align-items:flex-end">
       <label class="stack stack--sm"><span class="xs muted">Berapa kode</span>
         <input class="input" id="admJml" type="number" min="1" max="200" value="10" style="width:110px"></label>
+      <label class="stack stack--sm"><span class="xs muted">Paket</span>
+        <select class="input" id="admPaket" style="width:200px">
+          <option value="lengkap">Lengkap — 9 bahasa</option>
+          <option value="esensi">Esensi — 5 bahasa</option>
+        </select></label>
       <label class="stack stack--sm"><span class="xs muted">Masa aktif</span>
         <select class="input" id="admBulan" style="width:170px">
           <option value="">Selamanya</option>
@@ -411,7 +430,7 @@ function gambar() {
     </div>
     <div class="table-wrap" style="margin-top:var(--s-4)">
       <table class="tbl"><thead><tr>
-        <th>Kode</th><th>Status</th><th>Dikirim ke</th><th>Masa aktif</th><th>Dibuat</th><th></th>
+        <th>Kode</th><th>Paket</th><th>Status</th><th>Dikirim ke</th><th>Masa aktif</th><th>Dibuat</th><th></th>
       </tr></thead><tbody id="admTKode">${k.daftar.map(barisKode).join('')}</tbody></table>
     </div>
   </div>
@@ -435,13 +454,21 @@ function gambar() {
         .map(([v, t]) => `<button class="btn btn--soft btn--sm" data-hidup-saring="${v}">${t}</button>`).join('')}
     </div>
 
+    ${p.filter(x => x.upgrade_diminta).length ? `<div class="note note--warn" style="margin-top:var(--s-4)">
+      <strong>${nf(p.filter(x => x.upgrade_diminta).length)} orang menunggu dinaikkan ke paket Lengkap</strong>
+      Mereka menyatakan sudah membayar. Periksa dulu pembayarannya masuk di Scalev,
+      lalu tekan <b>Jadikan Lengkap</b> di barisnya.
+      <div style="margin-top:.5rem">${p.filter(x => x.upgrade_diminta)
+        .map(x => `<span class="badge badge--warn" style="margin-right:.35rem">${esc(x.email || x.user_id)}</span>`).join('')}</div>
+    </div>` : ''}
+
     ${hitungHidup(p).nihil ? `<div class="note note--warn small" style="margin-top:var(--s-4)">
       ${nf(hitungHidup(p).nihil)} orang mendaftar tapi belum pernah membuka aplikasinya.
       Mereka yang paling perlu disapa — bukan yang sudah rajin.</div>` : ''}
 
     <div class="table-wrap" style="margin-top:var(--s-4)">
       <table class="tbl"><thead><tr>
-        <th>Email</th><th>Akses</th><th>Terakhir dipakai</th><th>Kode</th><th>Sampai</th><th>Daftar</th><th></th>
+        <th>Email</th><th>Akses</th><th>Paket</th><th>Terakhir dipakai</th><th>Kode</th><th>Sampai</th><th>Daftar</th><th></th>
       </tr></thead><tbody id="admTUser">${p.map(barisPengguna).join('')}</tbody></table>
     </div>
   </div>`;
@@ -556,6 +583,27 @@ function pasang() {
     if (t.dataset.kirim)
       return layarKirim(t.dataset.kirim, Number(t.dataset.bulan) || null);
 
+    /* Naik/turun paket. Dikonfirmasi karena menurunkan berarti mencabut
+       empat bahasa dari orang yang sedang memakainya, dan menaikkan
+       berarti memberikan barang tanpa uang kalau pembayarannya ternyata
+       belum masuk. Dua-duanya tidak pantas terjadi karena salah klik. */
+    if (t.dataset.paket) {
+      const ke = t.dataset.paket;
+      const siapa = t.dataset.email || 'pengguna ini';
+      const naik = ke === 'lengkap';
+      const ya = await confirmDialog(
+        naik ? 'Jadikan paket Lengkap?' : 'Turunkan ke paket Esensi?',
+        naik
+          ? `<b>${esc(siapa)}</b> akan langsung bisa membuka Jerman, Prancis, Spanyol, dan Rusia. `
+            + 'Pastikan pembayarannya sudah masuk di Scalev.'
+          : `<b>${esc(siapa)}</b> akan kehilangan Jerman, Prancis, Spanyol, dan Rusia. `
+            + 'Kemajuan belajarnya tidak dihapus, tapi bahasanya terkunci.',
+        naik ? 'Jadikan Lengkap' : 'Turunkan');
+      if (!ya) return;
+      return jalankan({ tindakan: 'paket', userId: t.dataset.user, paket: ke },
+        naik ? 'Paketnya dinaikkan jadi Lengkap.' : 'Paketnya diturunkan ke Esensi.');
+    }
+
     if (t.dataset.pesan) {
       const nama = prompt('Dikirim ke siapa? (nama atau nomor WA)');
       if (nama === null) return;
@@ -590,6 +638,7 @@ function pasang() {
     try {
       const r = await fungsi('panel-admin', {
         tindakan: 'buat', jumlah, bulan: b === '' ? null : Number(b),
+        paket: $('#admPaket').value,
         label: $('#admCatat').value.trim() || null
       });
       const daftar = r.dibuat || [];
@@ -630,7 +679,7 @@ function pasang() {
       .filter(p => !q || (p.email || '').toLowerCase().includes(q))
       .filter(p => !hidupTerpilih || hidup(p).kunci === hidupTerpilih)
       .map(barisPengguna).join('') ||
-      '<tr><td colspan="7" class="muted small">Tidak ada yang cocok.</td></tr>';
+      '<tr><td colspan="8" class="muted small">Tidak ada yang cocok.</td></tr>';
     $$('#admSaringHidup button').forEach(b =>
       b.classList.toggle('btn--primary', b.dataset.hidupSaring === hidupTerpilih));
   };

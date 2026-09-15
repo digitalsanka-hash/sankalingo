@@ -38,6 +38,7 @@ import {
 } from './awan.js';
 import { profil, aksesAktif, adalahAdmin, tebus, lupakanProfil } from './lisensi.js';
 import { tautanBeli, tautanWa } from './jual-config.js';
+import { setPaketSaya } from './paket.js';
 
 const KUNCI_CAP = 'fasih.akses.cap';
 
@@ -54,6 +55,7 @@ const tulisCap = p => {
       email: p?.email || null,
       sampai: p?.akses_sampai || null,   // null = selamanya
       admin: !!p?.admin,
+      paket: p?.paket === 'esensi' ? 'esensi' : 'lengkap',
       dicek: Date.now(),
     }));
   } catch { /* penyimpanan penuh bukan alasan menolak masuk */ }
@@ -75,6 +77,10 @@ function capMasihSah() {
   const c = bacaCap();
   if (!c) return false;
   if (!c.dicek || Date.now() - c.dicek > UMUR_CAP) return false;
+  /* Paketnya ikut dipulihkan di sini, bukan hanya waktu profil terbaca
+     dari server: kalau tidak, pemakai luring yang membeli Esensi akan
+     menemukan sembilan bahasa terbuka sampai sinyalnya kembali. */
+  setPaketSaya(c.paket);
   if (c.admin) return true;
   return !c.sampai || new Date(c.sampai).getTime() > Date.now();
 }
@@ -94,7 +100,11 @@ async function periksaAkses() {
   if (!navigator.onLine) return { boleh: capMasihSah(), alasan: 'luring' };
 
   const p = await profil({ segarkan: true });
-  if (p && (aksesAktif(p) || adalahAdmin(p))) { tulisCap(p); return { boleh: true, profil: p }; }
+  if (p && (aksesAktif(p) || adalahAdmin(p))) {
+    tulisCap(p);
+    setPaketSaya(p.paket);
+    return { boleh: true, profil: p };
+  }
 
   /* profil() menelan galat jaringannya sendiri dan mengembalikan null.
      Null karena itu ambigu: bisa "belum menebus", bisa "server tak
