@@ -70,8 +70,24 @@ serve(async (req) => {
       case 'ringkasan': {
         const { data: kodes } = await db
           .from('kode_lisensi').select('*').order('dibuat', { ascending: false });
-        const { data: profil } = await db
+        const { data: profilMentah } = await db
           .from('profil').select('*').order('dibuat', { ascending: false });
+
+        /* Kapan tiap orang terakhir MEMAKAI aplikasinya.
+
+           Sumbernya kemajuan.diperbarui, bukan profil.terlihat — kolom
+           itu ada di skema tetapi tidak pernah ditulis siapa pun, jadi
+           selamanya null. Sementara kemajuan ditulis ulang tiap kali
+           aplikasi ditinggalkan (awan.js sinkron() pada
+           visibilitychange), termasuk ketika tidak ada kemajuan baru.
+           Jadi ia jujur menjawab "terakhir membuka", bukan sekadar
+           "terakhir menyelesaikan latihan". */
+        const { data: kemajuan } = await db
+          .from('kemajuan').select('user_id, diperbarui');
+        const kapan = new Map((kemajuan ?? []).map((k) => [k.user_id, k.diperbarui]));
+        const profil = (profilMentah ?? []).map((p) => ({
+          ...p, dipakai_terakhir: kapan.get(p.user_id) ?? null,
+        }));
 
         const semua = kodes ?? [];
         return jawab({

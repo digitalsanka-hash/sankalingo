@@ -59,13 +59,40 @@ function barisKode(k) {
   </tr>`;
 }
 
+/* ── Seberapa hidup seorang pengguna ──────────────────────────────
+
+   Dibedakan dari kolom "Akses". Akses menjawab sudah bayar atau belum;
+   ini menjawab masih dipakai atau tidak — dan dua hal itu sering
+   berlawanan. Pembeli yang membayar penuh lalu tidak pernah membuka
+   aplikasinya adalah orang yang paling perlu kamu hubungi, dan di
+   kolom Akses ia terlihat sama sehatnya dengan pengguna paling rajin.
+
+   Sumber angkanya kemajuan.diperbarui, ditulis tiap kali aplikasi
+   ditinggalkan. Jadi "belum pernah" benar-benar berarti belum pernah
+   dibuka sesudah mendaftar, bukan sekadar belum mengerjakan latihan. */
+const HARI = 24 * 60 * 60 * 1000;
+
+const hitungHidup = (daftar) => daftar.reduce((a, p) => {
+  a[hidup(p).kunci]++; return a;
+}, { aktif: 0, melambat: 0, hilang: 0, nihil: 0 });
+
+function hidup(p) {
+  if (!p.dipakai_terakhir) return { kunci: 'nihil', label: 'belum pernah', warna: 'bad' };
+  const hari = Math.floor((Date.now() - new Date(p.dipakai_terakhir)) / HARI);
+  if (hari <= 7) return { kunci: 'aktif', label: hari === 0 ? 'hari ini' : `${hari} hari lalu`, warna: 'ok' };
+  if (hari <= 30) return { kunci: 'melambat', label: `${hari} hari lalu`, warna: 'warn' };
+  return { kunci: 'hilang', label: `${hari} hari lalu`, warna: 'bad' };
+}
+
 function barisPengguna(p) {
   const aktif = p.kode && (!p.akses_sampai || new Date(p.akses_sampai) > new Date());
-  return `<tr>
+  const h = hidup(p);
+  return `<tr data-hidup="${h.kunci}">
     <td>${esc(p.email || '(tanpa email)')}${p.admin ? ' <span class="badge badge--ok">admin</span>' : ''}</td>
     <td>${aktif
       ? '<span class="badge badge--ok">aktif</span>'
       : '<span class="badge badge--warn">belum bayar</span>'}</td>
+    <td><span class="badge badge--${h.warna}">${esc(h.label)}</span></td>
     <td>${p.kode ? `<span class="mono">${esc(p.kode)}</span>` : '—'}</td>
     <td>${p.akses_sampai ? esc(tanggal(p.akses_sampai)) : (p.kode ? 'selamanya' : '—')}</td>
     <td class="nowrap">${esc(tanggal(p.dibuat))}</td>
@@ -394,9 +421,27 @@ function gambar() {
       <div class="card__title">${ico('users')} Pengguna</div>
       <input class="input" id="admCariUser" type="search" placeholder="Cari email…" style="max-width:230px">
     </div>
+
+    <div class="row" style="gap:var(--s-6);margin-top:var(--s-4);flex-wrap:wrap">
+      ${chip(hitungHidup(p).aktif, 'dipakai ≤7 hari', 'ok')}
+      ${chip(hitungHidup(p).melambat, 'melambat 8–30 hari', 'warn')}
+      ${chip(hitungHidup(p).hilang, 'hilang >30 hari', 'bad')}
+      ${chip(hitungHidup(p).nihil, 'belum pernah dibuka', 'bad')}
+    </div>
+
+    <div class="pill-row" id="admSaringHidup" style="margin-top:var(--s-4)">
+      ${[['', 'Semua'], ['aktif', 'Aktif'], ['melambat', 'Melambat'],
+         ['hilang', 'Hilang'], ['nihil', 'Belum pernah']]
+        .map(([v, t]) => `<button class="btn btn--soft btn--sm" data-hidup-saring="${v}">${t}</button>`).join('')}
+    </div>
+
+    ${hitungHidup(p).nihil ? `<div class="note note--warn small" style="margin-top:var(--s-4)">
+      ${nf(hitungHidup(p).nihil)} orang mendaftar tapi belum pernah membuka aplikasinya.
+      Mereka yang paling perlu disapa — bukan yang sudah rajin.</div>` : ''}
+
     <div class="table-wrap" style="margin-top:var(--s-4)">
       <table class="tbl"><thead><tr>
-        <th>Email</th><th>Akses</th><th>Kode</th><th>Sampai</th><th>Daftar</th><th></th>
+        <th>Email</th><th>Akses</th><th>Terakhir dipakai</th><th>Kode</th><th>Sampai</th><th>Daftar</th><th></th>
       </tr></thead><tbody id="admTUser">${p.map(barisPengguna).join('')}</tbody></table>
     </div>
   </div>`;
@@ -575,9 +620,28 @@ function pasang() {
   saring('#admCariKode', '#admTKode', q => data.kode.daftar
     .filter(k => !q || (k.kode + ' ' + (k.dipesan_untuk || '')).toLowerCase().includes(q))
     .map(barisKode).join(''));
-  saring('#admCariUser', '#admTUser', q => data.pengguna
-    .filter(p => !q || (p.email || '').toLowerCase().includes(q))
-    .map(barisPengguna).join(''));
+  /* Pencarian email dan penyaring keaktifan menulis ke tbody yang sama,
+     jadi keduanya harus lewat satu pintu. Dipisah, yang satu akan
+     menghapus hasil yang lain tanpa jejak. */
+  let hidupTerpilih = '';
+  const gambarPengguna = () => {
+    const q = ($('#admCariUser')?.value || '').trim().toLowerCase();
+    $('#admTUser').innerHTML = data.pengguna
+      .filter(p => !q || (p.email || '').toLowerCase().includes(q))
+      .filter(p => !hidupTerpilih || hidup(p).kunci === hidupTerpilih)
+      .map(barisPengguna).join('') ||
+      '<tr><td colspan="7" class="muted small">Tidak ada yang cocok.</td></tr>';
+    $$('#admSaringHidup button').forEach(b =>
+      b.classList.toggle('btn--primary', b.dataset.hidupSaring === hidupTerpilih));
+  };
+  if ($('#admCariUser')) $('#admCariUser').oninput = gambarPengguna;
+  if ($('#admSaringHidup')) $('#admSaringHidup').onclick = e => {
+    const b = e.target.closest('[data-hidup-saring]');
+    if (!b) return;
+    hidupTerpilih = b.dataset.hidupSaring;
+    gambarPengguna();
+  };
+  gambarPengguna();
   saring('#admCariSaran', '#admTSaran', q => (saran?.daftar ?? [])
     .filter(s => !q || (s.isi + ' ' + (s.email || '') + ' ' + (s.halaman || '')).toLowerCase().includes(q))
     .map(barisSaran).join(''));
